@@ -3,21 +3,21 @@
 import { motion } from 'framer-motion'
 
 export default function BracketView() {
-  // 34-team bracket structure - all TBD for now
+  // 34-team bracket structure with actual competitor names
   const leftTeams = [
-    "SEED #1 TBD", "SEED #2 TBD", "SEED #3 TBD", "SEED #4 TBD",
-    "SEED #5 TBD", "SEED #6 TBD", "SEED #7 TBD", "SEED #8 TBD",
-    "SEED #9 TBD", "SEED #10 TBD", "SEED #11 TBD", "SEED #12 TBD",
-    "SEED #13 TBD", "SEED #14 TBD", "SEED #15 TBD", "SEED #16 TBD",
-    "SEED #17 TBD"
+    "MAX KONOPKA", "ROBERT BRADY", "ZION RUSSELL", "BYRON ACHA",
+    "JOSE VALDEZ", "JADEN POPE", "WESTON CHRISTOPHER", "NOLAN SCHOENBACHLER",
+    "THOMAS FOX", "JEREMI KISINSKI", "JAKE DOLL", "DANIEL SUAREZ",
+    "RYAN BOVE", "RYAN COOPER", "LUCAS KONSTATOS", "ANTHONY MAYROSE",
+    "ANDREW FLASKAMP"
   ]
 
   const rightTeams = [
-    "SEED #18 TBD", "SEED #19 TBD", "SEED #20 TBD", "SEED #21 TBD",
-    "SEED #22 TBD", "SEED #23 TBD", "SEED #24 TBD", "SEED #25 TBD",
-    "SEED #26 TBD", "SEED #27 TBD", "SEED #28 TBD", "SEED #29 TBD",
-    "SEED #30 TBD", "SEED #31 TBD", "SEED #32 TBD", "SEED #33 TBD",
-    "SEED #34 TBD"
+    "FABIAN ESCATEL", "KAMREN HERALD", "JAYLEN BISCHOFF", "BRENNAN SKODA",
+    "AALYIAH WASHBURN", "KADEN CAMENZIND", "HANNAH FRENCH", "MICHAEL CARNEY",
+    "TAJ DHILLON", "JACOB LEE", "ADRIEN RAMÍREZ-RAYO", "DENNIS CHORNIY",
+    "CHARLIE SIMMS", "BRENON REED", "KIRILL PAVLYCHEV", "LAINEY DROWN",
+    "VALERIA ALVAL"
   ]
 
   return (
