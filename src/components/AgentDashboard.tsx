@@ -325,9 +325,9 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
                     value={newSale.premium}
                     onChange={(e) => setNewSale(prev => ({ ...prev, premium: e.target.value }))}
                     className="w-full px-4 py-3 bg-blue-50/80 border-2 border-blue-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all font-semibold text-lg"
-                    placeholder="1500"
-                    min="800"
-                    max="3000"
+                    placeholder="Enter any amount (e.g. 1500, 5000, 12000)"
+                    min="1"
+                    step="1"
                     required
                   />
                 </div>
