@@ -322,13 +322,13 @@ export default function MarchMadnessLeaderboard() {
             {/* Bracket rounds preview */}
             <div className="space-y-6">
               <div className="text-center">
-                <div className="text-sm text-orange-400 font-bold mb-2">TBD</div>
+                <div className="text-sm text-orange-400 font-bold mb-2">ELITE 8</div>
                 <div className="grid grid-cols-2 gap-2">
                   {[1,2,3,4,5,6,7,8].map(i => (
                     <div key={i} className="bg-white/5 border border-white/10 rounded-lg p-2 text-center">
                       <div className="text-xs text-white/70">SEED #{i}</div>
                       <div className="text-sm font-bold text-white truncate">
-                        {salesReps[i-1]?.name.split(' ')[0] || 'TBD'}
+                        TBD
                       </div>
                     </div>
                   ))}
