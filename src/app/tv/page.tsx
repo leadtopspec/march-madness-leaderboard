@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, Crown, Award, Star, Target } from 'lucide-react'
-import BracketView from '@/components/BracketView'
+import TVBracketView from '@/components/TVBracketView'
 
 interface SalesRep {
   id: string
@@ -178,10 +178,11 @@ export default function TVMode() {
         </div>
       </div>
 
-      {/* Main Content Area - Full Screen Bracket */}
-      <div className="relative p-6">
+      {/* Main Content - TV Optimized Layout */}
+      <div className="relative p-4">
+        {/* Larger, TV-Optimized Title */}
         <motion.h2 
-          className="text-4xl font-bold text-white mb-6 text-center flex items-center justify-center gap-3"
+          className="text-6xl font-black text-white mb-8 text-center"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -189,17 +190,88 @@ export default function TVMode() {
           🏀 LIVE TOURNAMENT BRACKET 🏀
         </motion.h2>
         
-        {/* Full Screen Bracket */}
-        <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/20">
-          <BracketView />
-        </div>
+        {/* Split Layout: Bracket + Leaderboard */}
+        <div className="grid grid-cols-4 gap-6 h-full">
+          {/* Main Bracket - 3/4 of screen */}
+          <div className="col-span-3 bg-white/5 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border-2 border-white/20 h-[700px]">
+            <TVBracketView />
+          </div>
 
-        {/* Quick Stats Overlay */}
-        <div className="absolute top-8 right-8 bg-black/80 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-          <div className="text-center text-white">
-            <div className="text-2xl font-bold">ROUND 1</div>
-            <div className="text-sm opacity-75">17 ACTIVE MATCHUPS</div>
-            <div className="text-lg font-bold text-green-400 mt-2">🔴 LIVE</div>
+          {/* Right Sidebar - Leaderboard + Stats - 1/4 of screen */}
+          <div className="col-span-1 space-y-4">
+            {/* Live Stats */}
+            <div className="bg-black/80 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <div className="text-center text-white">
+                <div className="text-2xl font-bold text-green-400 mb-2">🔴 LIVE</div>
+                <div className="text-xl font-bold">ROUND 1</div>
+                <div className="text-sm opacity-75">17 ACTIVE MATCHUPS</div>
+              </div>
+            </div>
+
+            {/* Top Performers */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <h3 className="text-2xl font-bold text-white mb-4 text-center">🏆 TOP 8</h3>
+              <div className="space-y-2">
+                {salesReps.slice(0, 8).map((agent, index) => {
+                  const badge = getRankBadge(agent.rank)
+                  const IconComponent = badge.icon
+                  return (
+                    <div
+                      key={agent.id}
+                      className={`flex items-center justify-between p-3 rounded-lg ${badge.bg} border border-white/20`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className={`w-8 h-8 bg-gradient-to-r ${badge.color} rounded-full flex items-center justify-center`}>
+                          <IconComponent className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                          <div className="text-sm font-bold text-white truncate">
+                            #{index + 1} {agent.name.split(' ')[0]}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-bold text-white">{agent.totalSales}</div>
+                        <div className="text-xs text-white/70">{formatCurrency(agent.totalPremium)}</div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Tournament Progress */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <h3 className="text-lg font-bold text-white mb-3 text-center">📊 PROGRESS</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between text-white">
+                  <span>Round 1</span>
+                  <span className="text-green-400 font-bold">ACTIVE</span>
+                </div>
+                <div className="flex justify-between text-white/60">
+                  <span>Round 2</span>
+                  <span>Pending</span>
+                </div>
+                <div className="flex justify-between text-white/60">
+                  <span>Final Four</span>
+                  <span>Pending</span>
+                </div>
+                <div className="flex justify-between text-white/60">
+                  <span>Championship</span>
+                  <span>Pending</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Live Clock */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 text-center">
+              <div className="text-2xl font-bold text-white">
+                {isClient && currentTime ? currentTime.toLocaleTimeString() : '--:--:--'}
+              </div>
+              <div className="text-sm text-white/70">
+                {isClient && currentTime ? currentTime.toLocaleDateString() : '--/--/----'}
+              </div>
+            </div>
           </div>
         </div>
       </div>
