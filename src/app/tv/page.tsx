@@ -178,102 +178,28 @@ export default function TVMode() {
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="relative p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Main Content Area - Full Screen Bracket */}
+      <div className="relative p-6">
+        <motion.h2 
+          className="text-4xl font-bold text-white mb-6 text-center flex items-center justify-center gap-3"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          🏀 LIVE TOURNAMENT BRACKET 🏀
+        </motion.h2>
         
-        {/* Tournament Bracket - Takes up 2/3 of screen on large displays */}
-        <div className="lg:col-span-2">
-          <motion.h2 
-            className="text-4xl font-bold text-white mb-4 text-center flex items-center justify-center gap-3"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            🌴 Tournament Bracket 🏀
-          </motion.h2>
-          <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border-2 border-white/20">
-            <BracketView />
-          </div>
+        {/* Full Screen Bracket */}
+        <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/20">
+          <BracketView />
         </div>
 
-        {/* Leaderboard - Takes up 1/3 of screen */}
-        <div>
-          <motion.h2 
-            className="text-3xl font-bold text-white mb-4 text-center flex items-center justify-center gap-2"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            👑 TOP PERFORMERS
-          </motion.h2>
-
-          <div className="space-y-3">
-            {topAgents.map((agent, index) => {
-              const badge = getRankBadge(agent.rank)
-              const IconComponent = badge.icon
-              
-              return (
-                <motion.div
-                  key={agent.id}
-                  className={`${badge.bg} backdrop-blur-sm rounded-2xl p-4 border border-white/20 ${badge.glow} shadow-lg`}
-                  initial={{ x: 50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.1 * index }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-12 h-12 bg-gradient-to-r ${badge.color} rounded-full flex items-center justify-center shadow-lg`}>
-                        <IconComponent className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <div className="text-lg font-bold text-white">
-                          #{agent.rank} {agent.name}
-                        </div>
-                        <div className="text-sm text-white/70 font-semibold">
-                          {agent.team}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xl font-bold text-white">
-                        {agent.totalSales}
-                      </div>
-                      <div className="text-sm text-white/70 font-semibold">
-                        {formatCurrency(agent.totalPremium)}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )
-            })}
-          </div>
-
-          {/* Tournament Progress */}
-          <div className="mt-6 bg-white/5 backdrop-blur-xl rounded-2xl p-4 border border-white/20">
-            <h3 className="text-xl font-bold text-white mb-3 text-center">🏆 Tournament Status</h3>
-            <div className="space-y-2">
-              <div className="flex justify-between text-white">
-                <span>Round 1 (17 matchups)</span>
-                <span className="text-green-400 font-bold">ACTIVE</span>
-              </div>
-              <div className="flex justify-between text-white/60">
-                <span>Round 2 (8 matchups)</span>
-                <span>Pending</span>
-              </div>
-              <div className="flex justify-between text-white/60">
-                <span>Quarterfinals (4 matchups)</span>
-                <span>Pending</span>
-              </div>
-              <div className="flex justify-between text-white/60">
-                <span>Final Four (2 matchups)</span>
-                <span>Pending</span>
-              </div>
-              <div className="flex justify-between text-white/60">
-                <span>Championship (1 matchup)</span>
-                <span>Pending</span>
-              </div>
-            </div>
+        {/* Quick Stats Overlay */}
+        <div className="absolute top-8 right-8 bg-black/80 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+          <div className="text-center text-white">
+            <div className="text-2xl font-bold">ROUND 1</div>
+            <div className="text-sm opacity-75">17 ACTIVE MATCHUPS</div>
+            <div className="text-lg font-bold text-green-400 mt-2">🔴 LIVE</div>
           </div>
         </div>
       </div>
