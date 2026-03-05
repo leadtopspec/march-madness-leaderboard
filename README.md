@@ -66,7 +66,7 @@ A real-time competition tracking platform for sales tournaments and March Madnes
 ### Local Development
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/march-madness-leaderboard.git
+git clone https://github.com/leadtopspec/march-madness-leaderboard.git
 
 # Navigate to project
 cd march-madness-leaderboard
@@ -230,8 +230,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/YOUR_USERNAME/march-madness-leaderboard/issues)
-- **Documentation**: [Wiki](https://github.com/YOUR_USERNAME/march-madness-leaderboard/wiki)
+- **Issues**: [GitHub Issues](https://github.com/leadtopspec/march-madness-leaderboard/issues)
+- **Documentation**: [Wiki](https://github.com/leadtopspec/march-madness-leaderboard/wiki)
 - **Email**: support@yourdomain.com
 - **Discord**: [Community Server](https://discord.gg/your-server)
 
