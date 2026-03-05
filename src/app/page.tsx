@@ -410,6 +410,131 @@ export default function MarchMadnessLeaderboard() {
           <BracketView />
         </motion.div>
 
+        {/* Rules Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 mb-8"
+        >
+          <div className="flex items-center gap-3 mb-8">
+            <div className="text-3xl">📋</div>
+            <h2 className="text-3xl font-black text-white">MARCH MADNESS SALES COMPETITION RULES</h2>
+          </div>
+          
+          <div className="text-white space-y-6">
+            <div className="bg-orange-500/20 border border-orange-400/30 rounded-xl p-4">
+              <div className="text-xl font-bold text-orange-200 mb-2">🎯 Objective</div>
+              <div className="text-orange-100">Outproduce your opponent in issued business and advance through the bracket.</div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Left Column */}
+              <div className="space-y-6">
+                <div className="bg-white/5 border border-white/20 rounded-xl p-6">
+                  <div className="text-lg font-bold text-blue-200 mb-3 flex items-center gap-2">
+                    <span>1.</span> 🥊 Head-to-Head Matchups
+                  </div>
+                  <ul className="text-white/90 space-y-2 text-sm">
+                    <li>• Each round you will be paired against one opponent</li>
+                    <li>• Whoever writes the most issued premium for that round advances</li>
+                  </ul>
+                </div>
+
+                <div className="bg-white/5 border border-white/20 rounded-xl p-6">
+                  <div className="text-lg font-bold text-purple-200 mb-3 flex items-center gap-2">
+                    <span>2.</span> 📹 Zoom Room Requirement
+                  </div>
+                  <ul className="text-white/90 space-y-2 text-sm">
+                    <li>• Both competitors must be in the same Zoom room while selling</li>
+                    <li>• Cameras on and unmuted while working</li>
+                    <li>• You must be actively dialing or presenting during the session</li>
+                    <li className="text-purple-200 font-semibold">This keeps accountability high and creates real competition.</li>
+                  </ul>
+                </div>
+
+                <div className="bg-white/5 border border-white/20 rounded-xl p-6">
+                  <div className="text-lg font-bold text-green-200 mb-3 flex items-center gap-2">
+                    <span>3.</span> ⚖️ What Counts
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="text-green-300 font-semibold">✅ Issued premium only counts</div>
+                    <div className="text-red-300 font-semibold">❌ Rewrites do NOT count</div>
+                    <div className="text-white/90">Only new submitted and issued business applies to the scoreboard.</div>
+                  </div>
+                </div>
+
+                <div className="bg-white/5 border border-white/20 rounded-xl p-6">
+                  <div className="text-lg font-bold text-yellow-200 mb-3 flex items-center gap-2">
+                    <span>4.</span> 🏁 Rounds 1–3 (Submission Rounds)
+                  </div>
+                  <div className="text-white/90 space-y-2 text-sm">
+                    <div>For the first three rounds:</div>
+                    <ul className="space-y-1">
+                      <li>• Winner is determined by total submitted premium</li>
+                      <li>• Highest submitted production moves on to the next round</li>
+                    </ul>
+                    <div className="text-yellow-200 font-semibold">These rounds are meant to keep the bracket moving quickly.</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column */}
+              <div className="space-y-6">
+                <div className="bg-white/5 border border-white/20 rounded-xl p-6">
+                  <div className="text-lg font-bold text-red-200 mb-3 flex items-center gap-2">
+                    <span>5.</span> 🏆 Final Round (Issued Business)
+                  </div>
+                  <div className="text-white/90 space-y-2 text-sm">
+                    <div>The final round will be based on issued premium for the entire month.</div>
+                    <ul className="space-y-1">
+                      <li>• All production must issue during the month</li>
+                      <li>• The person with the highest issued premium wins the tournament</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="bg-white/5 border border-white/20 rounded-xl p-6">
+                  <div className="text-lg font-bold text-orange-200 mb-3 flex items-center gap-2">
+                    <span>6.</span> 🚫 Integrity Rules
+                  </div>
+                  <ul className="text-white/90 space-y-2 text-sm">
+                    <li>• No splitting apps</li>
+                    <li>• No transferring apps</li>
+                    <li>• No counting someone else's business</li>
+                    <li>• Production must be written personally by you</li>
+                    <li className="text-red-300 font-semibold">Violation = disqualification</li>
+                  </ul>
+                </div>
+
+                <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-400/30 rounded-xl p-6">
+                  <div className="text-lg font-bold text-yellow-200 mb-3 flex items-center gap-2">
+                    <span>7.</span> 🏆 Winner
+                  </div>
+                  <div className="text-yellow-100 text-sm">
+                    The highest issued premium in the final round wins the March Madness Championship Prize (Cancun Trip).
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/30 rounded-xl p-6">
+                  <div className="text-lg font-bold text-cyan-200 mb-3 flex items-center gap-2">
+                    <span>8.</span> 🔥 Spirit of the Competition
+                  </div>
+                  <div className="text-cyan-100 space-y-2 text-sm">
+                    <div>This is meant to create:</div>
+                    <ul className="space-y-1">
+                      <li>• accountability</li>
+                      <li>• intensity</li>
+                      <li>• fun competition</li>
+                      <li>• massive production</li>
+                    </ul>
+                    <div className="text-cyan-200 font-bold text-center mt-4 text-lg">Iron sharpens iron.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Call to Action */}
         <div className="text-center mt-12">
           <motion.button
