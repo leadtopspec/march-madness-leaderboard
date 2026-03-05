@@ -3,19 +3,21 @@
 import { motion } from 'framer-motion'
 
 export default function BracketView() {
-  // 32-team bracket structure for clean design - all TBD for now
+  // 34-team bracket structure - all TBD for now
   const leftTeams = [
     "SEED #1 TBD", "SEED #2 TBD", "SEED #3 TBD", "SEED #4 TBD",
     "SEED #5 TBD", "SEED #6 TBD", "SEED #7 TBD", "SEED #8 TBD",
     "SEED #9 TBD", "SEED #10 TBD", "SEED #11 TBD", "SEED #12 TBD",
-    "SEED #13 TBD", "SEED #14 TBD", "SEED #15 TBD", "SEED #16 TBD"
+    "SEED #13 TBD", "SEED #14 TBD", "SEED #15 TBD", "SEED #16 TBD",
+    "SEED #17 TBD"
   ]
 
   const rightTeams = [
-    "SEED #1 TBD", "SEED #2 TBD", "SEED #3 TBD", "SEED #4 TBD",
-    "SEED #5 TBD", "SEED #6 TBD", "SEED #7 TBD", "SEED #8 TBD",
-    "SEED #9 TBD", "SEED #10 TBD", "SEED #11 TBD", "SEED #12 TBD",
-    "SEED #13 TBD", "SEED #14 TBD", "SEED #15 TBD", "SEED #16 TBD"
+    "SEED #18 TBD", "SEED #19 TBD", "SEED #20 TBD", "SEED #21 TBD",
+    "SEED #22 TBD", "SEED #23 TBD", "SEED #24 TBD", "SEED #25 TBD",
+    "SEED #26 TBD", "SEED #27 TBD", "SEED #28 TBD", "SEED #29 TBD",
+    "SEED #30 TBD", "SEED #31 TBD", "SEED #32 TBD", "SEED #33 TBD",
+    "SEED #34 TBD"
   ]
 
   return (
@@ -55,7 +57,7 @@ export default function BracketView() {
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-30">
         <div className="bg-orange-600/95 backdrop-blur text-white px-6 py-3 rounded-2xl shadow-xl border-2 border-orange-700">
           <div className="text-xl font-black text-center">🏀 ALL IN AGENCIES TOURNAMENT 🏀</div>
-          <div className="text-sm text-center opacity-90 mt-1">MARCH MADNESS • 32 COMPETITORS</div>
+          <div className="text-sm text-center opacity-90 mt-1">MARCH MADNESS • 34 COMPETITORS</div>
         </div>
       </div>
 
@@ -142,15 +144,15 @@ export default function BracketView() {
 
           {/* Left Side Teams - Round 1 */}
           <div className="absolute left-0" style={{top: '20px'}}>
-            <div className="space-y-3">
+            <div className="space-y-1">
               {leftTeams.map((team, index) => (
                 <motion.div
                   key={`left-${index}`}
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="bg-white/90 rounded border border-gray-400 p-2 w-44 h-10 text-xs font-semibold flex items-center"
-                  style={{marginBottom: index % 2 === 1 ? '20px' : '4px'}}
+                  className="bg-white/90 rounded border border-gray-400 p-2 w-48 h-12 text-xs font-semibold flex items-center"
+                  style={{marginBottom: '8px'}}
                 >
                   {team}
                 </motion.div>
@@ -160,15 +162,15 @@ export default function BracketView() {
 
           {/* Right Side Teams - Round 1 */}
           <div className="absolute right-0" style={{top: '20px'}}>
-            <div className="space-y-3">
+            <div className="space-y-1">
               {rightTeams.map((team, index) => (
                 <motion.div
                   key={`right-${index}`}
                   initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="bg-white/90 rounded border border-gray-400 p-2 w-44 h-10 text-xs font-semibold flex items-center justify-end"
-                  style={{marginBottom: index % 2 === 1 ? '20px' : '4px'}}
+                  className="bg-white/90 rounded border border-gray-400 p-2 w-48 h-12 text-xs font-semibold flex items-center justify-end"
+                  style={{marginBottom: '8px'}}
                 >
                   {team}
                 </motion.div>
@@ -177,16 +179,16 @@ export default function BracketView() {
           </div>
 
           {/* Round 2 - Left Side */}
-          <div className="absolute" style={{left: '200px', top: '40px'}}>
-            <div className="space-y-12">
-              {[...Array(8)].map((_, index) => (
+          <div className="absolute" style={{left: '220px', top: '50px'}}>
+            <div className="space-y-4">
+              {[...Array(9)].map((_, index) => (
                 <motion.div
                   key={`left-r2-${index}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1 + index * 0.1 }}
-                  className="bg-white/90 rounded border border-gray-400 p-2 w-36 h-10 text-xs flex items-center justify-center"
-                  style={{marginBottom: '30px'}}
+                  className="bg-white/90 rounded border border-gray-400 p-2 w-40 h-12 text-xs flex items-center justify-center font-semibold"
+                  style={{marginBottom: '20px'}}
                 >
                   TBD
                 </motion.div>
@@ -195,16 +197,16 @@ export default function BracketView() {
           </div>
 
           {/* Round 2 - Right Side */}
-          <div className="absolute" style={{right: '200px', top: '40px'}}>
-            <div className="space-y-12">
-              {[...Array(8)].map((_, index) => (
+          <div className="absolute" style={{right: '220px', top: '50px'}}>
+            <div className="space-y-4">
+              {[...Array(9)].map((_, index) => (
                 <motion.div
                   key={`right-r2-${index}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1 + index * 0.1 }}
-                  className="bg-white/90 rounded border border-gray-400 p-2 w-36 h-10 text-xs flex items-center justify-center"
-                  style={{marginBottom: '30px'}}
+                  className="bg-white/90 rounded border border-gray-400 p-2 w-40 h-12 text-xs flex items-center justify-center font-semibold"
+                  style={{marginBottom: '20px'}}
                 >
                   TBD
                 </motion.div>
@@ -213,16 +215,16 @@ export default function BracketView() {
           </div>
 
           {/* Round 3 - Left Side */}
-          <div className="absolute" style={{left: '280px', top: '80px'}}>
-            <div className="space-y-24">
-              {[...Array(4)].map((_, index) => (
+          <div className="absolute" style={{left: '320px', top: '120px'}}>
+            <div className="space-y-8">
+              {[...Array(5)].map((_, index) => (
                 <motion.div
                   key={`left-r3-${index}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.5 + index * 0.1 }}
-                  className="bg-white/90 rounded border border-gray-400 p-2 w-32 h-10 text-xs flex items-center justify-center"
-                  style={{marginBottom: '60px'}}
+                  className="bg-white/90 rounded border border-gray-400 p-2 w-36 h-12 text-xs flex items-center justify-center font-semibold"
+                  style={{marginBottom: '40px'}}
                 >
                   TBD
                 </motion.div>
@@ -231,16 +233,16 @@ export default function BracketView() {
           </div>
 
           {/* Round 3 - Right Side */}
-          <div className="absolute" style={{right: '280px', top: '80px'}}>
-            <div className="space-y-24">
-              {[...Array(4)].map((_, index) => (
+          <div className="absolute" style={{right: '320px', top: '120px'}}>
+            <div className="space-y-8">
+              {[...Array(5)].map((_, index) => (
                 <motion.div
                   key={`right-r3-${index}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.5 + index * 0.1 }}
-                  className="bg-white/90 rounded border border-gray-400 p-2 w-32 h-10 text-xs flex items-center justify-center"
-                  style={{marginBottom: '60px'}}
+                  className="bg-white/90 rounded border border-gray-400 p-2 w-36 h-12 text-xs flex items-center justify-center font-semibold"
+                  style={{marginBottom: '40px'}}
                 >
                   TBD
                 </motion.div>
@@ -249,43 +251,43 @@ export default function BracketView() {
           </div>
 
           {/* Final Four */}
-          <div className="absolute" style={{left: '380px', top: '160px'}}>
+          <div className="absolute" style={{left: '420px', top: '220px'}}>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 2 }}
-              className="bg-white/90 rounded border border-gray-400 p-2 w-32 h-10 text-xs flex items-center justify-center"
-              style={{marginBottom: '240px'}}
+              className="bg-white/90 rounded border border-gray-400 p-2 w-36 h-12 text-xs flex items-center justify-center font-semibold"
+              style={{marginBottom: '120px'}}
             >
-              TBD
+              REGION #1 TBD
             </motion.div>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 2 }}
-              className="bg-white/90 rounded border border-gray-400 p-2 w-32 h-10 text-xs flex items-center justify-center"
+              className="bg-white/90 rounded border border-gray-400 p-2 w-36 h-12 text-xs flex items-center justify-center font-semibold"
             >
-              TBD
+              REGION #2 TBD
             </motion.div>
           </div>
 
-          <div className="absolute" style={{right: '380px', top: '160px'}}>
+          <div className="absolute" style={{right: '420px', top: '220px'}}>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 2 }}
-              className="bg-white/90 rounded border border-gray-400 p-2 w-32 h-10 text-xs flex items-center justify-center"
-              style={{marginBottom: '240px'}}
+              className="bg-white/90 rounded border border-gray-400 p-2 w-36 h-12 text-xs flex items-center justify-center font-semibold"
+              style={{marginBottom: '120px'}}
             >
-              TBD
+              REGION #3 TBD
             </motion.div>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 2 }}
-              className="bg-white/90 rounded border border-gray-400 p-2 w-32 h-10 text-xs flex items-center justify-center"
+              className="bg-white/90 rounded border border-gray-400 p-2 w-36 h-12 text-xs flex items-center justify-center font-semibold"
             >
-              TBD
+              REGION #4 TBD
             </motion.div>
           </div>
 
@@ -297,10 +299,12 @@ export default function BracketView() {
               transition={{ delay: 2.5 }}
               className="text-center"
             >
-              <div className="bg-white/90 rounded border-2 border-yellow-500 p-3 w-40 h-12 text-sm font-bold flex items-center justify-center mb-2">
-                CHAMPION
+              <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg border-2 border-yellow-600 p-4 w-44 h-16 text-sm font-black flex items-center justify-center mb-3 shadow-2xl">
+                <div className="text-center">
+                  <div className="text-white">🏆 CHAMPION 🏆</div>
+                  <div className="text-xs text-yellow-100">MARCH MADNESS 2025</div>
+                </div>
               </div>
-              <div className="text-4xl">🏆</div>
             </motion.div>
           </div>
         </div>
