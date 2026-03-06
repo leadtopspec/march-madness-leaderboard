@@ -86,43 +86,37 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
     return { icon: Target, color: 'from-gray-400 to-gray-600', bg: 'bg-black/80 backdrop-blur-sm border-red-600', glow: 'shadow-red-500/20' }
   }
 
-  // First Round Matchups - Live Tournament Bracket
-  const firstRoundMatchups = [
-    { team1: "MAX KONOPKA", team2: "ANDREW FLASKAMP" },
-    { team1: "ROBERT BRADY", team2: "ANTHONY MAYROSE" },
-    { team1: "ZION RUSSELL", team2: "LUCAS KONSTATOS" },
-    { team1: "BYRON ACHA", team2: "RYAN COOPER" },
-    { team1: "JOSE VALDEZ", team2: "RYAN BOVE" },
-    { team1: "JADEN POPE", team2: "DANIEL SUAREZ" },
-    { team1: "WESTON CHRISTOPHER", team2: "JAKE DOLL" },
-    { team1: "NOLAN SCHOENBACHLER", team2: "JEREMI KISINSKI" },
-    { team1: "FABIAN ESCATEL", team2: "VALERIA ALVAL" },
-    { team1: "KAMREN HERALD", team2: "LAINEY DROWN" },
-    { team1: "JAYLEN BISCHOFF", team2: "KIRILL PAVLYCHEV" },
-    { team1: "BRENNAN SKODA", team2: "BRENON REED" },
-    { team1: "AALYIAH WASHBURN", team2: "CHARLIE SIMMS" },
-    { team1: "KADEN CAMENZIND", team2: "DENNIS CHORNIY" },
-    { team1: "HANNAH FRENCH", team2: "ADRIEN RAMÍREZ-RAYO" },
-    { team1: "MICHAEL CARNEY", team2: "JACOB LEE" },
+  // Week 1 - Play-In Round Matchups (17 games total)
+  const playInRoundMatchups = [
+    { game: 1, team1: "MAX KONOPKA", team2: "ROBERT BRADY" },
+    { game: 2, team1: "ZION RUSSELL", team2: "BYRON ACHA" },
+    { game: 3, team1: "JOSE VALDEZ", team2: "JADEN POPE" },
+    { game: 4, team1: "WESTON CHRISTOPHER", team2: "NOLAN SCHOENBACHLER" },
+    { game: 5, team1: "THOMAS FOX", team2: "JEREMI KISINSKI" },
+    { game: 6, team1: "JAKE DOLL", team2: "DANIEL SUAREZ" },
+    { game: 7, team1: "RYAN BOVE", team2: "RYAN COOPER" },
+    { game: 8, team1: "LUCAS KONSTATOS", team2: "ANTHONY MAYROSE" },
+    { game: 9, team1: "ANDREW FLASKAMP", team2: "FABIAN ESCATEL" },
+    { game: 10, team1: "KAMREN HERALD", team2: "JAYLEN BISCHOFF" },
+    { game: 11, team1: "BRENNAN SKODA", team2: "AALYIAH WASHBURN" },
+    { game: 12, team1: "KADEN CAMENZIND", team2: "HANNAH FRENCH" },
+    { game: 13, team1: "MICHAEL CARNEY", team2: "TAJ DHILLON" },
+    { game: 14, team1: "JACOB LEE", team2: "ADRIEN RAMÍREZ-RAYO" },
+    { game: 15, team1: "DENNIS CHORNIY", team2: "CHARLIE SIMMS" },
+    { game: 16, team1: "BRENON REED", team2: "KIRILL PAVLYCHEV" },
+    { game: 17, team1: "LAINEY DROWN", team2: "VALERIA ALVAL" },
   ]
-  
-  const byes = ["THOMAS FOX", "TAJ DHILLON"]
 
   const getCurrentMatchup = () => {
-    // Check if agent has a bye
-    if (byes.includes(agent.name)) {
-      return { isBye: true, status: agent.name === "THOMAS FOX" ? "BYE" : "AUTO" }
-    }
-    
     // Find the matchup this agent is in
-    const matchup = firstRoundMatchups.find(m => 
+    const matchup = playInRoundMatchups.find(m => 
       m.team1 === agent.name || m.team2 === agent.name
     )
     
     if (matchup) {
       const opponent = matchup.team1 === agent.name ? matchup.team2 : matchup.team1
       const opponentAgent = _allAgents.find(a => a.name === opponent)
-      return { opponent: opponentAgent, matchup, isBye: false }
+      return { opponent: opponentAgent, matchup, gameNumber: matchup.game }
     }
     
     return null
@@ -230,20 +224,10 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
                 <h3 className="text-4xl font-black text-white">🥊 YOUR MATCHUP</h3>
               </div>
 
-              {currentMatchup?.isBye ? (
-                <div className="text-center py-12">
-                  <div className="text-8xl mb-6">🎯</div>
-                  <div className="text-3xl font-black text-green-400 mb-4">AUTOMATIC ADVANCE!</div>
-                  <div className="text-xl text-green-300 mb-6">You have a {currentMatchup.status} to Round 2</div>
-                  <div className="bg-green-900/80 border-2 border-green-600 rounded-2xl p-6 max-w-md mx-auto backdrop-blur-sm">
-                    <div className="text-lg font-bold text-green-300 mb-2">🏆 Round 2 Secured!</div>
-                    <div className="text-sm text-white">Keep recording sales to maintain your advantage for the next round!</div>
-                  </div>
-                </div>
-              ) : currentMatchup?.opponent ? (
+              {currentMatchup?.opponent ? (
                 <div className="text-center py-8">
                   <div className="text-6xl mb-6">⚔️</div>
-                  <div className="text-2xl font-black text-white mb-4">ROUND 1 - HEAD TO HEAD</div>
+                  <div className="text-2xl font-black text-white mb-4">GAME #{currentMatchup.gameNumber} - HEAD TO HEAD</div>
                   
                   <div className="grid grid-cols-3 gap-4 items-center max-w-2xl mx-auto">
                     {/* You */}
