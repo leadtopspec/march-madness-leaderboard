@@ -86,16 +86,49 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
     return { icon: Target, color: 'from-gray-400 to-gray-600', bg: 'bg-black/80 backdrop-blur-sm border-red-600', glow: 'shadow-red-500/20' }
   }
 
-  // Find current opponent based on bracket matchup - currently showing TBD
-  // const getCurrentOpponent = () => {
-  //   // Bracket matchups are TBD - will be populated once tournament starts
-  //   // For now, return null until matchups are set
-  //   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  //   const _allAgents = allAgents // Keeping for future use when matchups are set
-  //   return null
-  // }
+  // First Round Matchups - Live Tournament Bracket
+  const firstRoundMatchups = [
+    { team1: "MAX KONOPKA", team2: "ANDREW FLASKAMP" },
+    { team1: "ROBERT BRADY", team2: "ANTHONY MAYROSE" },
+    { team1: "ZION RUSSELL", team2: "LUCAS KONSTATOS" },
+    { team1: "BYRON ACHA", team2: "RYAN COOPER" },
+    { team1: "JOSE VALDEZ", team2: "RYAN BOVE" },
+    { team1: "JADEN POPE", team2: "DANIEL SUAREZ" },
+    { team1: "WESTON CHRISTOPHER", team2: "JAKE DOLL" },
+    { team1: "NOLAN SCHOENBACHLER", team2: "JEREMI KISINSKI" },
+    { team1: "FABIAN ESCATEL", team2: "VALERIA ALVAL" },
+    { team1: "KAMREN HERALD", team2: "LAINEY DROWN" },
+    { team1: "JAYLEN BISCHOFF", team2: "KIRILL PAVLYCHEV" },
+    { team1: "BRENNAN SKODA", team2: "BRENON REED" },
+    { team1: "AALYIAH WASHBURN", team2: "CHARLIE SIMMS" },
+    { team1: "KADEN CAMENZIND", team2: "DENNIS CHORNIY" },
+    { team1: "HANNAH FRENCH", team2: "ADRIEN RAMÍREZ-RAYO" },
+    { team1: "MICHAEL CARNEY", team2: "JACOB LEE" },
+  ]
+  
+  const byes = ["THOMAS FOX", "TAJ DHILLON"]
 
-  // const opponent = getCurrentOpponent() // Temporarily disabled - all matchups TBD
+  const getCurrentMatchup = () => {
+    // Check if agent has a bye
+    if (byes.includes(agent.name)) {
+      return { isBye: true, status: agent.name === "THOMAS FOX" ? "BYE" : "AUTO" }
+    }
+    
+    // Find the matchup this agent is in
+    const matchup = firstRoundMatchups.find(m => 
+      m.team1 === agent.name || m.team2 === agent.name
+    )
+    
+    if (matchup) {
+      const opponent = matchup.team1 === agent.name ? matchup.team2 : matchup.team1
+      const opponentAgent = _allAgents.find(a => a.name === opponent)
+      return { opponent: opponentAgent, matchup, isBye: false }
+    }
+    
+    return null
+  }
+
+  const currentMatchup = getCurrentMatchup()
   const agentBadge = getRankBadge(agent.rank)
   const AgentIcon = agentBadge.icon
   const mySales = recentSales.filter(sale => sale.repName === agent.name).slice(0, 5)
@@ -183,7 +216,7 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
               </div>
             </motion.div>
 
-            {/* Current Matchup - Enhanced */}
+            {/* Current Matchup - Live */}
             <motion.div 
               className="bg-gradient-to-br from-red-900/40 via-black/60 to-gray-900/40 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-red-600 p-8"
               initial={{ opacity: 0, y: 20 }}
@@ -194,18 +227,68 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
                 <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl flex items-center justify-center shadow-xl">
                   <Users className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-4xl font-black text-white">🆚 YOUR MATCHUP</h3>
+                <h3 className="text-4xl font-black text-white">🥊 YOUR MATCHUP</h3>
               </div>
 
-              <div className="text-center py-16">
-                <div className="text-8xl mb-6">🏖️</div>
-                <div className="text-3xl font-black text-gray-400 mb-4">Tournament Brackets TBD</div>
-                <div className="text-xl text-gray-500 mb-6">Matchups will be announced soon!</div>
-                <div className="bg-black/80 border-2 border-red-600 rounded-2xl p-6 max-w-md mx-auto backdrop-blur-sm">
-                  <div className="text-lg font-bold text-red-300 mb-2">🌊 Get Ready to Compete!</div>
-                  <div className="text-sm text-white">Record your sales to secure your position. Tournament brackets and matchups will be revealed when competition begins!</div>
+              {currentMatchup?.isBye ? (
+                <div className="text-center py-12">
+                  <div className="text-8xl mb-6">🎯</div>
+                  <div className="text-3xl font-black text-green-400 mb-4">AUTOMATIC ADVANCE!</div>
+                  <div className="text-xl text-green-300 mb-6">You have a {currentMatchup.status} to Round 2</div>
+                  <div className="bg-green-900/80 border-2 border-green-600 rounded-2xl p-6 max-w-md mx-auto backdrop-blur-sm">
+                    <div className="text-lg font-bold text-green-300 mb-2">🏆 Round 2 Secured!</div>
+                    <div className="text-sm text-white">Keep recording sales to maintain your advantage for the next round!</div>
+                  </div>
                 </div>
-              </div>
+              ) : currentMatchup?.opponent ? (
+                <div className="text-center py-8">
+                  <div className="text-6xl mb-6">⚔️</div>
+                  <div className="text-2xl font-black text-white mb-4">ROUND 1 - HEAD TO HEAD</div>
+                  
+                  <div className="grid grid-cols-3 gap-4 items-center max-w-2xl mx-auto">
+                    {/* You */}
+                    <div className="bg-red-600/30 border-2 border-red-400 rounded-xl p-6 text-center">
+                      <div className="text-4xl mb-2">💪</div>
+                      <div className="text-xl font-black text-white">{agent.name.split(' ')[0]}</div>
+                      <div className="text-sm text-red-300">YOU</div>
+                      <div className="mt-3 space-y-1">
+                        <div className="text-2xl font-black text-white">{agent.totalSales}</div>
+                        <div className="text-xs text-gray-400">Sales</div>
+                        <div className="text-lg font-bold text-green-400">{formatCurrency(agent.totalPremium)}</div>
+                      </div>
+                    </div>
+
+                    {/* VS */}
+                    <div className="text-center">
+                      <div className="text-4xl font-black text-red-400 mb-2">VS</div>
+                      <div className="text-sm text-gray-400">First to advance wins</div>
+                    </div>
+
+                    {/* Opponent */}
+                    <div className="bg-gray-700/30 border-2 border-gray-500 rounded-xl p-6 text-center">
+                      <div className="text-4xl mb-2">🎯</div>
+                      <div className="text-xl font-black text-white">{currentMatchup.opponent.name.split(' ')[0]}</div>
+                      <div className="text-sm text-gray-300">OPPONENT</div>
+                      <div className="mt-3 space-y-1">
+                        <div className="text-2xl font-black text-white">{currentMatchup.opponent.totalSales}</div>
+                        <div className="text-xs text-gray-400">Sales</div>
+                        <div className="text-lg font-bold text-green-400">{formatCurrency(currentMatchup.opponent.totalPremium)}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 bg-black/80 border-2 border-red-600 rounded-2xl p-6 max-w-lg mx-auto backdrop-blur-sm">
+                    <div className="text-lg font-bold text-red-300 mb-2">🔴 LIVE COMPETITION!</div>
+                    <div className="text-sm text-white">Record sales now to outperform your opponent and advance to Round 2!</div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-16">
+                  <div className="text-8xl mb-6">🏖️</div>
+                  <div className="text-3xl font-black text-gray-400 mb-4">Matchup Loading...</div>
+                  <div className="text-xl text-gray-500 mb-6">Checking your tournament position...</div>
+                </div>
+              )}
 
             </motion.div>
 

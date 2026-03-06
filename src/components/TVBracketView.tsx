@@ -33,62 +33,203 @@ export default function TVBracketView() {
 
   return (
     <div className="w-full h-full bg-transparent overflow-hidden">
-      {/* TV Header */}
-      <div className="text-center mb-2">
-        <div className="bg-gradient-to-r from-red-600 to-red-800 text-white px-4 py-2 rounded-lg shadow-lg inline-block">
-          <h3 className="text-lg font-black">🥊 FIRST ROUND MATCHUPS LIVE 🥊</h3>
+      {/* TV-Optimized Traditional Bracket Layout */}
+      <div className="flex items-start justify-between h-full gap-1 text-xs">
+        
+        {/* Left Side - Round 1 */}
+        <div className="flex flex-col min-w-[120px] h-full">
+          <div className="text-center text-white font-bold text-sm mb-1 bg-red-600/80 rounded py-1 border border-red-400">
+            ROUND 1 LEFT
+          </div>
+          <div className="flex-1 flex flex-col justify-start space-y-1 overflow-y-auto max-h-[580px]">
+            {firstRoundMatchups.slice(0, 8).map((matchup, index) => (
+              <motion.div
+                key={`left-${index}`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.02 }}
+                className="bg-gray-900/95 rounded border-2 border-red-600 p-1.5 shadow-sm"
+              >
+                <div className="text-white font-semibold text-[10px] truncate">{matchup.team1}</div>
+                <div className="text-red-300 text-[8px] text-center font-bold">VS</div>
+                <div className="text-white font-semibold text-[10px] truncate">{matchup.team2}</div>
+              </motion.div>
+            ))}
+            {/* Thomas Fox Bye */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-green-600/95 rounded border-2 border-green-400 p-1.5 shadow-sm"
+            >
+              <div className="text-white font-semibold text-[10px] text-center">{specialAdvances[0].name}</div>
+              <div className="text-green-200 text-[8px] text-center">{specialAdvances[0].status}</div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Left Side - Round 2 */}
+        <div className="flex flex-col min-w-[100px] h-full">
+          <div className="text-center text-white font-bold text-sm mb-1 bg-red-700/80 rounded py-1 border border-red-500">
+            ROUND 2
+          </div>
+          <div className="flex-1 flex flex-col justify-center space-y-3">
+            {[...Array(9)].map((_, index) => (
+              <motion.div
+                key={`left-r2-${index}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 + index * 0.03 }}
+                className="bg-black/80 rounded border-2 border-red-500 p-1.5 text-center shadow-sm"
+              >
+                <div className="text-red-300 font-semibold text-[10px]">TBD</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Left Side - Round 3 */}
+        <div className="flex flex-col min-w-[100px] h-full">
+          <div className="text-center text-white font-bold text-sm mb-1 bg-red-800/80 rounded py-1 border border-red-600">
+            ROUND 3
+          </div>
+          <div className="flex-1 flex flex-col justify-center space-y-8">
+            {[...Array(5)].map((_, index) => (
+              <motion.div
+                key={`left-r3-${index}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1 + index * 0.05 }}
+                className="bg-gray-800/80 rounded border-2 border-red-400 p-1.5 text-center shadow-sm"
+              >
+                <div className="text-red-300 font-semibold text-[10px]">TBD</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Championship Center Column */}
+        <div className="flex flex-col items-center justify-center min-w-[140px] space-y-4">
+          {/* Final Four - Left */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1.5 }}
+            className="bg-gradient-to-r from-red-600 to-red-800 rounded-lg border border-red-400 p-3 text-center shadow-lg w-full"
+          >
+            <div className="text-white font-black text-sm">FINAL FOUR</div>
+            <div className="text-red-200 text-xs mt-1">LEFT REGION</div>
+          </motion.div>
+
+          {/* Championship */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 2 }}
+            className="bg-gradient-to-r from-red-700 to-black rounded-xl border-2 border-red-500 p-4 text-center shadow-xl w-full"
+          >
+            <div className="text-2xl mb-1">🏆</div>
+            <div className="text-white font-black text-lg">CHAMPION</div>
+            <div className="text-red-200 text-xs mt-1">MARCH MADNESS 2025</div>
+          </motion.div>
+
+          {/* Final Four - Right */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1.5 }}
+            className="bg-gradient-to-r from-red-600 to-red-800 rounded-lg border border-red-400 p-3 text-center shadow-lg w-full"
+          >
+            <div className="text-white font-black text-sm">FINAL FOUR</div>
+            <div className="text-red-200 text-xs mt-1">RIGHT REGION</div>
+          </motion.div>
+        </div>
+
+        {/* Right Side - Round 3 */}
+        <div className="flex flex-col min-w-[100px] h-full">
+          <div className="text-center text-white font-bold text-sm mb-1 bg-red-800/80 rounded py-1 border border-red-600">
+            ROUND 3
+          </div>
+          <div className="flex-1 flex flex-col justify-center space-y-8">
+            {[...Array(5)].map((_, index) => (
+              <motion.div
+                key={`right-r3-${index}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1 + index * 0.05 }}
+                className="bg-gray-800/80 rounded border-2 border-red-400 p-1.5 text-center shadow-sm"
+              >
+                <div className="text-red-300 font-semibold text-[10px]">TBD</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Side - Round 2 */}
+        <div className="flex flex-col min-w-[100px] h-full">
+          <div className="text-center text-white font-bold text-sm mb-1 bg-red-700/80 rounded py-1 border border-red-500">
+            ROUND 2
+          </div>
+          <div className="flex-1 flex flex-col justify-center space-y-3">
+            {[...Array(9)].map((_, index) => (
+              <motion.div
+                key={`right-r2-${index}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 + index * 0.03 }}
+                className="bg-black/80 rounded border-2 border-red-500 p-1.5 text-center shadow-sm"
+              >
+                <div className="text-red-300 font-semibold text-[10px]">TBD</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Side - Round 1 */}
+        <div className="flex flex-col min-w-[120px] h-full">
+          <div className="text-center text-white font-bold text-sm mb-1 bg-red-600/80 rounded py-1 border border-red-400">
+            ROUND 1 RIGHT
+          </div>
+          <div className="flex-1 flex flex-col justify-start space-y-1 overflow-y-auto max-h-[580px]">
+            {firstRoundMatchups.slice(8, 16).map((matchup, index) => (
+              <motion.div
+                key={`right-${index}`}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.02 }}
+                className="bg-gray-900/95 rounded border-2 border-red-600 p-1.5 shadow-sm"
+              >
+                <div className="text-white text-right font-semibold text-[10px] truncate">{matchup.team1}</div>
+                <div className="text-red-300 text-[8px] text-center font-bold">VS</div>
+                <div className="text-white text-right font-semibold text-[10px] truncate">{matchup.team2}</div>
+              </motion.div>
+            ))}
+            {/* Taj Dhillon Auto-Advance */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-green-600/95 rounded border-2 border-green-400 p-1.5 shadow-sm"
+            >
+              <div className="text-white font-semibold text-[10px] text-center">{specialAdvances[1].name}</div>
+              <div className="text-green-200 text-[8px] text-center">{specialAdvances[1].status}</div>
+            </motion.div>
+          </div>
         </div>
       </div>
 
-      {/* Matchups Grid for TV */}
-      <div className="grid grid-cols-4 gap-2 h-full">
-        {firstRoundMatchups.map((matchup, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: index * 0.05 }}
-            className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg border border-red-400 p-3 shadow-lg flex flex-col justify-between"
-          >
-            <div className="text-center text-red-300 font-bold text-xs mb-2">
-              #{index + 1}
-            </div>
-            <div className="space-y-2 flex-1">
-              <div className="bg-red-600/30 rounded border border-red-400 p-2">
-                <div className="text-white font-bold text-xs text-center truncate">
-                  {matchup.team1}
-                </div>
-              </div>
-              <div className="text-center text-red-400 font-black text-sm">VS</div>
-              <div className="bg-red-600/30 rounded border border-red-400 p-2">
-                <div className="text-white font-bold text-xs text-center truncate">
-                  {matchup.team2}
-                </div>
-              </div>
-            </div>
-            <div className="text-center mt-2">
-              <div className="bg-black/50 rounded px-2 py-1 text-yellow-300 text-xs font-bold">
-                LIVE
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Special Advances */}
-      <div className="mt-3 flex justify-center gap-4">
-        {specialAdvances.map((player, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 + index * 0.1 }}
-            className="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-2 rounded-lg border border-green-400 shadow-lg"
-          >
-            <div className="font-bold text-xs text-center">{player.name}</div>
-            <div className="text-xs text-green-200 text-center">{player.status}</div>
-          </motion.div>
-        ))}
+      {/* Tournament Status */}
+      <div className="text-center mt-2">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.5 }}
+          className="bg-green-600 text-white px-4 py-1.5 rounded-lg shadow-md inline-flex items-center gap-2 border border-green-400"
+        >
+          <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+          <span className="font-bold text-sm">🔴 LIVE • ROUND 1 MATCHUPS • COMPETE NOW!</span>
+          <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+        </motion.div>
       </div>
 
 
