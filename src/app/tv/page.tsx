@@ -197,7 +197,7 @@ export default function TVMode() {
                   ● LIVE
                 </div>
                 <div className="text-red-100 text-lg font-bold">
-                  March 7-14, 2025
+                  March 7-14, 2026
                 </div>
               </div>
             </div>
@@ -263,9 +263,9 @@ export default function TVMode() {
 
             {/* Top Performers */}
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-              <h3 className="text-2xl font-bold text-white mb-4 text-center">🏆 TOP 8</h3>
+              <h3 className="text-2xl font-bold text-white mb-4 text-center">🏆 TOP 10</h3>
               <div className="space-y-2">
-                {salesReps.slice(0, 8).map((agent, index) => {
+                {salesReps.slice(0, 10).map((agent, index) => {
                   const badge = getRankBadge(agent.rank)
                   const IconComponent = badge.icon
                   return (

@@ -52,9 +52,9 @@ export default function TVBracketView() {
         </div>
 
         {/* Left Side - Round 2 */}
-        <div className="flex flex-col min-w-[100px] h-full">
+        <div className="flex flex-col min-w-[80px] h-full">
           <div className="text-center text-white font-bold text-sm mb-1 bg-red-700/80 rounded py-1 border border-red-500">
-            ROUND 2
+            R2
           </div>
           <div className="flex-1 flex flex-col justify-center space-y-3">
             {[...Array(9)].map((_, index) => (
@@ -63,18 +63,18 @@ export default function TVBracketView() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 + index * 0.03 }}
-                className="bg-black/80 rounded border-2 border-red-500 p-1.5 text-center shadow-sm"
+                className="bg-black/80 rounded border-2 border-red-500 p-1 text-center shadow-sm"
               >
-                <div className="text-red-300 font-semibold text-[10px]">TBD</div>
+                <div className="text-red-300 font-semibold text-[9px]">TBD</div>
               </motion.div>
             ))}
           </div>
         </div>
 
         {/* Left Side - Round 3 */}
-        <div className="flex flex-col min-w-[100px] h-full">
+        <div className="flex flex-col min-w-[80px] h-full">
           <div className="text-center text-white font-bold text-sm mb-1 bg-red-800/80 rounded py-1 border border-red-600">
-            ROUND 3
+            R3
           </div>
           <div className="flex-1 flex flex-col justify-center space-y-8">
             {[...Array(5)].map((_, index) => (
@@ -83,16 +83,16 @@ export default function TVBracketView() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1 + index * 0.05 }}
-                className="bg-gray-800/80 rounded border-2 border-red-400 p-1.5 text-center shadow-sm"
+                className="bg-gray-800/80 rounded border-2 border-red-400 p-1 text-center shadow-sm"
               >
-                <div className="text-red-300 font-semibold text-[10px]">TBD</div>
+                <div className="text-red-300 font-semibold text-[9px]">TBD</div>
               </motion.div>
             ))}
           </div>
         </div>
 
         {/* Championship Center Column */}
-        <div className="flex flex-col items-center justify-center min-w-[140px] space-y-4">
+        <div className="flex flex-col items-center justify-center min-w-[120px] space-y-4">
           {/* Final Four - Left */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -113,7 +113,7 @@ export default function TVBracketView() {
           >
             <div className="text-2xl mb-1">🏆</div>
             <div className="text-white font-black text-lg">CHAMPION</div>
-            <div className="text-red-200 text-xs mt-1">MARCH MADNESS 2025</div>
+            <div className="text-red-200 text-xs mt-1">MARCH MADNESS 2026</div>
           </motion.div>
 
           {/* Final Four - Right */}
@@ -129,9 +129,9 @@ export default function TVBracketView() {
         </div>
 
         {/* Right Side - Round 3 */}
-        <div className="flex flex-col min-w-[100px] h-full">
+        <div className="flex flex-col min-w-[80px] h-full">
           <div className="text-center text-white font-bold text-sm mb-1 bg-red-800/80 rounded py-1 border border-red-600">
-            ROUND 3
+            R3
           </div>
           <div className="flex-1 flex flex-col justify-center space-y-8">
             {[...Array(5)].map((_, index) => (
@@ -140,18 +140,18 @@ export default function TVBracketView() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1 + index * 0.05 }}
-                className="bg-gray-800/80 rounded border-2 border-red-400 p-1.5 text-center shadow-sm"
+                className="bg-gray-800/80 rounded border-2 border-red-400 p-1 text-center shadow-sm"
               >
-                <div className="text-red-300 font-semibold text-[10px]">TBD</div>
+                <div className="text-red-300 font-semibold text-[9px]">TBD</div>
               </motion.div>
             ))}
           </div>
         </div>
 
         {/* Right Side - Round 2 */}
-        <div className="flex flex-col min-w-[100px] h-full">
+        <div className="flex flex-col min-w-[80px] h-full">
           <div className="text-center text-white font-bold text-sm mb-1 bg-red-700/80 rounded py-1 border border-red-500">
-            ROUND 2
+            R2
           </div>
           <div className="flex-1 flex flex-col justify-center space-y-3">
             {[...Array(9)].map((_, index) => (
@@ -160,9 +160,9 @@ export default function TVBracketView() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 + index * 0.03 }}
-                className="bg-black/80 rounded border-2 border-red-500 p-1.5 text-center shadow-sm"
+                className="bg-black/80 rounded border-2 border-red-500 p-1 text-center shadow-sm"
               >
-                <div className="text-red-300 font-semibold text-[10px]">TBD</div>
+                <div className="text-red-300 font-semibold text-[9px]">TBD</div>
               </motion.div>
             ))}
           </div>
