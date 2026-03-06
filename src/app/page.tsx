@@ -80,8 +80,68 @@ export default function MarchMadnessLeaderboard() {
     setIsClient(true)
     setCurrentTime(new Date())
     
+    // Load saved data from localStorage
+    const savedSalesReps = localStorage.getItem('salesReps')
+    const savedRecentSales = localStorage.getItem('recentSales')
+    
+    if (savedSalesReps) {
+      try {
+        const parsedReps = JSON.parse(savedSalesReps).map((rep: any) => ({
+          ...rep,
+          lastSale: new Date(rep.lastSale)
+        }))
+        setSalesReps(parsedReps)
+      } catch (e) {
+        console.error('Error parsing saved sales reps:', e)
+      }
+    }
+    
+    if (savedRecentSales) {
+      try {
+        const parsedSales = JSON.parse(savedRecentSales).map((sale: any) => ({
+          ...sale,
+          timestamp: new Date(sale.timestamp)
+        }))
+        setRecentSales(parsedSales)
+      } catch (e) {
+        console.error('Error parsing saved recent sales:', e)
+      }
+    }
+    
+    // Listen for storage changes from other tabs/windows
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'salesReps' && e.newValue) {
+        try {
+          const parsedReps = JSON.parse(e.newValue).map((rep: any) => ({
+            ...rep,
+            lastSale: new Date(rep.lastSale)
+          }))
+          setSalesReps(parsedReps)
+        } catch (error) {
+          console.error('Error syncing sales reps:', error)
+        }
+      }
+      if (e.key === 'recentSales' && e.newValue) {
+        try {
+          const parsedSales = JSON.parse(e.newValue).map((sale: any) => ({
+            ...sale,
+            timestamp: new Date(sale.timestamp)
+          }))
+          setRecentSales(parsedSales)
+        } catch (error) {
+          console.error('Error syncing recent sales:', error)
+        }
+      }
+    }
+    
+    window.addEventListener('storage', handleStorageChange)
+    
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
-    return () => clearInterval(timer)
+    
+    return () => {
+      clearInterval(timer)
+      window.removeEventListener('storage', handleStorageChange)
+    }
   }, [])
 
   const handleLogin = (agentId: string) => {
@@ -95,6 +155,16 @@ export default function MarchMadnessLeaderboard() {
     setLoggedInAgent(null)
   }
 
+  const handleReset = () => {
+    if (confirm('Are you sure you want to reset all tournament data? This cannot be undone.')) {
+      setSalesReps(bracketParticipants)
+      setRecentSales([])
+      localStorage.removeItem('salesReps')
+      localStorage.removeItem('recentSales')
+      setLoggedInAgent(null)
+    }
+  }
+
   const handleRecordSale = (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
     const saleEntry: Sale = {
       id: Date.now().toString(),
@@ -102,7 +172,9 @@ export default function MarchMadnessLeaderboard() {
       timestamp: new Date()
     }
     
-    setRecentSales(prev => [saleEntry, ...prev.slice(0, 19)])
+    const newRecentSales = [saleEntry, ...recentSalesList.slice(0, 19)]
+    setRecentSales(newRecentSales)
+    localStorage.setItem('recentSales', JSON.stringify(newRecentSales))
     
     const existingRep = salesReps.find(rep => 
       rep.name.toLowerCase().includes(saleData.repName.toLowerCase()) ||
@@ -110,7 +182,7 @@ export default function MarchMadnessLeaderboard() {
     )
     
     if (existingRep) {
-      setSalesReps(prev => prev.map(rep => 
+      const updatedReps = salesReps.map(rep => 
         rep.id === existingRep.id 
           ? { 
               ...rep, 
@@ -120,15 +192,14 @@ export default function MarchMadnessLeaderboard() {
             }
           : rep
       ).sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium)
-       .map((rep, index) => ({ ...rep, rank: index + 1 })))
+       .map((rep, index) => ({ ...rep, rank: index + 1 }))
+      
+      setSalesReps(updatedReps)
+      localStorage.setItem('salesReps', JSON.stringify(updatedReps))
       
       if (loggedInAgent && loggedInAgent.id === existingRep.id) {
-        setLoggedInAgent(prev => prev ? {
-          ...prev,
-          totalSales: prev.totalSales + 1,
-          totalPremium: prev.totalPremium + saleData.premium,
-          lastSale: new Date()
-        } : null)
+        const updatedAgent = updatedReps.find(rep => rep.id === existingRep.id)
+        setLoggedInAgent(updatedAgent || null)
       }
     }
   }
@@ -214,6 +285,15 @@ export default function MarchMadnessLeaderboard() {
             <Tv className="w-6 h-6" />
             📺 TV DISPLAY
           </motion.a>
+
+          <motion.button
+            onClick={handleReset}
+            className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg hover:from-orange-600 hover:to-red-600 transition-all flex items-center gap-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            🔄 RESET DATA
+          </motion.button>
         </div>
 
         {/* Live Stats Banner */}

@@ -60,15 +60,68 @@ const bracketParticipants: SalesRep[] = [
 export default function TVMode() {
   const [currentTime, setCurrentTime] = useState<Date | null>(null)
   const [isClient, setIsClient] = useState(false)
-  const [salesReps] = useState<SalesRep[]>(bracketParticipants.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
+  const [salesReps, setSalesReps] = useState<SalesRep[]>(bracketParticipants.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
 
   useEffect(() => {
     // Set client-side flag and initial time
     setIsClient(true)
     setCurrentTime(new Date())
     
+    // Load saved data from localStorage
+    const savedSalesReps = localStorage.getItem('salesReps')
+    
+    if (savedSalesReps) {
+      try {
+        const parsedReps = JSON.parse(savedSalesReps).map((rep: any) => ({
+          ...rep,
+          lastSale: new Date(rep.lastSale)
+        }))
+        setSalesReps(parsedReps)
+      } catch (e) {
+        console.error('Error parsing saved sales reps:', e)
+      }
+    }
+    
+    // Listen for storage changes from other tabs/windows
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'salesReps' && e.newValue) {
+        try {
+          const parsedReps = JSON.parse(e.newValue).map((rep: any) => ({
+            ...rep,
+            lastSale: new Date(rep.lastSale)
+          }))
+          setSalesReps(parsedReps)
+        } catch (error) {
+          console.error('Error syncing sales reps:', error)
+        }
+      }
+    }
+    
+    window.addEventListener('storage', handleStorageChange)
+    
+    // Also poll every 5 seconds to catch same-tab updates
+    const pollInterval = setInterval(() => {
+      const savedSalesReps = localStorage.getItem('salesReps')
+      if (savedSalesReps) {
+        try {
+          const parsedReps = JSON.parse(savedSalesReps).map((rep: any) => ({
+            ...rep,
+            lastSale: new Date(rep.lastSale)
+          }))
+          setSalesReps(parsedReps)
+        } catch (e) {
+          console.error('Error polling sales reps:', e)
+        }
+      }
+    }, 5000)
+    
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
-    return () => clearInterval(timer)
+    
+    return () => {
+      clearInterval(timer)
+      clearInterval(pollInterval)
+      window.removeEventListener('storage', handleStorageChange)
+    }
   }, [])
 
   const formatCurrency = (amount: number) => {
