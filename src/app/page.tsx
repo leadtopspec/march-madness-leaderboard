@@ -165,9 +165,9 @@ export default function MarchMadnessLeaderboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900">
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white py-6 shadow-2xl">
+      <div className="bg-gradient-to-r from-red-600 to-red-800 text-white py-6 shadow-2xl border-b-4 border-red-400">
         <div className="container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
@@ -196,7 +196,7 @@ export default function MarchMadnessLeaderboard() {
         <div className="flex flex-wrap gap-4 justify-center mb-8">
           <motion.button
             onClick={() => setShowLoginModal(true)}
-            className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:from-green-600 hover:to-emerald-700 transition-all flex items-center gap-3"
+            className="bg-gradient-to-r from-red-500 to-red-700 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:from-red-600 hover:to-red-800 transition-all flex items-center gap-3"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -207,7 +207,7 @@ export default function MarchMadnessLeaderboard() {
           <motion.a
             href="/tv"
             target="_blank"
-            className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:from-purple-600 hover:to-pink-700 transition-all flex items-center gap-3"
+            className="bg-gradient-to-r from-gray-700 to-black text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:from-gray-800 hover:to-gray-900 transition-all flex items-center gap-3"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -219,7 +219,7 @@ export default function MarchMadnessLeaderboard() {
         {/* Live Stats Banner */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <motion.div 
-            className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl p-4 text-center shadow-xl"
+            className="bg-gradient-to-r from-red-500 to-red-700 text-white rounded-xl p-4 text-center shadow-xl"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
@@ -229,7 +229,7 @@ export default function MarchMadnessLeaderboard() {
           </motion.div>
 
           <motion.div 
-            className="bg-gradient-to-r from-blue-500 to-cyan-600 text-white rounded-xl p-4 text-center shadow-xl"
+            className="bg-gradient-to-r from-gray-700 to-gray-900 text-white rounded-xl p-4 text-center shadow-xl"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
@@ -239,7 +239,7 @@ export default function MarchMadnessLeaderboard() {
           </motion.div>
 
           <motion.div 
-            className="bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl p-4 text-center shadow-xl"
+            className="bg-gradient-to-r from-red-600 to-red-800 text-white rounded-xl p-4 text-center shadow-xl"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
@@ -249,7 +249,7 @@ export default function MarchMadnessLeaderboard() {
           </motion.div>
 
           <motion.div 
-            className="bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl p-4 text-center shadow-xl"
+            className="bg-gradient-to-r from-black to-gray-800 text-white rounded-xl p-4 text-center shadow-xl"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
@@ -263,7 +263,7 @@ export default function MarchMadnessLeaderboard() {
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 mb-8"
+          className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border-2 border-red-500/30 mb-8"
         >
           <div className="flex items-center gap-3 mb-8">
             <div className="text-3xl">📋</div>
@@ -271,16 +271,16 @@ export default function MarchMadnessLeaderboard() {
           </div>
           
           <div className="text-white space-y-6">
-            <div className="bg-orange-500/20 border border-orange-400/30 rounded-xl p-4">
-              <div className="text-xl font-bold text-orange-200 mb-2">🎯 Objective</div>
-              <div className="text-orange-100">Outproduce your opponent in issued business and advance through the bracket.</div>
+            <div className="bg-red-500/20 border border-red-400/30 rounded-xl p-4">
+              <div className="text-xl font-bold text-red-200 mb-2">🎯 Objective</div>
+              <div className="text-red-100">Outproduce your opponent in issued business and advance through the bracket.</div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Left Column */}
               <div className="space-y-6">
-                <div className="bg-white/5 border border-white/20 rounded-xl p-6">
-                  <div className="text-lg font-bold text-blue-200 mb-3 flex items-center gap-2">
+                <div className="bg-black/20 border border-gray-600/30 rounded-xl p-6">
+                  <div className="text-lg font-bold text-gray-200 mb-3 flex items-center gap-2">
                     <span>1.</span> 🥊 Head-to-Head Matchups
                   </div>
                   <ul className="text-white/90 space-y-2 text-sm">
@@ -289,8 +289,8 @@ export default function MarchMadnessLeaderboard() {
                   </ul>
                 </div>
 
-                <div className="bg-white/5 border border-white/20 rounded-xl p-6">
-                  <div className="text-lg font-bold text-purple-200 mb-3 flex items-center gap-2">
+                <div className="bg-red-600/20 border border-red-500/30 rounded-xl p-6">
+                  <div className="text-lg font-bold text-red-200 mb-3 flex items-center gap-2">
                     <span>2.</span> 📹 Zoom Room Requirement
                   </div>
                   <ul className="text-white/90 space-y-2 text-sm">
@@ -349,13 +349,13 @@ export default function MarchMadnessLeaderboard() {
                   <ul className="text-white/90 space-y-2 text-sm">
                     <li>• No splitting apps</li>
                     <li>• No transferring apps</li>
-                    <li>• No counting someone else's business</li>
+                    <li>• No counting someone else&apos;s business</li>
                     <li>• Production must be written personally by you</li>
                     <li className="text-red-300 font-semibold">Violation = disqualification</li>
                   </ul>
                 </div>
 
-                <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-400/30 rounded-xl p-6">
+                <div className="bg-gradient-to-r from-red-500/20 to-red-700/20 border border-red-400/30 rounded-xl p-6">
                   <div className="text-lg font-bold text-yellow-200 mb-3 flex items-center gap-2">
                     <span>7.</span> 🏆 Winner
                   </div>
@@ -364,7 +364,7 @@ export default function MarchMadnessLeaderboard() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/30 rounded-xl p-6">
+                <div className="bg-gradient-to-r from-black/20 to-gray-800/20 border border-gray-400/30 rounded-xl p-6">
                   <div className="text-lg font-bold text-cyan-200 mb-3 flex items-center gap-2">
                     <span>8.</span> 🔥 Spirit of the Competition
                   </div>
@@ -406,7 +406,7 @@ export default function MarchMadnessLeaderboard() {
                   transition={{ delay: index * 0.1 }}
                   className={`flex items-center justify-between p-4 rounded-xl border ${
                     index < 3 
-                      ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-yellow-400/30' 
+                      ? 'bg-gradient-to-r from-red-500/20 to-red-700/20 border-red-400/30' 
                       : 'bg-white/5 border-white/10'
                   }`}
                 >
@@ -474,7 +474,7 @@ export default function MarchMadnessLeaderboard() {
 
               <div className="text-center">
                 <div className="text-sm text-red-400 font-bold mb-2">CHAMPIONSHIP</div>
-                <div className="bg-gradient-to-r from-red-500/20 to-pink-500/20 border border-red-400/30 rounded-xl p-4">
+                <div className="bg-gradient-to-r from-red-600/20 to-black/20 border border-red-400/30 rounded-xl p-4">
                   <div className="text-2xl font-black text-white mb-1">🏆</div>
                   <div className="text-lg font-bold text-white">MARCH MADNESS</div>
                   <div className="text-sm text-white/70">CHAMPION</div>

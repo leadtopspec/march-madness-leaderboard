@@ -87,7 +87,7 @@
   }
 
   .tv-mode-header {
-    @apply text-6xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent;
+    @apply text-6xl font-bold mb-4 bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent;
   }
 
   .tv-mode-item {
@@ -142,15 +142,15 @@
 
   /* TV Mode specific styles */
   .tv-gradient {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #b91c1c 0%, #111827 100%);
   }
 
   .leaderboard-gradient {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #dc2626 0%, #7f1d1d 100%);
   }
 
   .competition-gradient {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%);
   }
 
   /* Custom focus styles for accessibility */

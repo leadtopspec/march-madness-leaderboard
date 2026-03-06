@@ -106,23 +106,23 @@ export default function TVMode() {
     }
   }
 
-  const topAgents = salesReps.slice(0, 10)
+
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 text-white overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900 text-white overflow-hidden relative">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-20 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-40 right-32 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        <div className="absolute top-20 left-20 w-64 h-64 bg-red-600/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-40 right-32 w-80 h-80 bg-red-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-red-700/5 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
 
       {/* Header */}
-      <div className="relative bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 p-8 shadow-2xl border-b-8 border-yellow-400">
+      <div className="relative bg-gradient-to-r from-red-600 via-red-700 to-red-800 p-8 shadow-2xl border-b-8 border-red-400">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
             <motion.div 
-              className="w-24 h-24 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-2xl relative"
+              className="w-24 h-24 bg-gradient-to-r from-red-500 to-red-700 rounded-full flex items-center justify-center shadow-2xl relative"
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
             >
@@ -138,12 +138,12 @@ export default function TVMode() {
               >
                 🏀 MARCH MADNESS
               </motion.h1>
-              <p className="text-3xl text-yellow-100 font-bold">All In Agencies • Sales Tournament</p>
+              <p className="text-3xl text-red-100 font-bold">All In Agencies • Sales Tournament</p>
               <div className="flex items-center space-x-4 mt-2">
                 <div className="bg-green-500 text-white px-4 py-1 rounded-full text-lg font-bold animate-pulse">
                   ● LIVE
                 </div>
-                <div className="text-yellow-100 text-lg font-bold">
+                <div className="text-red-100 text-lg font-bold">
                   March 7-14, 2025
                 </div>
               </div>
@@ -191,14 +191,14 @@ export default function TVMode() {
         </motion.h2>
         
         {/* Split Layout: Bracket + Leaderboard */}
-        <div className="grid grid-cols-4 gap-6 h-full">
-          {/* Main Bracket - 3/4 of screen */}
-          <div className="col-span-3 bg-white/5 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border-2 border-white/20 h-[700px]">
+        <div className="grid grid-cols-5 gap-4 h-full">
+          {/* Main Bracket - 4/5 of screen */}
+          <div className="col-span-4 bg-white/5 backdrop-blur-xl rounded-xl p-4 shadow-xl border border-white/20 h-[650px]">
             <TVBracketView />
           </div>
 
-          {/* Right Sidebar - Leaderboard + Stats - 1/4 of screen */}
-          <div className="col-span-1 space-y-4">
+          {/* Right Sidebar - Leaderboard + Stats - 1/5 of screen */}
+          <div className="col-span-1 space-y-3">
             {/* Live Stats */}
             <div className="bg-black/80 backdrop-blur-sm rounded-xl p-4 border border-white/20">
               <div className="text-center text-white">
