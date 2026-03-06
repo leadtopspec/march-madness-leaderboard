@@ -72,7 +72,7 @@ export default function TVMode() {
     
     if (savedSalesReps) {
       try {
-        const parsedReps = JSON.parse(savedSalesReps).map((rep: any) => ({
+        const parsedReps = JSON.parse(savedSalesReps).map((rep: SalesRep & {lastSale: string}) => ({
           ...rep,
           lastSale: new Date(rep.lastSale)
         }))
@@ -86,7 +86,7 @@ export default function TVMode() {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'salesReps' && e.newValue) {
         try {
-          const parsedReps = JSON.parse(e.newValue).map((rep: any) => ({
+          const parsedReps = JSON.parse(e.newValue).map((rep: SalesRep & {lastSale: string}) => ({
             ...rep,
             lastSale: new Date(rep.lastSale)
           }))
@@ -104,7 +104,7 @@ export default function TVMode() {
       const savedSalesReps = localStorage.getItem('salesReps')
       if (savedSalesReps) {
         try {
-          const parsedReps = JSON.parse(savedSalesReps).map((rep: any) => ({
+          const parsedReps = JSON.parse(savedSalesReps).map((rep: SalesRep & {lastSale: string}) => ({
             ...rep,
             lastSale: new Date(rep.lastSale)
           }))

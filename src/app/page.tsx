@@ -88,7 +88,7 @@ export default function MarchMadnessLeaderboard() {
     
     if (savedSalesReps) {
       try {
-        const parsedReps = JSON.parse(savedSalesReps).map((rep: any) => ({
+        const parsedReps = JSON.parse(savedSalesReps).map((rep: SalesRep & {lastSale: string}) => ({
           ...rep,
           lastSale: new Date(rep.lastSale)
         }))
@@ -100,7 +100,7 @@ export default function MarchMadnessLeaderboard() {
     
     if (savedRecentSales) {
       try {
-        const parsedSales = JSON.parse(savedRecentSales).map((sale: any) => ({
+        const parsedSales = JSON.parse(savedRecentSales).map((sale: Sale & {timestamp: string}) => ({
           ...sale,
           timestamp: new Date(sale.timestamp)
         }))
@@ -115,7 +115,7 @@ export default function MarchMadnessLeaderboard() {
         const parsedAgent = JSON.parse(savedLoggedInAgent)
         // Find the current version of this agent with updated stats
         const currentAgent = (savedSalesReps ? JSON.parse(savedSalesReps) : bracketParticipants)
-          .find((rep: any) => rep.id === parsedAgent.id)
+          .find((rep: SalesRep) => rep.id === parsedAgent.id)
         if (currentAgent) {
           setLoggedInAgent({
             ...currentAgent,
@@ -131,7 +131,7 @@ export default function MarchMadnessLeaderboard() {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'salesReps' && e.newValue) {
         try {
-          const parsedReps = JSON.parse(e.newValue).map((rep: any) => ({
+          const parsedReps = JSON.parse(e.newValue).map((rep: SalesRep & {lastSale: string}) => ({
             ...rep,
             lastSale: new Date(rep.lastSale)
           }))
@@ -141,7 +141,7 @@ export default function MarchMadnessLeaderboard() {
           const currentLoggedInAgent = localStorage.getItem('loggedInAgent')
           if (currentLoggedInAgent) {
             const parsedLoggedInAgent = JSON.parse(currentLoggedInAgent)
-            const updatedAgent = parsedReps.find((rep: any) => rep.id === parsedLoggedInAgent.id)
+            const updatedAgent = parsedReps.find((rep: SalesRep) => rep.id === parsedLoggedInAgent.id)
             if (updatedAgent) {
               setLoggedInAgent(updatedAgent)
             }
@@ -152,7 +152,7 @@ export default function MarchMadnessLeaderboard() {
       }
       if (e.key === 'recentSales' && e.newValue) {
         try {
-          const parsedSales = JSON.parse(e.newValue).map((sale: any) => ({
+          const parsedSales = JSON.parse(e.newValue).map((sale: Sale & {timestamp: string}) => ({
             ...sale,
             timestamp: new Date(sale.timestamp)
           }))
