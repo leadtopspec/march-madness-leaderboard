@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Target, TrendingUp, Users, Clock, Plus, LogOut, Crown, Award, Star, Zap } from 'lucide-react'
+import { Target, TrendingUp, Users, Clock, Plus, LogOut, Crown, Award, Star, Zap, X } from 'lucide-react'
 
 interface SalesRep {
   id: string
@@ -28,11 +28,12 @@ interface AgentDashboardProps {
   agent: SalesRep
   allAgents: SalesRep[]
   onRecordSale: (sale: Omit<Sale, 'id' | 'timestamp'>) => void
+  onDeleteSale: (saleId: string) => void
   onLogout: () => void
   recentSales: Sale[]
 }
 
-export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordSale, onLogout, recentSales }: AgentDashboardProps) {
+export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordSale, onDeleteSale, onLogout, recentSales }: AgentDashboardProps) {
   // Keep allAgents for future matchup functionality
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _unused = _allAgents;
@@ -240,7 +241,7 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
                         className="bg-gradient-to-r from-red-900/20 to-red-800/20 border-2 border-red-600 rounded-xl p-4 hover:shadow-lg transition-all backdrop-blur-sm"
                       >
                         <div className="flex justify-between items-start">
-                          <div>
+                          <div className="flex-1">
                             <div className="font-black text-white text-lg">{sale.clientName}</div>
                             <div className="text-sm text-red-300 font-semibold">{sale.policyType}</div>
                             <div className="text-xs text-green-400 font-medium">AP: {formatCurrency(sale.premium)}</div>
@@ -249,6 +250,17 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
                             <div className="font-black text-green-400 text-xl">{formatCurrency(sale.premium)}</div>
                             <div className="text-xs text-gray-400">{sale.timestamp.toLocaleString()}</div>
                           </div>
+                          <button
+                            onClick={() => {
+                              if (confirm('Delete this sale? This cannot be undone.')) {
+                                onDeleteSale(sale.id)
+                              }
+                            }}
+                            className="ml-2 p-1 text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded transition-colors"
+                            title="Delete sale"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
                         </div>
                       </motion.div>
                     ))

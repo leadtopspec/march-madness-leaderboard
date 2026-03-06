@@ -205,16 +205,7 @@ export default function MarchMadnessLeaderboard() {
     localStorage.removeItem('loggedInAgent')
   }
 
-  const handleReset = () => {
-    if (confirm('Are you sure you want to reset all tournament data? This cannot be undone.')) {
-      setSalesReps(bracketParticipants)
-      setRecentSales([])
-      setLoggedInAgent(null)
-      localStorage.removeItem('salesReps')
-      localStorage.removeItem('recentSales')
-      localStorage.removeItem('loggedInAgent')
-    }
-  }
+
 
   const handleRecordSale = (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
     const saleEntry: Sale = {
@@ -240,6 +231,47 @@ export default function MarchMadnessLeaderboard() {
               totalSales: rep.totalSales + 1, 
               totalPremium: rep.totalPremium + saleData.premium,
               lastSale: new Date()
+            }
+          : rep
+      ).sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium)
+       .map((rep, index) => ({ ...rep, rank: index + 1 }))
+      
+      setSalesReps(updatedReps)
+      localStorage.setItem('salesReps', JSON.stringify(updatedReps))
+      
+      if (loggedInAgent && loggedInAgent.id === existingRep.id) {
+        const updatedAgent = updatedReps.find(rep => rep.id === existingRep.id)
+        setLoggedInAgent(updatedAgent || null)
+        if (updatedAgent) {
+          localStorage.setItem('loggedInAgent', JSON.stringify(updatedAgent))
+        }
+      }
+    }
+  }
+
+  const handleDeleteSale = (saleId: string) => {
+    const saleToDelete = recentSalesList.find(sale => sale.id === saleId)
+    if (!saleToDelete) return
+
+    // Remove sale from recent sales
+    const newRecentSales = recentSalesList.filter(sale => sale.id !== saleId)
+    setRecentSales(newRecentSales)
+    localStorage.setItem('recentSales', JSON.stringify(newRecentSales))
+
+    // Find and update the agent who made this sale
+    const existingRep = salesReps.find(rep => 
+      rep.name.toLowerCase().includes(saleToDelete.repName.toLowerCase()) ||
+      saleToDelete.repName.toLowerCase().includes(rep.name.toLowerCase())
+    )
+
+    if (existingRep && existingRep.totalSales > 0) {
+      const updatedReps = salesReps.map(rep => 
+        rep.id === existingRep.id 
+          ? { 
+              ...rep, 
+              totalSales: Math.max(0, rep.totalSales - 1), 
+              totalPremium: Math.max(0, rep.totalPremium - saleToDelete.premium),
+              lastSale: rep.totalSales > 1 ? rep.lastSale : new Date('2024-03-01T00:00:00.000Z')
             }
           : rep
       ).sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium)
@@ -295,6 +327,7 @@ export default function MarchMadnessLeaderboard() {
         agent={updatedAgent}
         allAgents={salesReps}
         onRecordSale={handleRecordSale}
+        onDeleteSale={handleDeleteSale}
         onLogout={handleLogout}
         recentSales={recentSalesList}
       />
@@ -352,14 +385,7 @@ export default function MarchMadnessLeaderboard() {
             📺 TV DISPLAY
           </motion.a>
 
-          <motion.button
-            onClick={handleReset}
-            className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg hover:from-orange-600 hover:to-red-600 transition-all flex items-center gap-2"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            🔄 RESET DATA
-          </motion.button>
+
         </div>
 
         {/* Live Stats Banner */}
