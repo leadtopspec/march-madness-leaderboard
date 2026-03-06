@@ -79,12 +79,12 @@ export default function BracketView() {
       </div>
 
       {/* Traditional Bracket View */}
-      <div className="w-full mx-auto overflow-x-auto">
-        <div className="flex items-center justify-between min-w-[800px] gap-2 lg:gap-4 px-2">
+      <div className="w-full mx-auto overflow-x-auto pb-4">
+        <div className="flex items-center justify-between min-w-[680px] gap-1 md:gap-2 lg:gap-4 px-2">
           
           {/* Left Side - Round 1 */}
-          <div className="flex flex-col min-w-[110px] lg:min-w-[140px]">
-            <div className="text-center text-white font-bold text-xs lg:text-sm mb-3 bg-red-600/80 rounded-lg py-2 border border-red-400">
+          <div className="flex flex-col min-w-[95px] md:min-w-[110px] lg:min-w-[140px]">
+            <div className="text-center text-white font-bold text-[10px] md:text-xs lg:text-sm mb-3 bg-red-600/80 rounded-lg py-2 border border-red-400">
               PLAY-IN LEFT
             </div>
             <div className="space-y-2">
@@ -94,10 +94,10 @@ export default function BracketView() {
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.02 }}
-                  className="bg-gray-900/95 rounded-lg border-2 border-red-600 p-2 lg:p-3 text-[9px] lg:text-[10px] font-bold shadow-lg hover:shadow-xl transition-shadow backdrop-blur-sm"
+                  className="bg-gray-900/95 rounded-lg border-2 border-red-600 p-1.5 md:p-2 lg:p-3 text-[8px] md:text-[9px] lg:text-[10px] font-bold shadow-lg hover:shadow-xl transition-shadow backdrop-blur-sm"
                 >
                   <div className="text-white truncate">G{matchup.game}: {matchup.team1}</div>
-                  <div className="text-red-300 text-[8px] text-center">VS</div>
+                  <div className="text-red-300 text-[7px] md:text-[8px] text-center">VS</div>
                   <div className="text-white truncate">{matchup.team2}</div>
                 </motion.div>
               ))}
@@ -105,8 +105,8 @@ export default function BracketView() {
           </div>
 
           {/* Left Side - Round 2 */}
-          <div className="flex flex-col min-w-[90px] lg:min-w-[120px]">
-            <div className="text-center text-white font-bold text-xs lg:text-sm mb-3 bg-red-700/80 rounded-lg py-2 border border-red-500">
+          <div className="flex flex-col min-w-[70px] md:min-w-[90px] lg:min-w-[120px]">
+            <div className="text-center text-white font-bold text-[10px] md:text-xs lg:text-sm mb-3 bg-red-700/80 rounded-lg py-2 border border-red-500">
               ROUND 2
             </div>
             <div className="flex flex-col justify-center h-full space-y-3 lg:space-y-4">
@@ -116,7 +116,7 @@ export default function BracketView() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1 + index * 0.05 }}
-                  className="bg-black/80 rounded-lg border-2 border-red-500 p-2 lg:p-3 text-[10px] lg:text-xs font-bold text-center shadow-lg backdrop-blur-sm"
+                  className="bg-black/80 rounded-lg border-2 border-red-500 p-1.5 md:p-2 lg:p-3 text-[9px] md:text-[10px] lg:text-xs font-bold text-center shadow-lg backdrop-blur-sm"
                 >
                   <div className="text-red-300">TBD</div>
                 </motion.div>
@@ -125,18 +125,18 @@ export default function BracketView() {
           </div>
 
           {/* Left Side - Round 3 */}
-          <div className="flex flex-col min-w-[90px] lg:min-w-[120px]">
-            <div className="text-center text-white font-bold text-xs lg:text-sm mb-3 bg-red-800/80 rounded-lg py-2 border border-red-600">
+          <div className="flex flex-col min-w-[70px] md:min-w-[90px] lg:min-w-[120px]">
+            <div className="text-center text-white font-bold text-[10px] md:text-xs lg:text-sm mb-3 bg-red-800/80 rounded-lg py-2 border border-red-600">
               ROUND 3
             </div>
-            <div className="flex flex-col justify-center h-full space-y-8 lg:space-y-12">
+            <div className="flex flex-col justify-center h-full space-y-6 md:space-y-8 lg:space-y-12">
               {[...Array(5)].map((_, index) => (
                 <motion.div
                   key={`left-r3-${index}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.5 + index * 0.05 }}
-                  className="bg-gray-800/80 rounded-lg border-2 border-red-400 p-2 lg:p-3 text-[10px] lg:text-xs font-bold text-center shadow-lg backdrop-blur-sm"
+                  className="bg-gray-800/80 rounded-lg border-2 border-red-400 p-1.5 md:p-2 lg:p-3 text-[9px] md:text-[10px] lg:text-xs font-bold text-center shadow-lg backdrop-blur-sm"
                 >
                   <div className="text-red-300">TBD</div>
                 </motion.div>
@@ -145,7 +145,7 @@ export default function BracketView() {
           </div>
 
           {/* Championship Center Column */}
-          <div className="flex flex-col items-center justify-center min-w-[120px] lg:min-w-[160px] space-y-4 lg:space-y-8">
+          <div className="flex flex-col items-center justify-center min-w-[100px] md:min-w-[120px] lg:min-w-[160px] space-y-3 md:space-y-4 lg:space-y-8">
             {/* Final Four - Left */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
@@ -182,18 +182,18 @@ export default function BracketView() {
           </div>
 
           {/* Right Side - Round 3 */}
-          <div className="flex flex-col min-w-[90px] lg:min-w-[120px]">
-            <div className="text-center text-white font-bold text-xs lg:text-sm mb-3 bg-red-800/80 rounded-lg py-2 border border-red-600">
+          <div className="flex flex-col min-w-[70px] md:min-w-[90px] lg:min-w-[120px]">
+            <div className="text-center text-white font-bold text-[10px] md:text-xs lg:text-sm mb-3 bg-red-800/80 rounded-lg py-2 border border-red-600">
               ROUND 3
             </div>
-            <div className="flex flex-col justify-center h-full space-y-8 lg:space-y-12">
+            <div className="flex flex-col justify-center h-full space-y-6 md:space-y-8 lg:space-y-12">
               {[...Array(5)].map((_, index) => (
                 <motion.div
                   key={`right-r3-${index}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.5 + index * 0.05 }}
-                  className="bg-gray-800/80 rounded-lg border-2 border-red-400 p-2 lg:p-3 text-[10px] lg:text-xs font-bold text-center shadow-lg backdrop-blur-sm"
+                  className="bg-gray-800/80 rounded-lg border-2 border-red-400 p-1.5 md:p-2 lg:p-3 text-[9px] md:text-[10px] lg:text-xs font-bold text-center shadow-lg backdrop-blur-sm"
                 >
                   <div className="text-red-300">TBD</div>
                 </motion.div>
@@ -202,8 +202,8 @@ export default function BracketView() {
           </div>
 
           {/* Right Side - Round 2 */}
-          <div className="flex flex-col min-w-[90px] lg:min-w-[120px]">
-            <div className="text-center text-white font-bold text-xs lg:text-sm mb-3 bg-red-700/80 rounded-lg py-2 border border-red-500">
+          <div className="flex flex-col min-w-[70px] md:min-w-[90px] lg:min-w-[120px]">
+            <div className="text-center text-white font-bold text-[10px] md:text-xs lg:text-sm mb-3 bg-red-700/80 rounded-lg py-2 border border-red-500">
               ROUND 2
             </div>
             <div className="flex flex-col justify-center h-full space-y-3 lg:space-y-4">
@@ -213,7 +213,7 @@ export default function BracketView() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1 + index * 0.05 }}
-                  className="bg-black/80 rounded-lg border-2 border-red-500 p-2 lg:p-3 text-[10px] lg:text-xs font-bold text-center shadow-lg backdrop-blur-sm"
+                  className="bg-black/80 rounded-lg border-2 border-red-500 p-1.5 md:p-2 lg:p-3 text-[9px] md:text-[10px] lg:text-xs font-bold text-center shadow-lg backdrop-blur-sm"
                 >
                   <div className="text-red-300">TBD</div>
                 </motion.div>
@@ -222,8 +222,8 @@ export default function BracketView() {
           </div>
 
           {/* Right Side - Round 1 */}
-          <div className="flex flex-col min-w-[110px] lg:min-w-[140px]">
-            <div className="text-center text-white font-bold text-xs lg:text-sm mb-3 bg-red-600/80 rounded-lg py-2 border border-red-400">
+          <div className="flex flex-col min-w-[95px] md:min-w-[110px] lg:min-w-[140px]">
+            <div className="text-center text-white font-bold text-[10px] md:text-xs lg:text-sm mb-3 bg-red-600/80 rounded-lg py-2 border border-red-400">
               PLAY-IN RIGHT
             </div>
             <div className="space-y-2">
@@ -233,10 +233,10 @@ export default function BracketView() {
                   initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.02 }}
-                  className="bg-gray-900/95 rounded-lg border-2 border-red-600 p-2 lg:p-3 text-[9px] lg:text-[10px] font-bold shadow-lg hover:shadow-xl transition-shadow backdrop-blur-sm"
+                  className="bg-gray-900/95 rounded-lg border-2 border-red-600 p-1.5 md:p-2 lg:p-3 text-[8px] md:text-[9px] lg:text-[10px] font-bold shadow-lg hover:shadow-xl transition-shadow backdrop-blur-sm"
                 >
                   <div className="text-white text-right truncate">G{matchup.game}: {matchup.team1}</div>
-                  <div className="text-red-300 text-[8px] text-center">VS</div>
+                  <div className="text-red-300 text-[7px] md:text-[8px] text-center">VS</div>
                   <div className="text-white text-right truncate">{matchup.team2}</div>
                 </motion.div>
               ))}
