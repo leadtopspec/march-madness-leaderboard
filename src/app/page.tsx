@@ -306,7 +306,7 @@ export default function MarchMadnessLeaderboard() {
                     <span>3.</span> ⚖️ What Counts
                   </div>
                   <div className="space-y-2 text-sm">
-                    <div className="text-green-300 font-semibold">✅ Issued premium only counts</div>
+                    <div className="text-green-300 font-semibold">✅ Submitted premium only counts</div>
                     <div className="text-red-300 font-semibold">❌ Rewrites do NOT count</div>
                     <div className="text-white/90">Only new submitted and issued business applies to the scoreboard.</div>
                   </div>
