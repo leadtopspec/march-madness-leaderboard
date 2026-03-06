@@ -79,10 +79,10 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
   }
 
   const getRankBadge = (rank: number) => {
-    if (rank === 1) return { icon: Crown, color: 'from-yellow-400 to-yellow-600', bg: 'bg-gradient-to-br from-yellow-400/30 to-amber-500/30 border-yellow-300', glow: 'shadow-yellow-500/50' }
-    if (rank === 2) return { icon: Award, color: 'from-gray-400 to-gray-600', bg: 'bg-gradient-to-br from-gray-400/30 to-slate-500/30 border-gray-300', glow: 'shadow-gray-500/50' }
-    if (rank === 3) return { icon: Star, color: 'from-orange-400 to-orange-600', bg: 'bg-gradient-to-br from-orange-400/30 to-red-500/30 border-orange-300', glow: 'shadow-orange-500/50' }
-    return { icon: Target, color: 'from-blue-400 to-blue-600', bg: 'bg-white/90 backdrop-blur-sm border-slate-200', glow: 'shadow-slate-500/20' }
+    if (rank === 1) return { icon: Crown, color: 'from-red-400 to-red-600', bg: 'bg-gradient-to-br from-red-600/30 to-red-800/30 border-red-500', glow: 'shadow-red-500/50' }
+    if (rank === 2) return { icon: Award, color: 'from-gray-400 to-gray-600', bg: 'bg-gradient-to-br from-gray-700/30 to-black/30 border-gray-600', glow: 'shadow-gray-500/50' }
+    if (rank === 3) return { icon: Star, color: 'from-red-300 to-red-500', bg: 'bg-gradient-to-br from-red-500/20 to-red-700/20 border-red-400', glow: 'shadow-red-500/30' }
+    return { icon: Target, color: 'from-gray-400 to-gray-600', bg: 'bg-black/80 backdrop-blur-sm border-red-600', glow: 'shadow-red-500/20' }
   }
 
   // Find current opponent based on bracket matchup - currently showing TBD
@@ -198,11 +198,11 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
 
               <div className="text-center py-16">
                 <div className="text-8xl mb-6">🏖️</div>
-                <div className="text-3xl font-black text-slate-600 mb-4">Tournament Brackets TBD</div>
-                <div className="text-xl text-slate-500 mb-6">Matchups will be announced soon!</div>
-                <div className="bg-cyan-50 border-2 border-cyan-200 rounded-2xl p-6 max-w-md mx-auto">
-                  <div className="text-lg font-bold text-cyan-800 mb-2">🌊 Get Ready to Compete!</div>
-                  <div className="text-sm text-cyan-700">Record your sales to secure your position. Tournament brackets and matchups will be revealed when competition begins!</div>
+                <div className="text-3xl font-black text-gray-400 mb-4">Tournament Brackets TBD</div>
+                <div className="text-xl text-gray-500 mb-6">Matchups will be announced soon!</div>
+                <div className="bg-black/80 border-2 border-red-600 rounded-2xl p-6 max-w-md mx-auto backdrop-blur-sm">
+                  <div className="text-lg font-bold text-red-300 mb-2">🌊 Get Ready to Compete!</div>
+                  <div className="text-sm text-white">Record your sales to secure your position. Tournament brackets and matchups will be revealed when competition begins!</div>
                 </div>
               </div>
 
@@ -210,16 +210,16 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
 
             {/* My Recent Sales */}
             <motion.div 
-              className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-green-200 p-8"
+              className="bg-black/90 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-red-600 p-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-700 rounded-2xl flex items-center justify-center">
                   <Clock className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-3xl font-black text-slate-800">🌊 My Recent Sales</h3>
+                <h3 className="text-3xl font-black text-white">🌊 My Recent Sales</h3>
               </div>
 
               <div className="space-y-3">
@@ -345,35 +345,35 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
 
             {/* Tournament Position */}
             <motion.div 
-              className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl shadow-2xl border-2 border-purple-200 p-6"
+              className="bg-gradient-to-br from-red-900/40 to-black/60 rounded-3xl shadow-2xl border-2 border-red-600 p-6 backdrop-blur-sm"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
             >
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-r from-red-500 to-red-700 rounded-xl flex items-center justify-center">
                   <TrendingUp className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-black text-slate-800">🏖️ Your Position</h3>
+                <h3 className="text-xl font-black text-white">🏖️ Your Position</h3>
               </div>
               
               <div className="space-y-3">
-                <div className="text-center bg-white/80 rounded-xl p-4">
-                  <div className="text-3xl font-black text-purple-600">#{agent.rank}</div>
-                  <div className="text-sm font-bold text-slate-600">Current Rank</div>
+                <div className="text-center bg-red-900/80 backdrop-blur-sm rounded-xl p-4 border border-red-600">
+                  <div className="text-3xl font-black text-red-300">#{agent.rank}</div>
+                  <div className="text-sm font-bold text-white">Current Rank</div>
                 </div>
                 
                 {agent.rank <= 8 && (
-                  <div className="text-center bg-green-100 rounded-xl p-4 border border-green-200">
-                    <div className="text-lg font-black text-green-700">🏝️ IN THE BRACKET!</div>
-                    <div className="text-xs text-green-600">You&apos;re competing for the championship</div>
+                  <div className="text-center bg-green-900/80 backdrop-blur-sm rounded-xl p-4 border border-green-600">
+                    <div className="text-lg font-black text-green-300">🏝️ IN THE BRACKET!</div>
+                    <div className="text-xs text-green-400">You&apos;re competing for the championship</div>
                   </div>
                 )}
                 
                 {agent.rank > 8 && (
-                  <div className="text-center bg-orange-100 rounded-xl p-4 border border-orange-200">
-                    <div className="text-lg font-black text-orange-700">⚡ PUSH TO TOP 8!</div>
-                    <div className="text-xs text-orange-600">Make more sales to enter bracket</div>
+                  <div className="text-center bg-orange-900/80 backdrop-blur-sm rounded-xl p-4 border border-orange-600">
+                    <div className="text-lg font-black text-orange-300">⚡ PUSH TO TOP 8!</div>
+                    <div className="text-xs text-orange-400">Make more sales to enter bracket</div>
                   </div>
                 )}
               </div>
@@ -381,30 +381,30 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
 
             {/* Quick Stats */}
             <motion.div 
-              className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-slate-200 p-6"
+              className="bg-black/90 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-red-600 p-6"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-r from-slate-500 to-slate-600 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-r from-red-500 to-red-700 rounded-xl flex items-center justify-center">
                   <Zap className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-black text-slate-800">⚡ Quick Facts</h3>
+                <h3 className="text-xl font-black text-white">⚡ Quick Facts</h3>
               </div>
               
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-slate-600">Last Sale:</span>
-                  <span className="font-bold">{agent.totalSales > 0 ? agent.lastSale.toLocaleDateString() : 'None'}</span>
+                  <span className="text-gray-400">Last Sale:</span>
+                  <span className="font-bold text-white">{agent.totalSales > 0 ? agent.lastSale.toLocaleDateString() : 'None'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-600">Avg Premium:</span>
-                  <span className="font-bold">{agent.totalSales > 0 ? formatCurrency(agent.totalPremium / agent.totalSales) : '$0'}</span>
+                  <span className="text-gray-400">Avg Premium:</span>
+                  <span className="font-bold text-white">{agent.totalSales > 0 ? formatCurrency(agent.totalPremium / agent.totalSales) : '$0'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-600">Team:</span>
-                  <span className="font-bold">{agent.team}</span>
+                  <span className="text-gray-400">Team:</span>
+                  <span className="font-bold text-white">{agent.team}</span>
                 </div>
               </div>
             </motion.div>
