@@ -83,6 +83,7 @@ export default function MarchMadnessLeaderboard() {
     // Load saved data from localStorage
     const savedSalesReps = localStorage.getItem('salesReps')
     const savedRecentSales = localStorage.getItem('recentSales')
+    const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
     
     if (savedSalesReps) {
       try {
@@ -107,6 +108,23 @@ export default function MarchMadnessLeaderboard() {
         console.error('Error parsing saved recent sales:', e)
       }
     }
+
+    if (savedLoggedInAgent) {
+      try {
+        const parsedAgent = JSON.parse(savedLoggedInAgent)
+        // Find the current version of this agent with updated stats
+        const currentAgent = (savedSalesReps ? JSON.parse(savedSalesReps) : bracketParticipants)
+          .find((rep: any) => rep.id === parsedAgent.id)
+        if (currentAgent) {
+          setLoggedInAgent({
+            ...currentAgent,
+            lastSale: new Date(currentAgent.lastSale)
+          })
+        }
+      } catch (e) {
+        console.error('Error parsing saved logged in agent:', e)
+      }
+    }
     
     // Listen for storage changes from other tabs/windows
     const handleStorageChange = (e: StorageEvent) => {
@@ -117,6 +135,16 @@ export default function MarchMadnessLeaderboard() {
             lastSale: new Date(rep.lastSale)
           }))
           setSalesReps(parsedReps)
+          
+          // Update logged in agent if their data changed
+          const currentLoggedInAgent = localStorage.getItem('loggedInAgent')
+          if (currentLoggedInAgent) {
+            const parsedLoggedInAgent = JSON.parse(currentLoggedInAgent)
+            const updatedAgent = parsedReps.find((rep: any) => rep.id === parsedLoggedInAgent.id)
+            if (updatedAgent) {
+              setLoggedInAgent(updatedAgent)
+            }
+          }
         } catch (error) {
           console.error('Error syncing sales reps:', error)
         }
@@ -130,6 +158,22 @@ export default function MarchMadnessLeaderboard() {
           setRecentSales(parsedSales)
         } catch (error) {
           console.error('Error syncing recent sales:', error)
+        }
+      }
+      if (e.key === 'loggedInAgent') {
+        if (e.newValue) {
+          try {
+            const parsedAgent = JSON.parse(e.newValue)
+            setLoggedInAgent({
+              ...parsedAgent,
+              lastSale: new Date(parsedAgent.lastSale)
+            })
+          } catch (error) {
+            console.error('Error syncing logged in agent:', error)
+          }
+        } else {
+          // Agent logged out in another tab
+          setLoggedInAgent(null)
         }
       }
     }
@@ -148,20 +192,23 @@ export default function MarchMadnessLeaderboard() {
     const agent = salesReps.find(rep => rep.id === agentId)
     if (agent) {
       setLoggedInAgent(agent)
+      localStorage.setItem('loggedInAgent', JSON.stringify(agent))
     }
   }
 
   const handleLogout = () => {
     setLoggedInAgent(null)
+    localStorage.removeItem('loggedInAgent')
   }
 
   const handleReset = () => {
     if (confirm('Are you sure you want to reset all tournament data? This cannot be undone.')) {
       setSalesReps(bracketParticipants)
       setRecentSales([])
+      setLoggedInAgent(null)
       localStorage.removeItem('salesReps')
       localStorage.removeItem('recentSales')
-      setLoggedInAgent(null)
+      localStorage.removeItem('loggedInAgent')
     }
   }
 
@@ -200,6 +247,9 @@ export default function MarchMadnessLeaderboard() {
       if (loggedInAgent && loggedInAgent.id === existingRep.id) {
         const updatedAgent = updatedReps.find(rep => rep.id === existingRep.id)
         setLoggedInAgent(updatedAgent || null)
+        if (updatedAgent) {
+          localStorage.setItem('loggedInAgent', JSON.stringify(updatedAgent))
+        }
       }
     }
   }
