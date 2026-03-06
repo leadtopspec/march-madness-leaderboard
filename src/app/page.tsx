@@ -74,6 +74,7 @@ export default function MarchMadnessLeaderboard() {
   const [currentTime, setCurrentTime] = useState<Date | null>(null)
   const [isClient, setIsClient] = useState(false)
   const [loggedInAgent, setLoggedInAgent] = useState<SalesRep | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     // Set client-side flag and initial time
@@ -180,6 +181,9 @@ export default function MarchMadnessLeaderboard() {
     
     window.addEventListener('storage', handleStorageChange)
     
+    // Mark loading as complete after localStorage is checked
+    setIsLoading(false)
+    
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
     
     return () => {
@@ -268,6 +272,18 @@ export default function MarchMadnessLeaderboard() {
   // Calculate totals for display
   const totalSales = salesReps.reduce((sum, rep) => sum + rep.totalSales, 0)
   const totalPremium = salesReps.reduce((sum, rep) => sum + rep.totalPremium, 0)
+
+  // Show loading screen while checking localStorage
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">🏀</div>
+          <div className="text-white text-2xl font-bold">Loading Tournament...</div>
+        </div>
+      </div>
+    )
+  }
 
   // If agent is logged in, show their personal dashboard
   if (loggedInAgent) {
