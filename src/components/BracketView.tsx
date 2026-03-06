@@ -34,12 +34,12 @@ export default function BracketView() {
         </motion.div>
       </div>
 
-      {/* Main Bracket Layout - Mobile First Responsive */}
-      <div className="w-full mx-auto">
-        <div className="flex items-center justify-between w-full gap-1 sm:gap-2 lg:gap-4 px-1 sm:px-2 lg:px-4 text-[8px] sm:text-xs lg:text-sm">
+      {/* Main Bracket Layout */}
+      <div className="w-full mx-auto overflow-x-auto">
+        <div className="flex items-center justify-between min-w-[800px] gap-2 lg:gap-4 px-2">
           
           {/* Left Side - Round 1 */}
-          <div className="flex flex-col min-w-[80px] sm:min-w-[120px] lg:min-w-[180px]">
+          <div className="flex flex-col min-w-[110px] lg:min-w-[140px]">
             <div className="text-center text-white font-bold text-xs lg:text-sm mb-3 bg-red-600/80 rounded-lg py-2 border border-red-400">
               ROUND 1
             </div>
@@ -50,7 +50,7 @@ export default function BracketView() {
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.02 }}
-                  className="bg-gray-900/95 rounded-lg border-2 border-red-600 p-1 sm:p-2 lg:p-3 text-[8px] sm:text-[10px] lg:text-xs font-bold shadow-lg hover:shadow-xl transition-shadow backdrop-blur-sm"
+                  className="bg-gray-900/95 rounded-lg border-2 border-red-600 p-2 lg:p-3 text-[10px] lg:text-xs font-bold shadow-lg hover:shadow-xl transition-shadow backdrop-blur-sm"
                 >
                   <div className="text-white truncate">{team}</div>
                 </motion.div>
@@ -59,7 +59,7 @@ export default function BracketView() {
           </div>
 
           {/* Left Side - Round 2 */}
-          <div className="flex flex-col min-w-[80px] sm:min-w-[100px] lg:min-w-[160px]">
+          <div className="flex flex-col min-w-[90px] lg:min-w-[120px]">
             <div className="text-center text-white font-bold text-xs lg:text-sm mb-3 bg-red-700/80 rounded-lg py-2 border border-red-500">
               ROUND 2
             </div>
@@ -79,7 +79,7 @@ export default function BracketView() {
           </div>
 
           {/* Left Side - Round 3 */}
-          <div className="flex flex-col min-w-[80px] sm:min-w-[100px] lg:min-w-[160px]">
+          <div className="flex flex-col min-w-[90px] lg:min-w-[120px]">
             <div className="text-center text-white font-bold text-xs lg:text-sm mb-3 bg-red-800/80 rounded-lg py-2 border border-red-600">
               ROUND 3
             </div>
@@ -99,7 +99,7 @@ export default function BracketView() {
           </div>
 
           {/* Championship Center Column */}
-          <div className="flex flex-col items-center justify-center min-w-[100px] sm:min-w-[120px] lg:min-w-[200px] space-y-4 lg:space-y-8">
+          <div className="flex flex-col items-center justify-center min-w-[120px] lg:min-w-[160px] space-y-4 lg:space-y-8">
             {/* Final Four - Left */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
@@ -136,7 +136,7 @@ export default function BracketView() {
           </div>
 
           {/* Right Side - Round 3 */}
-          <div className="flex flex-col min-w-[80px] sm:min-w-[100px] lg:min-w-[160px]">
+          <div className="flex flex-col min-w-[90px] lg:min-w-[120px]">
             <div className="text-center text-white font-bold text-xs lg:text-sm mb-3 bg-red-800/80 rounded-lg py-2 border border-red-600">
               ROUND 3
             </div>
@@ -156,7 +156,7 @@ export default function BracketView() {
           </div>
 
           {/* Right Side - Round 2 */}
-          <div className="flex flex-col min-w-[80px] sm:min-w-[100px] lg:min-w-[160px]">
+          <div className="flex flex-col min-w-[90px] lg:min-w-[120px]">
             <div className="text-center text-white font-bold text-xs lg:text-sm mb-3 bg-red-700/80 rounded-lg py-2 border border-red-500">
               ROUND 2
             </div>
@@ -176,7 +176,7 @@ export default function BracketView() {
           </div>
 
           {/* Right Side - Round 1 */}
-          <div className="flex flex-col min-w-[80px] sm:min-w-[120px] lg:min-w-[180px]">
+          <div className="flex flex-col min-w-[110px] lg:min-w-[140px]">
             <div className="text-center text-white font-bold text-xs lg:text-sm mb-3 bg-red-600/80 rounded-lg py-2 border border-red-400">
               ROUND 1
             </div>
@@ -187,7 +187,7 @@ export default function BracketView() {
                   initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.02 }}
-                  className="bg-gray-900/95 rounded-lg border-2 border-red-600 p-1 sm:p-2 lg:p-3 text-[8px] sm:text-[10px] lg:text-xs font-bold shadow-lg hover:shadow-xl transition-shadow backdrop-blur-sm"
+                  className="bg-gray-900/95 rounded-lg border-2 border-red-600 p-2 lg:p-3 text-[10px] lg:text-xs font-bold shadow-lg hover:shadow-xl transition-shadow backdrop-blur-sm"
                 >
                   <div className="text-white text-right truncate">{team}</div>
                 </motion.div>
