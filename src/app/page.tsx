@@ -6,69 +6,10 @@ import { Tv, Award, Target, Star, Crown, Users, LogIn } from 'lucide-react'
 import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
 import BracketView from '@/components/BracketView'
-
-interface SalesRep {
-  id: string
-  name: string
-  totalSales: number
-  totalPremium: number
-  rank: number
-  lastSale: Date
-  team: string
-  bracketPosition: number
-}
-
-interface Sale {
-  id: string
-  repName: string
-  clientName: string
-  policyType: string
-  premium: number
-  timestamp: Date
-}
-
-// Fixed date to prevent hydration errors
-const FIXED_DATE = new Date('2024-03-01T00:00:00.000Z')
-
-const bracketParticipants: SalesRep[] = [
-  { id: '1', name: 'MAX KONOPKA', totalSales: 0, totalPremium: 0, rank: 1, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 1 },
-  { id: '2', name: 'ROBERT BRADY', totalSales: 0, totalPremium: 0, rank: 2, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 2 },
-  { id: '3', name: 'ZION RUSSELL', totalSales: 0, totalPremium: 0, rank: 3, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 3 },
-  { id: '4', name: 'BYRON ACHA', totalSales: 0, totalPremium: 0, rank: 4, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 4 },
-  { id: '5', name: 'JOSE VALDEZ', totalSales: 0, totalPremium: 0, rank: 5, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 5 },
-  { id: '6', name: 'JADEN POPE', totalSales: 0, totalPremium: 0, rank: 6, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 6 },
-  { id: '7', name: 'WESTON CHRISTOPHER', totalSales: 0, totalPremium: 0, rank: 7, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 7 },
-  { id: '8', name: 'NOLAN SCHOENBACHLER', totalSales: 0, totalPremium: 0, rank: 8, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 8 },
-  { id: '9', name: 'THOMAS FOX', totalSales: 0, totalPremium: 0, rank: 9, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 9 },
-  { id: '10', name: 'JEREMI KISINSKI', totalSales: 0, totalPremium: 0, rank: 10, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 10 },
-  { id: '11', name: 'JAKE DOLL', totalSales: 0, totalPremium: 0, rank: 11, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 11 },
-  { id: '12', name: 'DANIEL SUAREZ', totalSales: 0, totalPremium: 0, rank: 12, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 12 },
-  { id: '13', name: 'RYAN BOVE', totalSales: 0, totalPremium: 0, rank: 13, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 13 },
-  { id: '14', name: 'RYAN COOPER', totalSales: 0, totalPremium: 0, rank: 14, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 14 },
-  { id: '15', name: 'LUCAS KONSTATOS', totalSales: 0, totalPremium: 0, rank: 15, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 15 },
-  { id: '16', name: 'ANTHONY MAYROSE', totalSales: 0, totalPremium: 0, rank: 16, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 16 },
-  { id: '17', name: 'ANDREW FLASKAMP', totalSales: 0, totalPremium: 0, rank: 17, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 17 },
-  { id: '18', name: 'FABIAN ESCATEL', totalSales: 0, totalPremium: 0, rank: 18, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 18 },
-  { id: '19', name: 'KAMREN HERALD', totalSales: 0, totalPremium: 0, rank: 19, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 19 },
-  { id: '20', name: 'JAYLEN BISCHOFF', totalSales: 0, totalPremium: 0, rank: 20, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 20 },
-  { id: '21', name: 'BRENNAN SKODA', totalSales: 0, totalPremium: 0, rank: 21, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 21 },
-  { id: '22', name: 'AALYIAH WASHBURN', totalSales: 0, totalPremium: 0, rank: 22, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 22 },
-  { id: '23', name: 'KADEN CAMENZIND', totalSales: 0, totalPremium: 0, rank: 23, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 23 },
-  { id: '24', name: 'HANNAH FRENCH', totalSales: 0, totalPremium: 0, rank: 24, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 24 },
-  { id: '25', name: 'MICHAEL CARNEY', totalSales: 0, totalPremium: 0, rank: 25, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 25 },
-  { id: '26', name: 'TAJ DHILLON', totalSales: 0, totalPremium: 0, rank: 26, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 26 },
-  { id: '27', name: 'JACOB LEE', totalSales: 0, totalPremium: 0, rank: 27, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 27 },
-  { id: '28', name: 'ADRIEN RAMÍREZ-RAYO', totalSales: 0, totalPremium: 0, rank: 28, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 28 },
-  { id: '29', name: 'DENNIS CHORNIY', totalSales: 0, totalPremium: 0, rank: 29, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 29 },
-  { id: '30', name: 'CHARLIE SIMMS', totalSales: 0, totalPremium: 0, rank: 30, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 30 },
-  { id: '31', name: 'BRENON REED', totalSales: 0, totalPremium: 0, rank: 31, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 31 },
-  { id: '32', name: 'KIRILL PAVLYCHEV', totalSales: 0, totalPremium: 0, rank: 32, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 32 },
-  { id: '33', name: 'LAINEY DROWN', totalSales: 0, totalPremium: 0, rank: 33, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 33 },
-  { id: '34', name: 'VALERIA ALVAL', totalSales: 0, totalPremium: 0, rank: 34, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 34 },
-]
+import { TournamentSync, type SalesRep, type Sale } from '@/lib/sync'
 
 export default function MarchMadnessLeaderboard() {
-  const [salesReps, setSalesReps] = useState<SalesRep[]>(bracketParticipants)
+  const [salesReps, setSalesReps] = useState<SalesRep[]>([])
   const [recentSalesList, setRecentSales] = useState<Sale[]>([])
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [currentTime, setCurrentTime] = useState<Date | null>(null)
@@ -85,107 +26,51 @@ export default function MarchMadnessLeaderboard() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Load saved data from localStorage
-    const savedSalesReps = localStorage.getItem('salesReps')
-    const savedRecentSales = localStorage.getItem('recentSales')
+    // Set up tournament sync
+    const unsubscribe = TournamentSync.setupPeriodicSync(({ salesReps, sales }) => {
+      setSalesReps(salesReps)
+      setRecentSales(sales)
+      
+      // Update logged in agent if their data changed
+      const currentLoggedInAgent = localStorage.getItem('loggedInAgent')
+      if (currentLoggedInAgent) {
+        try {
+          const parsedLoggedInAgent = JSON.parse(currentLoggedInAgent)
+          const updatedAgent = salesReps.find((rep: SalesRep) => rep.id === parsedLoggedInAgent.id)
+          if (updatedAgent) {
+            setLoggedInAgent(updatedAgent)
+            localStorage.setItem('loggedInAgent', JSON.stringify(updatedAgent))
+          }
+        } catch (error) {
+          console.error('Error updating logged in agent:', error)
+        }
+      }
+      
+      if (isLoading) {
+        setIsLoading(false)
+      }
+    })
+    
+    // Also check localStorage immediately for faster initial load
+    const localData = TournamentSync.loadFromStorage()
+    setSalesReps(localData.salesReps)
+    setRecentSales(localData.sales)
+    
+    // Check for logged in agent
     const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
-    
-    if (savedSalesReps) {
-      try {
-        const parsedReps = JSON.parse(savedSalesReps).map((rep: SalesRep & {lastSale: string}) => ({
-          ...rep,
-          lastSale: new Date(rep.lastSale)
-        }))
-        setSalesReps(parsedReps)
-      } catch (e) {
-        console.error('Error parsing saved sales reps:', e)
-      }
-    }
-    
-    if (savedRecentSales) {
-      try {
-        const parsedSales = JSON.parse(savedRecentSales).map((sale: Sale & {timestamp: string}) => ({
-          ...sale,
-          timestamp: new Date(sale.timestamp)
-        }))
-        setRecentSales(parsedSales)
-      } catch (e) {
-        console.error('Error parsing saved recent sales:', e)
-      }
-    }
-
     if (savedLoggedInAgent) {
       try {
         const parsedAgent = JSON.parse(savedLoggedInAgent)
-        // Find the current version of this agent with updated stats
-        const currentAgent = (savedSalesReps ? JSON.parse(savedSalesReps) : bracketParticipants)
-          .find((rep: SalesRep) => rep.id === parsedAgent.id)
+        const currentAgent = localData.salesReps.find(rep => rep.id === parsedAgent.id)
         if (currentAgent) {
-          setLoggedInAgent({
-            ...currentAgent,
-            lastSale: new Date(currentAgent.lastSale)
-          })
+          setLoggedInAgent(currentAgent)
         }
       } catch (e) {
         console.error('Error parsing saved logged in agent:', e)
+        localStorage.removeItem('loggedInAgent')
       }
     }
     
-    // Listen for storage changes from other tabs/windows
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'salesReps' && e.newValue) {
-        try {
-          const parsedReps = JSON.parse(e.newValue).map((rep: SalesRep & {lastSale: string}) => ({
-            ...rep,
-            lastSale: new Date(rep.lastSale)
-          }))
-          setSalesReps(parsedReps)
-          
-          // Update logged in agent if their data changed
-          const currentLoggedInAgent = localStorage.getItem('loggedInAgent')
-          if (currentLoggedInAgent) {
-            const parsedLoggedInAgent = JSON.parse(currentLoggedInAgent)
-            const updatedAgent = parsedReps.find((rep: SalesRep) => rep.id === parsedLoggedInAgent.id)
-            if (updatedAgent) {
-              setLoggedInAgent(updatedAgent)
-            }
-          }
-        } catch (error) {
-          console.error('Error syncing sales reps:', error)
-        }
-      }
-      if (e.key === 'recentSales' && e.newValue) {
-        try {
-          const parsedSales = JSON.parse(e.newValue).map((sale: Sale & {timestamp: string}) => ({
-            ...sale,
-            timestamp: new Date(sale.timestamp)
-          }))
-          setRecentSales(parsedSales)
-        } catch (error) {
-          console.error('Error syncing recent sales:', error)
-        }
-      }
-      if (e.key === 'loggedInAgent') {
-        if (e.newValue) {
-          try {
-            const parsedAgent = JSON.parse(e.newValue)
-            setLoggedInAgent({
-              ...parsedAgent,
-              lastSale: new Date(parsedAgent.lastSale)
-            })
-          } catch (error) {
-            console.error('Error syncing logged in agent:', error)
-          }
-        } else {
-          // Agent logged out in another tab
-          setLoggedInAgent(null)
-        }
-      }
-    }
-    
-    window.addEventListener('storage', handleStorageChange)
-    
-    // Mark loading as complete after localStorage is checked
     setIsLoading(false)
     
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
@@ -235,7 +120,7 @@ export default function MarchMadnessLeaderboard() {
       clearInterval(timer)
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
-      window.removeEventListener('storage', handleStorageChange)
+      unsubscribe()
     }
   }, [])
 
@@ -252,92 +137,43 @@ export default function MarchMadnessLeaderboard() {
     localStorage.removeItem('loggedInAgent')
   }
 
-
-
-  const handleRecordSale = (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
-    const saleEntry: Sale = {
-      id: Date.now().toString(),
-      ...saleData,
-      timestamp: new Date()
-    }
-    
-    const newRecentSales = [saleEntry, ...recentSalesList.slice(0, 19)]
-    setRecentSales(newRecentSales)
-    localStorage.setItem('recentSales', JSON.stringify(newRecentSales))
-    
-    const existingRep = salesReps.find(rep => 
-      rep.name.toLowerCase().includes(saleData.repName.toLowerCase()) ||
-      saleData.repName.toLowerCase().includes(rep.name.toLowerCase())
-    )
-    
-    if (existingRep) {
-      const updatedReps = salesReps.map(rep => 
-        rep.id === existingRep.id 
-          ? { 
-              ...rep, 
-              totalSales: rep.totalSales + 1, 
-              totalPremium: rep.totalPremium + saleData.premium,
-              lastSale: new Date()
-            }
-          : rep
-      ).sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium)
-       .map((rep, index) => ({ ...rep, rank: index + 1 }))
-      
+  const handleRecordSale = async (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
+    try {
+      const { salesReps: updatedReps, sales: updatedSales } = await TournamentSync.recordSale(saleData)
       setSalesReps(updatedReps)
-      localStorage.setItem('salesReps', JSON.stringify(updatedReps))
+      setRecentSales(updatedSales)
       
-      if (loggedInAgent && loggedInAgent.id === existingRep.id) {
-        const updatedAgent = updatedReps.find(rep => rep.id === existingRep.id)
-        setLoggedInAgent(updatedAgent || null)
+      // Update logged in agent if this was their sale
+      if (loggedInAgent) {
+        const updatedAgent = updatedReps.find(rep => rep.id === loggedInAgent.id)
         if (updatedAgent) {
+          setLoggedInAgent(updatedAgent)
           localStorage.setItem('loggedInAgent', JSON.stringify(updatedAgent))
         }
       }
+    } catch (error) {
+      console.error('Error recording sale:', error)
     }
   }
 
-  const handleDeleteSale = (saleId: string) => {
-    const saleToDelete = recentSalesList.find(sale => sale.id === saleId)
-    if (!saleToDelete) return
-
-    // Remove sale from recent sales
-    const newRecentSales = recentSalesList.filter(sale => sale.id !== saleId)
-    setRecentSales(newRecentSales)
-    localStorage.setItem('recentSales', JSON.stringify(newRecentSales))
-
-    // Find and update the agent who made this sale
-    const existingRep = salesReps.find(rep => 
-      rep.name.toLowerCase().includes(saleToDelete.repName.toLowerCase()) ||
-      saleToDelete.repName.toLowerCase().includes(rep.name.toLowerCase())
-    )
-
-    if (existingRep && existingRep.totalSales > 0) {
-      const updatedReps = salesReps.map(rep => 
-        rep.id === existingRep.id 
-          ? { 
-              ...rep, 
-              totalSales: Math.max(0, rep.totalSales - 1), 
-              totalPremium: Math.max(0, rep.totalPremium - saleToDelete.premium),
-              lastSale: rep.totalSales > 1 ? rep.lastSale : new Date('2024-03-01T00:00:00.000Z')
-            }
-          : rep
-      ).sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium)
-       .map((rep, index) => ({ ...rep, rank: index + 1 }))
-      
+  const handleDeleteSale = async (saleId: string) => {
+    try {
+      const { salesReps: updatedReps, sales: updatedSales } = await TournamentSync.deleteSale(saleId)
       setSalesReps(updatedReps)
-      localStorage.setItem('salesReps', JSON.stringify(updatedReps))
+      setRecentSales(updatedSales)
       
-      if (loggedInAgent && loggedInAgent.id === existingRep.id) {
-        const updatedAgent = updatedReps.find(rep => rep.id === existingRep.id)
-        setLoggedInAgent(updatedAgent || null)
+      // Update logged in agent
+      if (loggedInAgent) {
+        const updatedAgent = updatedReps.find(rep => rep.id === loggedInAgent.id)
         if (updatedAgent) {
+          setLoggedInAgent(updatedAgent)
           localStorage.setItem('loggedInAgent', JSON.stringify(updatedAgent))
         }
       }
+    } catch (error) {
+      console.error('Error deleting sale:', error)
     }
   }
-
-
 
   const getRankBadge = (rank: number) => {
     if (rank === 1) return { icon: Crown, color: 'from-yellow-400 to-yellow-600', bg: 'bg-gradient-to-br from-yellow-400/30 to-amber-500/30' }
@@ -345,8 +181,6 @@ export default function MarchMadnessLeaderboard() {
     if (rank === 3) return { icon: Star, color: 'from-orange-400 to-orange-600', bg: 'bg-gradient-to-br from-orange-400/30 to-red-500/30' }
     return { icon: Target, color: 'from-blue-400 to-blue-600', bg: 'bg-white/90' }
   }
-
-
   
   // Calculate totals for display
   const totalSales = salesReps.reduce((sum, rep) => sum + rep.totalSales, 0)
@@ -359,6 +193,7 @@ export default function MarchMadnessLeaderboard() {
         <div className="text-center">
           <div className="text-6xl mb-4">🏀</div>
           <div className="text-white text-2xl font-bold">Loading Tournament...</div>
+          <div className="text-gray-400 text-lg mt-2">Syncing with live database...</div>
         </div>
       </div>
     )
@@ -609,227 +444,3 @@ export default function MarchMadnessLeaderboard() {
                   <div className="bg-white/5 border border-white/20 rounded-xl p-4">
                     <div className="text-base font-bold text-red-200 mb-2 flex items-center gap-2">
                       🏆 Final Round
-                    </div>
-                    <div className="text-white/90 text-sm">
-                      Based on issued premium for entire month
-                    </div>
-                  </div>
-
-                  <div className="bg-white/5 border border-white/20 rounded-xl p-4">
-                    <div className="text-base font-bold text-orange-200 mb-2 flex items-center gap-2">
-                      🚫 Integrity Rules
-                    </div>
-                    <div className="text-white/90 text-sm">
-                      No splitting, transferring, or sharing business
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-r from-red-500/20 to-red-700/20 border border-red-400/30 rounded-xl p-4 text-center">
-                <div className="text-lg font-bold text-yellow-200 mb-2">🏆 PRIZE</div>
-                <div className="text-yellow-100 text-sm">
-                  Highest issued premium wins Cancun trip!
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </motion.div>
-
-        {/* Live Leaderboard */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Top Performers - Show more on mobile */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-white/20"
-          >
-            <div className="flex items-center gap-3 mb-4 md:mb-6">
-              <Crown className="w-6 h-6 md:w-8 md:h-8 text-yellow-400" />
-              <h2 className="text-xl md:text-2xl font-black text-white">TOP PERFORMERS</h2>
-            </div>
-            
-            <div className="space-y-2 md:space-y-4">
-              {salesReps.slice(0, 10).map((rep, index) => (
-                <motion.div
-                  key={rep.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  className={`flex items-center justify-between p-3 md:p-4 rounded-xl border ${
-                    index < 3 
-                      ? 'bg-gradient-to-r from-red-500/20 to-red-700/20 border-red-400/30' 
-                      : 'bg-white/5 border-white/10'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 md:gap-4">
-                    <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-black text-sm md:text-lg ${
-                      index === 0 ? 'bg-yellow-400 text-yellow-900' :
-                      index === 1 ? 'bg-gray-300 text-gray-800' :
-                      index === 2 ? 'bg-orange-400 text-orange-900' :
-                      'bg-white/10 text-white'
-                    }`}>
-                      #{index + 1}
-                    </div>
-                    <div>
-                      <div className="font-bold text-white text-sm md:text-lg">
-                        <span className="md:hidden">{rep.name.split(' ')[0]}</span>
-                        <span className="hidden md:inline">{rep.name}</span>
-                      </div>
-                      <div className="text-xs md:text-sm text-white/70 hidden md:block">All In Agencies</div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-lg md:text-2xl font-black text-white">{rep.totalSales}</div>
-                    <div className="text-xs md:text-sm text-white/70">${rep.totalPremium.toLocaleString()}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Tournament Status - Mobile Optimized */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-white/20"
-          >
-            <div className="flex items-center gap-3 mb-4 md:mb-6">
-              <Target className="w-6 h-6 md:w-8 md:h-8 text-orange-400" />
-              <h2 className="text-xl md:text-2xl font-black text-white">TOURNAMENT STATUS</h2>
-            </div>
-            
-            {/* Tournament Progress */}
-            <div className="space-y-4">
-              <div className="bg-gradient-to-r from-green-500/20 to-green-700/20 border border-green-400/30 rounded-xl p-4 text-center">
-                <div className="text-xl md:text-2xl font-black text-white mb-1">🔴 LIVE</div>
-                <div className="text-lg font-bold text-white">WEEK 1 PLAY-IN ROUND</div>
-                <div className="text-sm text-white/70">17 Active Matchups</div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
-                  <div className="text-sm text-yellow-400 font-bold mb-1">CURRENT ROUND</div>
-                  <div className="text-white font-bold">Play-In</div>
-                </div>
-                <div className="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
-                  <div className="text-sm text-orange-400 font-bold mb-1">NEXT ROUND</div>
-                  <div className="text-white font-bold">Elite 8</div>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-r from-red-600/20 to-black/20 border border-red-400/30 rounded-xl p-4 text-center">
-                <div className="text-xl font-black text-white mb-1">🏆</div>
-                <div className="text-lg font-bold text-white">CHAMPIONSHIP PRIZE</div>
-                <div className="text-sm text-yellow-200">Cancun Trip</div>
-              </div>
-
-              <div className="text-center">
-                <a 
-                  href="/tv" 
-                  target="_blank"
-                  className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-4 py-2 rounded-xl font-bold text-sm hover:from-blue-700 hover:to-blue-900 transition-all inline-flex items-center gap-2"
-                >
-                  <Tv className="w-4 h-4" />
-                  VIEW FULL BRACKET
-                </a>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* All Competitors Grid - Ultra Mobile Optimized */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-white/20 mb-8"
-        >
-          <div className="flex items-center justify-between mb-4 md:mb-6">
-            <div className="flex items-center gap-3">
-              <Users className="w-6 h-6 md:w-8 md:h-8 text-cyan-400" />
-              <h2 className="text-xl md:text-2xl font-black text-white">
-                <span className="md:hidden">COMPETITORS</span>
-                <span className="hidden md:inline">ALL COMPETITORS</span>
-              </h2>
-            </div>
-            <div className="text-sm text-white/70 font-bold">34 Total</div>
-          </div>
-          
-          {/* Mobile: Show top 12, Desktop: Show all 34 */}
-          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-3">
-            {(showAllCompetitors ? salesReps : salesReps.slice(0, 12)).map((rep, index) => {
-              const badge = getRankBadge(rep.rank)
-              const IconComponent = badge.icon
-              return (
-                <motion.div
-                  key={rep.id}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.01 }}
-                  className={`bg-white/5 border border-white/10 rounded-lg p-2 md:p-3 text-center hover:bg-white/10 transition-all ${
-                    rep.rank <= 3 ? 'border-yellow-400/30 bg-yellow-400/10' : ''
-                  }`}
-                >
-                  <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full mx-auto mb-1 md:mb-2 bg-gradient-to-r ${badge.color} flex items-center justify-center`}>
-                    <IconComponent className="w-3 h-3 md:w-4 md:h-4 text-white" />
-                  </div>
-                  <div className="text-white text-xs md:text-xs font-bold truncate">{rep.name.split(' ')[0]}</div>
-                  <div className="text-white/50 text-xs">#{rep.rank}</div>
-                  <div className="text-white text-sm md:text-sm font-bold">{rep.totalSales}</div>
-                </motion.div>
-              )
-            })}
-          </div>
-
-          {/* Show More/Less button - Mobile only */}
-          <div className="md:hidden mt-4 text-center">
-            <button
-              onClick={() => setShowAllCompetitors(!showAllCompetitors)}
-              className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:from-cyan-700 hover:to-blue-700 transition-all"
-            >
-              {showAllCompetitors ? `Show Less ↑` : `Show All 34 ↓`}
-            </button>
-          </div>
-        </motion.div>
-
-        {/* Tournament Bracket - Hidden on mobile, visible on desktop */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="hidden lg:block bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
-        >
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="text-2xl">🏀</div>
-              <h2 className="text-2xl font-black text-white">LIVE TOURNAMENT BRACKET</h2>
-            </div>
-            <div className="text-sm text-white/70 font-bold">March 7-14, 2026</div>
-          </div>
-          <BracketView />
-        </motion.div>
-
-        {/* Call to Action - Mobile Optimized */}
-        <div className="text-center mt-8 md:mt-12">
-          <motion.button
-            onClick={() => setShowLoginModal(true)}
-            className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 md:px-12 py-4 md:py-6 rounded-2xl md:rounded-3xl font-black text-lg md:text-2xl shadow-2xl hover:from-green-600 hover:to-emerald-700 transition-all w-full max-w-md mx-auto block"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            🏄‍♂️ JOIN THE COMPETITION
-          </motion.button>
-          <p className="text-white/70 mt-4 text-base md:text-lg font-bold">
-            Enter your access code to start competing!
-          </p>
-        </div>
-      </div>
-
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        onLogin={handleLogin}
-        agents={salesReps}
-      />
-    </div>
-  )
-}
