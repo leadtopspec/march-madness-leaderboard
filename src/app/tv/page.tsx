@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, Crown, Award, Star, Target } from 'lucide-react'
 import TVBracketView from '@/components/TVBracketView'
+import RealTimeSync, { type SalesRep, type Sale } from '@/lib/real-time-sync'
 
 interface SalesRep {
   id: string
@@ -69,20 +70,22 @@ export default function TVMode() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Load saved data from localStorage
-    const savedSalesReps = localStorage.getItem('salesReps')
-    
-    if (savedSalesReps) {
+    // Initialize real-time sync system
+    const initializeData = async () => {
       try {
-        const parsedReps = JSON.parse(savedSalesReps).map((rep: SalesRep & {lastSale: string}) => ({
-          ...rep,
-          lastSale: new Date(rep.lastSale)
-        }))
-        setSalesReps(parsedReps)
-      } catch (e) {
-        console.error('Error parsing saved sales reps:', e)
+        const data = await RealTimeSync.initialize()
+        setSalesReps(data.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
+      } catch (error) {
+        console.error('Failed to initialize sync:', error)
       }
     }
+    
+    initializeData()
+    
+    // Subscribe to real-time updates
+    const unsubscribe = RealTimeSync.subscribe((updatedData) => {
+      setSalesReps(updatedData.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
+    })
     
     // Listen for storage changes from other tabs/windows
     const handleStorageChange = (e: StorageEvent) => {
@@ -162,10 +165,10 @@ export default function TVMode() {
     
     return () => {
       clearInterval(timer)
-      clearInterval(pollInterval)
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
-      window.removeEventListener('storage', handleStorageChange)
+      unsubscribe()
+      RealTimeSync.cleanup()
     }
   }, [])
 

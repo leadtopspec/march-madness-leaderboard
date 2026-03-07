@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
-import { EmergencySync, type SalesRep, type Sale } from '@/lib/emergency-sync'
+import RealTimeSync, { type SalesRep, type Sale } from '@/lib/real-time-sync'
 
 export default function MarchMadnessLeaderboard() {
   const [salesReps, setSalesReps] = useState<SalesRep[]>([])
@@ -19,14 +19,23 @@ export default function MarchMadnessLeaderboard() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Initialize emergency sync system
-    const data = EmergencySync.initialize()
-    setSalesReps(data.salesReps)
-    setRecentSales(data.sales)
-    setIsLoading(false)
+    // Initialize real-time sync system
+    const initializeData = async () => {
+      try {
+        const data = await RealTimeSync.initialize()
+        setSalesReps(data.salesReps)
+        setRecentSales(data.sales)
+        setIsLoading(false)
+      } catch (error) {
+        console.error('Failed to initialize sync:', error)
+        setIsLoading(false)
+      }
+    }
+    
+    initializeData()
     
     // Subscribe to real-time updates
-    const unsubscribe = EmergencySync.subscribe((updatedData) => {
+    const unsubscribe = RealTimeSync.subscribe((updatedData) => {
       setSalesReps(updatedData.salesReps)
       setRecentSales(updatedData.sales)
     })
@@ -36,7 +45,7 @@ export default function MarchMadnessLeaderboard() {
     return () => {
       clearInterval(timer)
       unsubscribe()
-      EmergencySync.cleanup()
+      RealTimeSync.cleanup()
     }
   }, [])
 
@@ -53,7 +62,7 @@ export default function MarchMadnessLeaderboard() {
 
   const handleRecordSale = async (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
     try {
-      EmergencySync.recordSale(saleData)
+      await RealTimeSync.addSale(saleData)
       console.log('Sale recorded and synced across all devices')
     } catch (error) {
       console.error('Error recording sale:', error)
