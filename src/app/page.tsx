@@ -69,6 +69,8 @@ const bracketParticipants: SalesRep[] = [
   { id: '34', name: 'FABIAN ESCATEL', totalSales: 0, totalPremium: 0, rank: 34, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 34 },
   { id: '35', name: 'DANIEL SUAREZ', totalSales: 0, totalPremium: 0, rank: 35, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 35 },
   { id: '36', name: 'KIRILL PAVLYCHEV', totalSales: 0, totalPremium: 0, rank: 36, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 36 },
+  { id: '37', name: 'MASON GARCIA', totalSales: 0, totalPremium: 0, rank: 37, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 37 },
+  { id: '38', name: 'SOPHIA MARTINEZ', totalSales: 0, totalPremium: 0, rank: 38, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 38 },
 ]
 
 export default function MarchMadnessLeaderboard() {
@@ -649,7 +651,7 @@ export default function MarchMadnessLeaderboard() {
               <div className="bg-gradient-to-r from-green-500/20 to-green-700/20 border border-green-400/30 rounded-xl p-4 text-center">
                 <div className="text-xl md:text-2xl font-black text-white mb-1">🔴 LIVE</div>
                 <div className="text-lg font-bold text-white">WEEK 1 PLAY-IN ROUND</div>
-                <div className="text-sm text-white/70">17 Active Matchups</div>
+                <div className="text-sm text-white/70">18 Active Matchups</div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -694,7 +696,7 @@ export default function MarchMadnessLeaderboard() {
               <Users className="w-6 h-6 md:w-8 md:h-8 text-cyan-400" />
               <h2 className="text-xl md:text-2xl font-black text-white">ALL COMPETITORS</h2>
             </div>
-            <div className="text-sm text-white/70 font-bold">34 Total</div>
+            <div className="text-sm text-white/70 font-bold">36 Total</div>
           </div>
           
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-3">

@@ -20,7 +20,7 @@ interface SalesRep {
 // Fixed date to prevent hydration errors
 const FIXED_DATE = new Date('2024-03-01T00:00:00.000Z')
 
-// All 34 participants for March Madness tournament
+// All 36 participants for March Madness tournament
 const bracketParticipants: SalesRep[] = [
   { id: '1', name: 'MAX KONOPKA', totalSales: 0, totalPremium: 0, rank: 1, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 1 },
   { id: '2', name: 'ROBERT BRADY', totalSales: 0, totalPremium: 0, rank: 2, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 2 },
@@ -41,7 +41,7 @@ const bracketParticipants: SalesRep[] = [
   { id: '17', name: 'ANDREW FLASKAMP', totalSales: 0, totalPremium: 0, rank: 17, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 17 },
   { id: '18', name: 'FABIAN ESCATEL', totalSales: 0, totalPremium: 0, rank: 18, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 18 },
   { id: '19', name: 'KAMREN HERALD', totalSales: 0, totalPremium: 0, rank: 19, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 19 },
-  { id: '20', name: 'JAYLEN BISCHOFF', totalSales: 0, totalPremium: 0, rank: 20, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 20 },
+  { id: '20', name: 'TIVON BURNS', totalSales: 0, totalPremium: 0, rank: 20, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 20 },
   { id: '21', name: 'BRENNAN SKODA', totalSales: 0, totalPremium: 0, rank: 21, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 21 },
   { id: '22', name: 'AALYIAH WASHBURN', totalSales: 0, totalPremium: 0, rank: 22, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 22 },
   { id: '23', name: 'KADEN CAMENZIND', totalSales: 0, totalPremium: 0, rank: 23, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 23 },
@@ -56,6 +56,8 @@ const bracketParticipants: SalesRep[] = [
   { id: '32', name: 'KIRILL PAVLYCHEV', totalSales: 0, totalPremium: 0, rank: 32, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 32 },
   { id: '33', name: 'LAINEY DROWN', totalSales: 0, totalPremium: 0, rank: 33, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 33 },
   { id: '34', name: 'VALERIA ALVAL', totalSales: 0, totalPremium: 0, rank: 34, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 34 },
+  { id: '35', name: 'MASON GARCIA', totalSales: 0, totalPremium: 0, rank: 35, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 35 },
+  { id: '36', name: 'SOPHIA MARTINEZ', totalSales: 0, totalPremium: 0, rank: 36, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 36 },
 ]
 
 export default function TVMode() {
@@ -268,7 +270,7 @@ export default function TVMode() {
           {/* Mobile Stats Grid */}
           <div className="grid grid-cols-3 gap-2">
             <div className="bg-white/20 backdrop-blur-sm rounded-lg p-2 text-center">
-              <div className="text-lg font-bold text-white">34</div>
+              <div className="text-lg font-bold text-white">36</div>
               <div className="text-xs text-yellow-100 font-semibold">COMPETITORS</div>
             </div>
             <div className="bg-white/20 backdrop-blur-sm rounded-lg p-2 text-center">
@@ -343,7 +345,7 @@ export default function TVMode() {
           {/* Desktop Stats Bar */}
           <div className="flex justify-center space-x-8 mt-6">
             <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3 text-center">
-              <div className="text-3xl font-bold text-white">34</div>
+              <div className="text-3xl font-bold text-white">36</div>
               <div className="text-lg text-yellow-100 font-semibold">COMPETITORS</div>
             </div>
             <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3 text-center">
