@@ -35,7 +35,7 @@ export default function TVBracketView() {
             PLAY-IN LEFT
           </div>
           <div className="flex-1 flex flex-col justify-start space-y-1">
-            {playInRoundMatchups.slice(0, 8).map((matchup, index) => (
+            {playInRoundMatchups.slice(0, 9).map((matchup, index) => (
               <motion.div
                 key={`left-${index}`}
                 initial={{ opacity: 0, x: -20 }}
@@ -174,7 +174,7 @@ export default function TVBracketView() {
             PLAY-IN RIGHT
           </div>
           <div className="flex-1 flex flex-col justify-start space-y-1">
-            {playInRoundMatchups.slice(8, 17).map((matchup, index) => (
+            {playInRoundMatchups.slice(9, 17).map((matchup, index) => (
               <motion.div
                 key={`right-${index}`}
                 initial={{ opacity: 0, x: 20 }}
