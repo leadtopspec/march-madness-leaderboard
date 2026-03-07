@@ -6,7 +6,7 @@ import { Tv, Award, Target, Star, Crown, Users, LogIn } from 'lucide-react'
 import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
 import BracketView from '@/components/BracketView'
-import { TournamentSync, type SalesRep, type Sale } from '@/lib/sync'
+import { SimpleSync, type SalesRep, type Sale } from '@/lib/simple-sync'
 
 export default function MarchMadnessLeaderboard() {
   const [salesReps, setSalesReps] = useState<SalesRep[]>([])
@@ -26,8 +26,8 @@ export default function MarchMadnessLeaderboard() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Set up tournament sync
-    const unsubscribe = TournamentSync.setupPeriodicSync(({ salesReps, sales }) => {
+    // Set up simple sync with 10 second intervals
+    const unsubscribe = SimpleSync.startPeriodicSync(({ salesReps, sales }) => {
       setSalesReps(salesReps)
       setRecentSales(sales)
       
@@ -49,12 +49,7 @@ export default function MarchMadnessLeaderboard() {
       if (isLoading) {
         setIsLoading(false)
       }
-    })
-    
-    // Also check localStorage immediately for faster initial load
-    const localData = TournamentSync.loadFromStorage()
-    setSalesReps(localData.salesReps)
-    setRecentSales(localData.sales)
+    }, 10000) // Sync every 10 seconds
     
     // Check for logged in agent
     const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
@@ -139,7 +134,7 @@ export default function MarchMadnessLeaderboard() {
 
   const handleRecordSale = async (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
     try {
-      const { salesReps: updatedReps, sales: updatedSales } = await TournamentSync.recordSale(saleData)
+      const { salesReps: updatedReps, sales: updatedSales } = await SimpleSync.recordSale(saleData)
       setSalesReps(updatedReps)
       setRecentSales(updatedSales)
       
@@ -158,7 +153,7 @@ export default function MarchMadnessLeaderboard() {
 
   const handleDeleteSale = async (saleId: string) => {
     try {
-      const { salesReps: updatedReps, sales: updatedSales } = await TournamentSync.deleteSale(saleId)
+      const { salesReps: updatedReps, sales: updatedSales } = await SimpleSync.deleteSale(saleId)
       setSalesReps(updatedReps)
       setRecentSales(updatedSales)
       
