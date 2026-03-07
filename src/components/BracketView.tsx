@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 
 export default function BracketView() {
-  // Week 1 - Play-In Round Matchups (17 games total)
+  // Week 1 - Play-In Round Matchups (18 games total)
   const playInRoundMatchups = [
     { game: 1, team1: "MAX KONOPKA", team2: "ROBERT BRADY", winner: null },
     { game: 2, team1: "ZION RUSSELL", team2: "BYRON ACHA", winner: null },
@@ -14,7 +14,7 @@ export default function BracketView() {
     { game: 7, team1: "RYAN BOVE", team2: "RYAN COOPER", winner: null },
     { game: 8, team1: "LUCAS KONSTATOS", team2: "ANTHONY MAYROSE", winner: null },
     { game: 9, team1: "ANDREW FLASKAMP", team2: "FABIAN ESCATEL", winner: null },
-    { game: 10, team1: "KAMREN HERALD", team2: "JAYLEN BISCHOFF", winner: null },
+    { game: 10, team1: "KAMREN HERALD", team2: "TIVON BURNS", winner: null },
     { game: 11, team1: "BRENNAN SKODA", team2: "AALYIAH WASHBURN", winner: null },
     { game: 12, team1: "KADEN CAMENZIND", team2: "HANNAH FRENCH", winner: null },
     { game: 13, team1: "MICHAEL CARNEY", team2: "TAJ DHILLON", winner: null },
@@ -22,6 +22,7 @@ export default function BracketView() {
     { game: 15, team1: "DENNIS CHORNIY", team2: "CHARLIE SIMMS", winner: null },
     { game: 16, team1: "BRENON REED", team2: "KIRILL PAVLYCHEV", winner: null },
     { game: 17, team1: "LAINEY DROWN", team2: "VALERIA ALVAL", winner: null },
+    { game: 18, team1: "MASON GARCIA", team2: "SOPHIA MARTINEZ", winner: null },
   ]
 
   return (
@@ -34,7 +35,7 @@ export default function BracketView() {
           className="bg-gradient-to-r from-red-600 to-red-800 text-white px-4 lg:px-8 py-3 lg:py-4 rounded-2xl shadow-xl inline-block border-2 border-red-400"
         >
           <h2 className="text-xl lg:text-3xl font-black">🏀 MARCH MADNESS BRACKET 🏀</h2>
-          <p className="text-sm lg:text-lg opacity-90">34 COMPETITORS • WEEK 1 PLAY-IN ROUND</p>
+          <p className="text-sm lg:text-lg opacity-90">36 COMPETITORS • WEEK 1 PLAY-IN ROUND</p>
         </motion.div>
       </div>
 
@@ -227,7 +228,7 @@ export default function BracketView() {
               PLAY-IN RIGHT
             </div>
             <div className="space-y-2">
-              {playInRoundMatchups.slice(9, 17).map((matchup, index) => (
+              {playInRoundMatchups.slice(9, 18).map((matchup, index) => (
                 <motion.div
                   key={`right-${index}`}
                   initial={{ opacity: 0, x: 30 }}

@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 
 export default function TVBracketView() {
-  // Week 1 - Play-In Round Matchups (17 games total)
+  // Week 1 - Play-In Round Matchups (18 games total)
   const playInRoundMatchups = [
     { game: 1, team1: "MAX KONOPKA", team2: "ROBERT BRADY" },
     { game: 2, team1: "ZION RUSSELL", team2: "BYRON ACHA" },
@@ -14,7 +14,7 @@ export default function TVBracketView() {
     { game: 7, team1: "RYAN BOVE", team2: "RYAN COOPER" },
     { game: 8, team1: "LUCAS KONSTATOS", team2: "ANTHONY MAYROSE" },
     { game: 9, team1: "ANDREW FLASKAMP", team2: "FABIAN ESCATEL" },
-    { game: 10, team1: "KAMREN HERALD", team2: "JAYLEN BISCHOFF" },
+    { game: 10, team1: "KAMREN HERALD", team2: "TIVON BURNS" },
     { game: 11, team1: "BRENNAN SKODA", team2: "AALYIAH WASHBURN" },
     { game: 12, team1: "KADEN CAMENZIND", team2: "HANNAH FRENCH" },
     { game: 13, team1: "MICHAEL CARNEY", team2: "TAJ DHILLON" },
@@ -22,6 +22,7 @@ export default function TVBracketView() {
     { game: 15, team1: "DENNIS CHORNIY", team2: "CHARLIE SIMMS" },
     { game: 16, team1: "BRENON REED", team2: "KIRILL PAVLYCHEV" },
     { game: 17, team1: "LAINEY DROWN", team2: "VALERIA ALVAL" },
+    { game: 18, team1: "MASON GARCIA", team2: "SOPHIA MARTINEZ" },
   ]
 
   return (
@@ -36,7 +37,7 @@ export default function TVBracketView() {
             className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md inline-flex items-center gap-2 border border-green-400"
           >
             <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
-            <span className="font-bold text-sm">🔴 LIVE • PLAY-IN ROUND • 17 GAMES</span>
+            <span className="font-bold text-sm">🔴 LIVE • PLAY-IN ROUND • 18 GAMES</span>
             <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
           </motion.div>
         </div>
@@ -222,7 +223,7 @@ export default function TVBracketView() {
             PLAY-IN RIGHT
           </div>
           <div className="flex-1 flex flex-col justify-evenly">
-            {playInRoundMatchups.slice(9, 17).map((matchup, index) => (
+            {playInRoundMatchups.slice(9, 18).map((matchup, index) => (
               <motion.div
                 key={`right-${index}`}
                 initial={{ opacity: 0, x: 20 }}
@@ -247,7 +248,7 @@ export default function TVBracketView() {
             className="bg-green-600 text-white px-3 py-1 rounded shadow-md inline-flex items-center gap-2 border border-green-400"
           >
             <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
-            <span className="font-bold text-xs">🔴 LIVE • PLAY-IN ROUND • 17 GAMES • COMPETE NOW!</span>
+            <span className="font-bold text-xs">🔴 LIVE • PLAY-IN ROUND • 18 GAMES • COMPETE NOW!</span>
             <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
           </motion.div>
         </div>
