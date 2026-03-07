@@ -181,17 +181,54 @@ export default function MarchMadnessLeaderboard() {
           </motion.div>
         </div>
 
-        {/* Full Tournament Leaderboard */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Tournament Rules */}
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                📋 TOURNAMENT RULES
+              </h2>
+              <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                SHOW
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div className="text-yellow-400 font-bold">⚡ Quick Summary</div>
+              <p className="text-gray-300 text-sm">
+                Head-to-head matchups • Highest submitted premium wins • Must be in Zoom room • Final round based on issued business • Winner gets Cancun trip 🏆
+              </p>
+            </div>
+          </div>
+
+          {/* Tournament Status */}
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 shadow-xl">
+            <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+              🎯 TOURNAMENT STATUS
+            </h2>
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                <span className="text-red-400 font-bold">🔴 LIVE</span>
+              </div>
+              <div className="text-gray-300">
+                <div className="font-bold text-green-400">WEEK 1 PLAY-IN ROUND</div>
+                <div className="text-sm">17 Active Matchups</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Top Performers */}
         <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 shadow-xl">
           <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
             <div className="p-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl">
-              🏀
+              👑
             </div>
-            LIVE TOURNAMENT STANDINGS (ALL 34 AGENTS)
+            TOP PERFORMERS
           </h2>
           
-          <div className="space-y-3">
-            {allSalesReps.map((rep, index) => (
+          <div className="space-y-4">
+            {allSalesReps.slice(0, 10).map((rep, index) => (
               <motion.div
                 key={rep.id}
                 className={`flex items-center justify-between p-4 rounded-xl border ${
@@ -228,6 +265,15 @@ export default function MarchMadnessLeaderboard() {
               </motion.div>
             ))}
           </div>
+
+          {/* Show All Button */}
+          {allSalesReps.length > 10 && (
+            <div className="mt-6 text-center">
+              <button className="bg-gradient-to-r from-gray-600 to-gray-700 text-white px-6 py-3 rounded-xl font-bold hover:from-gray-500 hover:to-gray-600 transition-all">
+                View All {allSalesReps.length} Competitors →
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Recent Sales */}
@@ -251,84 +297,7 @@ export default function MarchMadnessLeaderboard() {
           </div>
         )}
 
-        {/* Tournament Bracket */}
-        <div className="mt-8 bg-gradient-to-br from-red-900 to-black rounded-2xl p-6 border border-red-700 shadow-xl">
-          <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
-            <div className="p-3 bg-gradient-to-r from-red-500 to-red-700 rounded-xl">
-              🏆
-            </div>
-            MARCH MADNESS BRACKET
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* First Round Matchups */}
-            <div>
-              <h3 className="text-xl font-bold text-red-400 mb-4">ROUND 1 MATCHUPS</h3>
-              <div className="space-y-2">
-                {allSalesReps.slice(0, 16).map((rep, index) => (
-                  <div key={rep.id} className="flex items-center justify-between bg-gray-800/50 p-3 rounded-lg">
-                    <div className="text-white font-semibold">#{index + 1} {rep.name.split(' ')[0]} {rep.name.split(' ')[1]?.[0]}.</div>
-                    <div className="text-green-400 font-bold">{rep.totalSales} sales</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="text-xl font-bold text-red-400 mb-4">REMAINING CONTENDERS</h3>
-              <div className="space-y-2">
-                {allSalesReps.slice(16, 34).map((rep, index) => (
-                  <div key={rep.id} className="flex items-center justify-between bg-gray-800/50 p-3 rounded-lg">
-                    <div className="text-white font-semibold">#{index + 17} {rep.name.split(' ')[0]} {rep.name.split(' ')[1]?.[0]}.</div>
-                    <div className="text-green-400 font-bold">{rep.totalSales} sales</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Tournament Rules */}
-        <div className="mt-8 bg-gradient-to-br from-gray-900 to-black rounded-2xl p-6 border border-gray-700 shadow-xl">
-          <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
-            <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl">
-              📋
-            </div>
-            TOURNAMENT RULES & STRUCTURE
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="text-xl font-bold text-blue-400 mb-3">COMPETITION FORMAT</h3>
-              <ul className="text-gray-300 space-y-2">
-                <li>• <span className="text-white font-semibold">34 Total Agents</span> competing</li>
-                <li>• <span className="text-white font-semibold">Single Elimination</span> bracket style</li>
-                <li>• <span className="text-white font-semibold">March 7-14, 2026</span> tournament dates</li>
-                <li>• <span className="text-white font-semibold">Real-time scoring</span> and updates</li>
-                <li>• <span className="text-white font-semibold">Live cross-device sync</span></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-xl font-bold text-green-400 mb-3">SCORING SYSTEM</h3>
-              <ul className="text-gray-300 space-y-2">
-                <li>• <span className="text-white font-semibold">Total Sales Count</span> primary metric</li>
-                <li>• <span className="text-white font-semibold">Premium Volume</span> as tiebreaker</li>
-                <li>• <span className="text-white font-semibold">Live Leaderboard</span> updates instantly</li>
-                <li>• <span className="text-white font-semibold">Individual Dashboards</span> for each agent</li>
-                <li>• <span className="text-white font-semibold">TV Display Mode</span> for office viewing</li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="mt-6 p-4 bg-red-900/30 border border-red-500 rounded-lg">
-            <h3 className="text-lg font-bold text-red-400 mb-2">🎯 HOW TO PARTICIPATE</h3>
-            <p className="text-gray-300">
-              Use your unique 6-character access code to log in and record sales. Every sale counts toward your tournament ranking. 
-              The system syncs across all devices - record on mobile, see results everywhere instantly!
-            </p>
-          </div>
-        </div>
       </div>
 
       {/* Modals */}
