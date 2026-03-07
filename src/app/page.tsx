@@ -7,7 +7,7 @@ import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
 import BracketView from '@/components/BracketView'
 import MaintenanceMode from '@/components/MaintenanceMode'
-import { SupabaseSync, type SalesRep, type Sale } from '@/lib/supabase-sync'
+import { SimpleSync, type SalesRep, type Sale } from '@/lib/simple-sync'
 
 // MAINTENANCE MODE - Set to true to show maintenance page
 const MAINTENANCE_MODE = false
@@ -39,20 +39,13 @@ export default function MarchMadnessLeaderboard() {
     localStorage.removeItem('recentSales')
     localStorage.removeItem('lastSync')
     
-    // Initialize Supabase and load data
+    // Initialize SimpleSync and load data
     const initializeData = async () => {
       try {
-        await SupabaseSync.initialize()
+        const data = await SimpleSync.loadData()
         
-        const [salesReps, sales] = await Promise.all([
-          SupabaseSync.loadSalesReps(),
-          SupabaseSync.loadSales()
-        ])
-        
-        console.log('Loaded from Supabase:', { salesReps: salesReps.length, sales: sales.length })
-        
-        setSalesReps(salesReps)
-        setRecentSales(sales)
+        setSalesReps(data.salesReps)
+        setRecentSales(data.recentSales)
         
         // Check for logged in agent
         const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
@@ -78,30 +71,16 @@ export default function MarchMadnessLeaderboard() {
     
     initializeData()
     
-    // Set up real-time subscriptions
-    const unsubscribe = SupabaseSync.subscribeToChanges(
-      (updatedReps) => {
-        setSalesReps(updatedReps)
-        
-        // Update logged in agent if their data changed
-        const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
-        if (savedLoggedInAgent) {
-          try {
-            const parsedAgent = JSON.parse(savedLoggedInAgent)
-            const updatedAgent = updatedReps.find(rep => rep.id === parsedAgent.id)
-            if (updatedAgent) {
-              setLoggedInAgent(updatedAgent)
-              localStorage.setItem('loggedInAgent', JSON.stringify(updatedAgent))
-            }
-          } catch (error) {
-            console.error('Error updating logged in agent:', error)
-          }
-        }
-      },
-      (updatedSales) => {
-        setRecentSales(updatedSales)
+    // Set up periodic sync (every 10 seconds)
+    const syncInterval = setInterval(async () => {
+      try {
+        const data = await SimpleSync.loadData()
+        setSalesReps(data.salesReps)
+        setRecentSales(data.recentSales)
+      } catch (error) {
+        console.error('Error syncing data:', error)
       }
-    )
+    }, 10000)
     
     // Check for logged in agent
     const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
@@ -167,7 +146,7 @@ export default function MarchMadnessLeaderboard() {
       clearInterval(timer)
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
-      unsubscribe()
+      clearInterval(syncInterval)
     }
   }, [])
 
@@ -186,10 +165,13 @@ export default function MarchMadnessLeaderboard() {
 
   const handleRecordSale = async (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
     try {
-      const { success } = await SupabaseSync.recordSale(saleData)
+      const { success } = await SimpleSync.recordSale(saleData)
       if (success) {
         console.log('Sale recorded successfully')
-        // Real-time subscription will update the UI automatically
+        // Refresh data immediately
+        const data = await SimpleSync.loadData()
+        setSalesReps(data.salesReps)
+        setRecentSales(data.recentSales)
       } else {
         console.error('Failed to record sale')
       }
@@ -200,10 +182,13 @@ export default function MarchMadnessLeaderboard() {
 
   const handleDeleteSale = async (saleId: string) => {
     try {
-      const { success } = await SupabaseSync.deleteSale(saleId)
+      const { success } = await SimpleSync.deleteSale(saleId)
       if (success) {
         console.log('Sale deleted successfully')
-        // Real-time subscription will update the UI automatically
+        // Refresh data immediately
+        const data = await SimpleSync.loadData()
+        setSalesReps(data.salesReps)
+        setRecentSales(data.recentSales)
       } else {
         console.error('Failed to delete sale')
       }
