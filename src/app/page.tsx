@@ -71,7 +71,7 @@ export default function MarchMadnessLeaderboard() {
 
   const handleDeleteSale = async (saleId: string) => {
     try {
-      EmergencySync.deleteSale(saleId)
+      await RealTimeSync.deleteSale(saleId)
       console.log('Sale deleted and synced across all devices')
     } catch (error) {
       console.error('Error deleting sale:', error)
@@ -88,8 +88,9 @@ export default function MarchMadnessLeaderboard() {
 
   const totalSales = salesReps.reduce((sum, rep) => sum + rep.totalSales, 0)
   const totalPremium = salesReps.reduce((sum, rep) => sum + rep.totalPremium, 0)
-  const allSalesReps = salesReps
+  const topSalesReps = salesReps
     .sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium)
+    .slice(0, 10)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-950 via-black to-red-950">
@@ -130,16 +131,8 @@ export default function MarchMadnessLeaderboard() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            AGENT LOGIN
+            🏄‍♂️ AGENT LOGIN
           </motion.button>
-          <motion.a
-            href="/tv"
-            className="bg-gradient-to-r from-gray-700 to-gray-900 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:from-gray-600 hover:to-gray-800 transition-all inline-flex items-center"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            TV DISPLAY
-          </motion.a>
         </div>
 
         {/* Stats Banner */}
@@ -181,44 +174,7 @@ export default function MarchMadnessLeaderboard() {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Tournament Rules */}
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 shadow-xl">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                📋 TOURNAMENT RULES
-              </h2>
-              <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                SHOW
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="text-yellow-400 font-bold">⚡ Quick Summary</div>
-              <p className="text-gray-300 text-sm">
-                Head-to-head matchups • Highest submitted premium wins • Must be in Zoom room • Final round based on issued business • Winner gets Cancun trip 🏆
-              </p>
-            </div>
-          </div>
-
-          {/* Tournament Status */}
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 shadow-xl">
-            <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-              🎯 TOURNAMENT STATUS
-            </h2>
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                <span className="text-red-400 font-bold">🔴 LIVE</span>
-              </div>
-              <div className="text-gray-300">
-                <div className="font-bold text-green-400">WEEK 1 PLAY-IN ROUND</div>
-                <div className="text-sm">17 Active Matchups</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Top Performers */}
+        {/* Leaderboard */}
         <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 shadow-xl">
           <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
             <div className="p-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl">
@@ -228,7 +184,7 @@ export default function MarchMadnessLeaderboard() {
           </h2>
           
           <div className="space-y-4">
-            {allSalesReps.slice(0, 10).map((rep, index) => (
+            {topSalesReps.map((rep, index) => (
               <motion.div
                 key={rep.id}
                 className={`flex items-center justify-between p-4 rounded-xl border ${
@@ -265,15 +221,6 @@ export default function MarchMadnessLeaderboard() {
               </motion.div>
             ))}
           </div>
-
-          {/* Show All Button */}
-          {allSalesReps.length > 10 && (
-            <div className="mt-6 text-center">
-              <button className="bg-gradient-to-r from-gray-600 to-gray-700 text-white px-6 py-3 rounded-xl font-bold hover:from-gray-500 hover:to-gray-600 transition-all">
-                View All {allSalesReps.length} Competitors →
-              </button>
-            </div>
-          )}
         </div>
 
         {/* Recent Sales */}
@@ -296,8 +243,6 @@ export default function MarchMadnessLeaderboard() {
             </div>
           </div>
         )}
-
-
       </div>
 
       {/* Modals */}
