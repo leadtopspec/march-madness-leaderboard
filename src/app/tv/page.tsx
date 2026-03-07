@@ -70,6 +70,15 @@ export default function TVMode() {
     setIsClient(true)
     setCurrentTime(new Date())
     
+    // EMERGENCY: Reset all data to fix inconsistencies
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('march_madness_data')
+      localStorage.removeItem('march_madness_emergency') 
+      localStorage.removeItem('salesReps')
+      localStorage.removeItem('recentSales')
+      console.log('🔄 TV: Cleared all cached tournament data')
+    }
+    
     // Initialize real-time sync system
     const initializeData = async () => {
       try {

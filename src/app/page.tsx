@@ -7,6 +7,7 @@ import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
 import BracketView from '@/components/BracketView'
 import RealTimeSync, { type SalesRep as SyncSalesRep, type Sale as SyncSale } from '@/lib/real-time-sync'
+import { resetAllTournamentData } from '@/lib/reset-data'
 
 interface SalesRep {
   id: string
@@ -84,6 +85,15 @@ export default function MarchMadnessLeaderboard() {
     // Set client-side flag and initial time
     setIsClient(true)
     setCurrentTime(new Date())
+    
+    // EMERGENCY: Reset all data to fix inconsistencies
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('march_madness_data')
+      localStorage.removeItem('march_madness_emergency') 
+      localStorage.removeItem('salesReps')
+      localStorage.removeItem('recentSales')
+      console.log('🔄 Cleared all cached tournament data')
+    }
     
     // Initialize real-time sync system
     const initializeData = async () => {

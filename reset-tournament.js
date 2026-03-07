@@ -1,53 +1,61 @@
-// Reset the tournament to start fresh
-const API_URL = 'https://api.jsonbin.io/v3/b/6754465aad19ca34f8cec3a7'
-const API_KEY = '$2a$10$n8r4VBF7v2MgUgzHLRRpW.pRaHQ4SLo9uMlOCb0e/YyE.NBK0lBNu'
+// TOURNAMENT DATA RESET SCRIPT
+// This will clear ALL tournament data and start fresh
 
-const AGENTS = [
-  'MAX KONOPKA', 'ROBERT BRADY', 'ZION RUSSELL', 'BYRON ACHA', 'JOSE VALDEZ',
-  'JADEN POPE', 'WESTON CHRISTOPHER', 'NOLAN SCHOENBACHLER', 'THOMAS FOX', 'JEREMI KISINSKI',
-  'JAKE DOLL', 'DANIEL SUAREZ', 'RYAN BOVE', 'RYAN COOPER', 'LUCAS KONSTATOS',
-  'ANTHONY MAYROSE', 'ANDREW FLASKAMP', 'FABIAN ESCATEL', 'KAMREN HERALD', 'JAYLEN BISCHOFF',
-  'BRENNAN SKODA', 'AALYIAH WASHBURN', 'KADEN CAMENZIND', 'HANNAH FRENCH', 'MICHAEL CARNEY',
-  'TAJ DHILLON', 'JACOB LEE', 'ADRIEN RAMÍREZ-RAYO', 'DENNIS CHORNIY', 'CHARLIE SIMMS',
-  'BRENON REED', 'KIRILL PAVLYCHEV', 'LAINEY DROWN', 'VALERIA ALVAL'
-]
+const JSONBIN_ID = '67543c1eacd3cb34a8b2bbdf'
+const JSONBIN_KEY = '$2a$10$DVaj3B8eMT1ggwsB6HCEa.8Y3Rh7QLnOLCnpTcuI7kT9qNADiGY4a'
+
+const initialReps = [
+  "MAX KONOPKA", "ROBERT BRADY", "ZION RUSSELL", "BYRON ACHA", "JOSE VALDEZ",
+  "JADEN POPE", "WESTON CHRISTOPHER", "NOLAN SCHOENBACHLER", "THOMAS FOX", "JEREMI KISINSKI",
+  "JAKE DOLL", "DANIEL SUAREZ", "RYAN BOVE", "RYAN COOPER", "LUCAS KONSTATOS",
+  "ANTHONY MAYROSE", "ANDREW FLASKAMP", "FABIAN ESCATEL", "KAMREN HERALD", "JAYLEN BISCHOFF",
+  "BRENNAN SKODA", "AALYIAH WASHBURN", "KADEN CAMENZIND", "HANNAH FRENCH", "MICHAEL CARNEY",
+  "TAJ DHILLON", "JACOB LEE", "ADRIEN RAMÍREZ-RAYO", "DENNIS CHORNIY", "CHARLIE SIMMS",
+  "BRENON REED", "KIRILL PAVLYCHEV", "LAINEY DROWN", "VALERIA ALVAL"
+].map((name, index) => ({
+  id: `agent_${index + 1}`,
+  name,
+  totalSales: 0,
+  totalPremium: 0,
+  rank: index + 1,
+  lastSale: new Date().toISOString(),
+  team: index < 17 ? "TEAM RED" : "TEAM BLACK",
+  bracketPosition: index + 1
+}))
+
+const freshTournamentData = {
+  salesReps: initialReps,
+  sales: [],
+  lastUpdated: new Date().toISOString(),
+  version: Date.now()
+}
 
 async function resetTournament() {
-  const salesReps = AGENTS.map((name, index) => ({
-    id: (index + 1).toString(),
-    name,
-    totalSales: 0,
-    totalPremium: 0,
-    rank: index + 1,
-    lastSale: '2024-03-01T00:00:00.000Z',
-    team: 'All In Agencies',
-    bracketPosition: index + 1
-  }))
-
-  const data = {
-    salesReps,
-    sales: [],
-    lastUpdated: new Date().toISOString()
-  }
-
   try {
-    const response = await fetch(API_URL, {
+    console.log('🔄 Resetting tournament data...')
+    
+    // Reset cloud storage
+    const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'X-Master-Key': API_KEY
+        'X-Master-Key': JSONBIN_KEY,
+        'X-Bin-Meta': 'false'
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(freshTournamentData)
     })
-
-    if (response.ok) {
-      console.log('✅ Tournament reset successfully!')
-      console.log('🏀 All 34 agents at 0 sales, ready for competition')
-    } else {
-      console.error('❌ Error resetting tournament:', response.statusText)
+    
+    if (!response.ok) {
+      throw new Error(`JSONBin reset failed: ${response.status}`)
     }
+    
+    console.log('✅ Cloud storage reset successfully')
+    console.log(`📊 Reset to 0 sales for all ${initialReps.length} agents`)
+    console.log('🎯 Tournament is ready for fresh start!')
+    
   } catch (error) {
-    console.error('❌ Network error:', error)
+    console.error('❌ Reset failed:', error)
+    process.exit(1)
   }
 }
 
