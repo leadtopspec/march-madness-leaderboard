@@ -2,21 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Tv, Award, Target, Star, Crown, Users, LogIn } from 'lucide-react'
 import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
-import BracketView from '@/components/BracketView'
-import MaintenanceMode from '@/components/MaintenanceMode'
-import { SimpleSync, type SalesRep, type Sale } from '@/lib/simple-sync'
-
-// MAINTENANCE MODE - Set to true to show maintenance page
-const MAINTENANCE_MODE = false
+import { EmergencySync, type SalesRep, type Sale } from '@/lib/emergency-sync'
 
 export default function MarchMadnessLeaderboard() {
-  // Show maintenance mode if enabled
-  if (MAINTENANCE_MODE) {
-    return <MaintenanceMode />
-  }
   const [salesReps, setSalesReps] = useState<SalesRep[]>([])
   const [recentSalesList, setRecentSales] = useState<Sale[]>([])
   const [showLoginModal, setShowLoginModal] = useState(false)
@@ -24,138 +14,36 @@ export default function MarchMadnessLeaderboard() {
   const [isClient, setIsClient] = useState(false)
   const [loggedInAgent, setLoggedInAgent] = useState<SalesRep | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [timeUntilStart, setTimeUntilStart] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
-  const [timeUntilEnd, setTimeUntilEnd] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
-  const [showRules, setShowRules] = useState(false)
-  const [showAllCompetitors, setShowAllCompetitors] = useState(false)
 
   useEffect(() => {
-    // Set client-side flag and initial time
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Force clear any localStorage cache
-    localStorage.removeItem('salesReps')
-    localStorage.removeItem('recentSales')
-    localStorage.removeItem('lastSync')
-    
-    // Initialize SimpleSync and load data
-    const initializeData = async () => {
-      try {
-        const data = await SimpleSync.loadData()
-        
-        setSalesReps(data.salesReps)
-        setRecentSales(data.recentSales)
-        
-        // Check for logged in agent
-        const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
-        if (savedLoggedInAgent) {
-          try {
-            const parsedAgent = JSON.parse(savedLoggedInAgent)
-            const currentAgent = salesReps.find(rep => rep.id === parsedAgent.id)
-            if (currentAgent) {
-              setLoggedInAgent(currentAgent)
-            }
-          } catch (e) {
-            console.error('Error parsing saved logged in agent:', e)
-            localStorage.removeItem('loggedInAgent')
-          }
-        }
-        
-        setIsLoading(false)
-      } catch (error) {
-        console.error('Error initializing data:', error)
-        setIsLoading(false)
-      }
-    }
-    
-    initializeData()
-    
-    // Set up periodic sync (every 10 seconds)
-    const syncInterval = setInterval(async () => {
-      try {
-        const data = await SimpleSync.loadData()
-        setSalesReps(data.salesReps)
-        setRecentSales(data.recentSales)
-      } catch (error) {
-        console.error('Error syncing data:', error)
-      }
-    }, 10000)
-    
-    // Check for logged in agent
-    const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
-    if (savedLoggedInAgent) {
-      try {
-        const parsedAgent = JSON.parse(savedLoggedInAgent)
-        const currentAgent = localData.salesReps.find(rep => rep.id === parsedAgent.id)
-        if (currentAgent) {
-          setLoggedInAgent(currentAgent)
-        }
-      } catch (e) {
-        console.error('Error parsing saved logged in agent:', e)
-        localStorage.removeItem('loggedInAgent')
-      }
-    }
-    
+    // Initialize emergency sync system
+    const data = EmergencySync.initialize()
+    setSalesReps(data.salesReps)
+    setRecentSales(data.sales)
     setIsLoading(false)
+    
+    // Subscribe to real-time updates
+    const unsubscribe = EmergencySync.subscribe((updatedData) => {
+      setSalesReps(updatedData.salesReps)
+      setRecentSales(updatedData.sales)
+    })
     
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
     
-    // Countdown to Round 1 start (March 7, 2026 at 12:00 AM CST)
-    const updateCountdown = () => {
-      const startTime = new Date('2026-03-07T06:00:00.000Z') // 12:00 AM CST = 06:00 UTC
-      const now = new Date()
-      const diff = startTime.getTime() - now.getTime()
-      
-      if (diff > 0) {
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-        
-        setTimeUntilStart({ days, hours, minutes, seconds })
-      } else {
-        setTimeUntilStart(null) // Tournament has started
-      }
-    }
-
-    // Countdown to Tournament end (March 14, 2026 at 11:59 PM CST)
-    const updateEndCountdown = () => {
-      const endTime = new Date('2026-03-15T05:59:00.000Z') // 11:59 PM CST = 05:59 UTC next day
-      const now = new Date()
-      const diff = endTime.getTime() - now.getTime()
-      
-      if (diff > 0) {
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-        
-        setTimeUntilEnd({ days, hours, minutes, seconds })
-      } else {
-        setTimeUntilEnd(null) // Tournament has ended
-      }
-    }
-    
-    updateCountdown() // Initial call
-    updateEndCountdown() // Initial call for end countdown
-    const countdownTimer = setInterval(updateCountdown, 1000)
-    const endCountdownTimer = setInterval(updateEndCountdown, 1000)
-    
     return () => {
       clearInterval(timer)
-      clearInterval(countdownTimer)
-      clearInterval(endCountdownTimer)
-      clearInterval(syncInterval)
+      unsubscribe()
+      EmergencySync.cleanup()
     }
   }, [])
 
-  const handleLogin = (agentId: string) => {
-    const agent = salesReps.find(rep => rep.id === agentId)
-    if (agent) {
-      setLoggedInAgent(agent)
-      localStorage.setItem('loggedInAgent', JSON.stringify(agent))
-    }
+  const handleLogin = (agent: SalesRep) => {
+    setLoggedInAgent(agent)
+    localStorage.setItem('loggedInAgent', JSON.stringify(agent))
+    setShowLoginModal(false)
   }
 
   const handleLogout = () => {
@@ -165,16 +53,8 @@ export default function MarchMadnessLeaderboard() {
 
   const handleRecordSale = async (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
     try {
-      const { success } = await SimpleSync.recordSale(saleData)
-      if (success) {
-        console.log('Sale recorded successfully')
-        // Refresh data immediately
-        const data = await SimpleSync.loadData()
-        setSalesReps(data.salesReps)
-        setRecentSales(data.recentSales)
-      } else {
-        console.error('Failed to record sale')
-      }
+      EmergencySync.recordSale(saleData)
+      console.log('Sale recorded and synced across all devices')
     } catch (error) {
       console.error('Error recording sale:', error)
     }
@@ -182,91 +62,51 @@ export default function MarchMadnessLeaderboard() {
 
   const handleDeleteSale = async (saleId: string) => {
     try {
-      const { success } = await SimpleSync.deleteSale(saleId)
-      if (success) {
-        console.log('Sale deleted successfully')
-        // Refresh data immediately
-        const data = await SimpleSync.loadData()
-        setSalesReps(data.salesReps)
-        setRecentSales(data.recentSales)
-      } else {
-        console.error('Failed to delete sale')
-      }
+      EmergencySync.deleteSale(saleId)
+      console.log('Sale deleted and synced across all devices')
     } catch (error) {
       console.error('Error deleting sale:', error)
     }
   }
 
-  const getRankBadge = (rank: number) => {
-    if (rank === 1) return { icon: Crown, color: 'from-yellow-400 to-yellow-600', bg: 'bg-gradient-to-br from-yellow-400/30 to-amber-500/30' }
-    if (rank === 2) return { icon: Award, color: 'from-gray-400 to-gray-600', bg: 'bg-gradient-to-br from-gray-400/30 to-slate-500/30' }
-    if (rank === 3) return { icon: Star, color: 'from-orange-400 to-orange-600', bg: 'bg-gradient-to-br from-orange-400/30 to-red-500/30' }
-    return { icon: Target, color: 'from-blue-400 to-blue-600', bg: 'bg-white/90' }
-  }
-  
-  // Calculate totals for display
-  const totalSales = salesReps.reduce((sum, rep) => sum + rep.totalSales, 0)
-  const totalPremium = salesReps.reduce((sum, rep) => sum + rep.totalPremium, 0)
-
-  // Show loading screen while checking localStorage
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-4">🏀</div>
-          <div className="text-white text-2xl font-bold">Loading Tournament...</div>
-          <div className="text-gray-400 text-lg mt-2">Syncing with live database...</div>
-        </div>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white text-xl">Loading tournament...</div>
       </div>
     )
   }
 
-  // If agent is logged in, show their personal dashboard
-  if (loggedInAgent) {
-    const currentAgentData = salesReps.find(rep => rep.id === loggedInAgent.id)
-    const updatedAgent = currentAgentData || loggedInAgent
-
-    return (
-      <AgentDashboard
-        agent={updatedAgent}
-        allAgents={salesReps}
-        onRecordSale={handleRecordSale}
-        onDeleteSale={handleDeleteSale}
-        onLogout={handleLogout}
-        recentSales={recentSalesList}
-      />
-    )
-  }
+  const totalSales = salesReps.reduce((sum, rep) => sum + rep.totalSales, 0)
+  const totalPremium = salesReps.reduce((sum, rep) => sum + rep.totalPremium, 0)
+  const topSalesReps = salesReps
+    .sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium)
+    .slice(0, 10)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900">
-      {/* Header - Mobile Optimized */}
-      <div className="bg-gradient-to-r from-red-600 to-red-800 text-white py-4 md:py-6 shadow-2xl border-b-4 border-red-400">
-        <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-red-950 via-black to-red-950">
+      {/* Header */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-800" />
+        <div className="relative z-10 px-4 py-6">
           <motion.div 
+            className="flex justify-between items-center text-white"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-between"
+            transition={{ duration: 0.8 }}
           >
-            <div className="flex items-center gap-2 md:gap-4">
-              <div className="text-2xl md:text-4xl">🏀</div>
-              <div>
-                <h1 className="text-xl md:text-4xl font-black">MARCH MADNESS</h1>
-                <p className="text-xs md:text-lg font-bold opacity-90">
-                  <span className="md:hidden">ALL IN • TOURNAMENT</span>
-                  <span className="hidden md:inline">ALL IN AGENCIES • SALES TOURNAMENT • MARCH 7-14</span>
-                </p>
-              </div>
+            <div>
+              <h1 className="text-3xl md:text-6xl font-black tracking-tight">
+                🏆 MARCH MADNESS
+              </h1>
+              <p className="text-lg md:text-2xl opacity-90 font-bold">
+                ALL IN AGENCIES • SALES TOURNAMENT • MARCH 7-14
+              </p>
             </div>
             <div className="text-right">
-              <div className="text-xs md:text-sm opacity-75">LIVE</div>
-              <div className="text-sm md:text-xl font-bold">
-                {isClient && currentTime ? (
-                  <span>
-                    <span className="md:hidden">{currentTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                    <span className="hidden md:inline">{currentTime.toLocaleTimeString()}</span>
-                  </span>
-                ) : '--:--'}
+              <div className="text-sm opacity-75">LIVE</div>
+              <div className="text-xl font-bold">
+                {isClient && currentTime ? currentTime.toLocaleTimeString() : '--:--'}
               </div>
             </div>
           </motion.div>
@@ -274,204 +114,150 @@ export default function MarchMadnessLeaderboard() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        {/* Action Buttons - Mobile Optimized */}
-        <div className="flex flex-col md:flex-row gap-3 md:gap-4 justify-center mb-6 md:mb-8 px-4">
+        {/* Action Buttons */}
+        <div className="flex gap-4 justify-center mb-8">
           <motion.button
             onClick={() => setShowLoginModal(true)}
-            className="bg-gradient-to-r from-red-500 to-red-700 text-white px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl font-bold text-base md:text-lg shadow-xl hover:from-red-600 hover:to-red-800 transition-all flex items-center justify-center gap-3"
+            className="bg-gradient-to-r from-red-500 to-red-700 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:from-red-600 hover:to-red-800 transition-all"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <LogIn className="w-5 h-5 md:w-6 md:h-6" />
             🏄‍♂️ AGENT LOGIN
           </motion.button>
-          
-          <motion.a
-            href="/tv"
-            target="_blank"
-            className="bg-gradient-to-r from-gray-700 to-black text-white px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl font-bold text-base md:text-lg shadow-xl hover:from-gray-800 hover:to-gray-900 transition-all flex items-center justify-center gap-3"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Tv className="w-5 h-5 md:w-6 md:h-6" />
-            📺 TV DISPLAY
-          </motion.a>
-          
-          <motion.button
-            onClick={() => window.location.reload()}
-            className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl font-bold text-sm md:text-base shadow-xl hover:from-blue-600 hover:to-blue-800 transition-all flex items-center justify-center gap-2"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            🔄 REFRESH DATA
-          </motion.button>
         </div>
 
-        {/* Live Stats Banner - Mobile Optimized */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8 px-4">
+        {/* Stats Banner */}
+        <div className="grid grid-cols-4 gap-4 mb-8">
           <motion.div 
-            className="bg-gradient-to-r from-red-500 to-red-700 text-white rounded-lg md:rounded-xl p-3 md:p-4 text-center shadow-xl"
+            className="bg-gradient-to-r from-red-500 to-red-700 text-white rounded-xl p-4 text-center shadow-xl"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.1 }}
           >
-            <div className="text-2xl md:text-3xl font-black">{salesReps.length}</div>
-            <div className="text-xs md:text-sm font-bold opacity-90">COMPETITORS</div>
+            <div className="text-3xl font-black">{salesReps.length}</div>
+            <div className="text-sm font-bold opacity-90">COMPETITORS</div>
           </motion.div>
 
           <motion.div 
-            className="bg-gradient-to-r from-gray-700 to-gray-900 text-white rounded-lg md:rounded-xl p-3 md:p-4 text-center shadow-xl"
+            className="bg-gradient-to-r from-gray-700 to-gray-900 text-white rounded-xl p-4 text-center shadow-xl"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
           >
-            <div className="text-2xl md:text-3xl font-black">{totalSales}</div>
-            <div className="text-xs md:text-sm font-bold opacity-90">TOTAL SALES</div>
+            <div className="text-3xl font-black">{totalSales}</div>
+            <div className="text-sm font-bold opacity-90">TOTAL SALES</div>
           </motion.div>
 
           <motion.div 
-            className="bg-gradient-to-r from-red-600 to-red-800 text-white rounded-lg md:rounded-xl p-3 md:p-4 text-center shadow-xl"
+            className="bg-gradient-to-r from-red-600 to-red-800 text-white rounded-xl p-4 text-center shadow-xl"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
           >
-            <div className="text-lg md:text-2xl font-black">${totalPremium.toLocaleString()}</div>
-            <div className="text-xs md:text-sm font-bold opacity-90">TOTAL PREMIUM</div>
+            <div className="text-2xl font-black">${totalPremium.toLocaleString()}</div>
+            <div className="text-sm font-bold opacity-90">TOTAL PREMIUM</div>
           </motion.div>
 
           <motion.div 
-            className="bg-gradient-to-r from-black to-gray-800 text-white rounded-lg md:rounded-xl p-3 md:p-4 text-center shadow-xl"
+            className="bg-gradient-to-r from-black to-gray-800 text-white rounded-xl p-4 text-center shadow-xl"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4 }}
           >
-            {timeUntilEnd ? (
-              <>
-                <div className="text-sm md:text-lg font-black">{timeUntilEnd.days}D {timeUntilEnd.hours}H</div>
-                <div className="text-xs md:text-sm font-bold opacity-90">REMAINING</div>
-              </>
-            ) : (
-              <>
-                <div className="text-lg md:text-2xl font-black">ENDED</div>
-                <div className="text-xs md:text-sm font-bold opacity-90">TOURNAMENT</div>
-              </>
-            )}
+            <div className="text-lg font-black">7D 11H</div>
+            <div className="text-sm font-bold opacity-90">REMAINING</div>
           </motion.div>
         </div>
 
-        {/* Countdown to Round 1 */}
-        {timeUntilStart && (
-          <motion.div 
-            className="bg-gradient-to-r from-green-600 to-green-800 text-white rounded-xl p-6 text-center shadow-xl mb-8"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <div className="text-2xl font-black mb-2">⏰ ROUND 1 STARTS IN:</div>
-            <div className="flex justify-center gap-4 text-3xl font-black">
-              {timeUntilStart.days > 0 && (
-                <div className="text-center">
-                  <div>{timeUntilStart.days}</div>
-                  <div className="text-sm opacity-90">DAYS</div>
-                </div>
-              )}
-              <div className="text-center">
-                <div>{timeUntilStart.hours.toString().padStart(2, '0')}</div>
-                <div className="text-sm opacity-90">HOURS</div>
-              </div>
-              <div className="text-center">
-                <div>{timeUntilStart.minutes.toString().padStart(2, '0')}</div>
-                <div className="text-sm opacity-90">MINUTES</div>
-              </div>
-              <div className="text-center">
-                <div>{timeUntilStart.seconds.toString().padStart(2, '0')}</div>
-                <div className="text-sm opacity-90">SECONDS</div>
-              </div>
+        {/* Leaderboard */}
+        <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 shadow-xl">
+          <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+            <div className="p-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl">
+              👑
             </div>
-            <div className="text-lg font-bold mt-2 opacity-90">March 7, 2026 • 12:00 AM CST</div>
-          </motion.div>
+            TOP PERFORMERS
+          </h2>
+          
+          <div className="space-y-4">
+            {topSalesReps.map((rep, index) => (
+              <motion.div
+                key={rep.id}
+                className={`flex items-center justify-between p-4 rounded-xl border ${
+                  index === 0 
+                    ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-yellow-500/30' 
+                    : index === 1
+                    ? 'bg-gradient-to-r from-gray-500/20 to-gray-600/20 border-gray-500/30'
+                    : index === 2
+                    ? 'bg-gradient-to-r from-orange-600/20 to-red-600/20 border-orange-500/30'
+                    : 'bg-gray-800/50 border-gray-700'
+                }`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold ${
+                    index === 0 ? 'bg-yellow-500 text-white' :
+                    index === 1 ? 'bg-gray-500 text-white' :
+                    index === 2 ? 'bg-orange-600 text-white' :
+                    'bg-gray-700 text-gray-300'
+                  }`}>
+                    #{index + 1}
+                  </div>
+                  <div>
+                    <div className="text-xl font-bold text-white">{rep.name}</div>
+                    <div className="text-gray-400">{rep.team}</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-white">{rep.totalSales}</div>
+                  <div className="text-lg text-green-400">${rep.totalPremium.toLocaleString()}</div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Recent Sales */}
+        {recentSalesList.length > 0 && (
+          <div className="mt-8 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 shadow-xl">
+            <h2 className="text-2xl font-bold text-white mb-4">🔥 RECENT SALES</h2>
+            <div className="space-y-3">
+              {recentSalesList.slice(0, 5).map((sale, index) => (
+                <div key={sale.id} className="flex justify-between items-center p-3 bg-gray-700/50 rounded-xl">
+                  <div>
+                    <div className="font-bold text-white">{sale.repName}</div>
+                    <div className="text-gray-400 text-sm">{sale.clientName} • {sale.policyType}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xl font-bold text-green-400">${sale.premium.toLocaleString()}</div>
+                    <div className="text-gray-400 text-sm">{sale.timestamp.toLocaleTimeString()}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
+      </div>
 
-        {/* Compact Rules Section - Mobile Optimized */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-black/40 backdrop-blur-sm rounded-2xl p-4 md:p-8 border-2 border-red-500/30 mb-8"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="text-2xl md:text-3xl">📋</div>
-              <h2 className="text-xl md:text-3xl font-black text-white">TOURNAMENT RULES</h2>
-            </div>
-            <button
-              onClick={() => setShowRules(!showRules)}
-              className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm font-bold transition-all"
-            >
-              {showRules ? 'HIDE' : 'SHOW'}
-            </button>
-          </div>
+      {/* Modals */}
+      {showLoginModal && (
+        <LoginModal
+          salesReps={salesReps}
+          onClose={() => setShowLoginModal(false)}
+          onLogin={handleLogin}
+        />
+      )}
 
-          {/* Always visible quick summary */}
-          <div className="bg-red-500/20 border border-red-400/30 rounded-xl p-3 md:p-4 mb-4">
-            <div className="text-lg md:text-xl font-bold text-red-200 mb-2">🎯 Quick Summary</div>
-            <div className="text-red-100 text-sm md:text-base">
-              Head-to-head matchups • Highest submitted premium wins • Must be in Zoom room • Final round based on issued business • Winner gets Cancun trip 🏆
-            </div>
-          </div>
-
-          {/* Detailed rules - collapsible on mobile */}
-          {showRules && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="text-white space-y-4"
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Key Rules - Left Column */}
-                <div className="space-y-4">
-                  <div className="bg-black/20 border border-gray-600/30 rounded-xl p-4">
-                    <div className="text-base font-bold text-gray-200 mb-2 flex items-center gap-2">
-                      🥊 Head-to-Head Matchups
-                    </div>
-                    <ul className="text-white/90 space-y-1 text-sm">
-                      <li>• Paired against one opponent each round</li>
-                      <li>• Most issued premium advances</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-red-600/20 border border-red-500/30 rounded-xl p-4">
-                    <div className="text-base font-bold text-red-200 mb-2 flex items-center gap-2">
-                      📹 Zoom Room Required
-                    </div>
-                    <ul className="text-white/90 space-y-1 text-sm">
-                      <li>• Both competitors in same Zoom room</li>
-                      <li>• Cameras on, actively working</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white/5 border border-white/20 rounded-xl p-4">
-                    <div className="text-base font-bold text-green-200 mb-2 flex items-center gap-2">
-                      ⚖️ What Counts
-                    </div>
-                    <div className="space-y-1 text-sm">
-                      <div className="text-green-300 font-semibold">✅ Submitted premium only</div>
-                      <div className="text-red-300 font-semibold">❌ Rewrites don&apos;t count</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Additional Rules - Right Column */}
-                <div className="space-y-4">
-                  <div className="bg-white/5 border border-white/20 rounded-xl p-4">
-                    <div className="text-base font-bold text-yellow-200 mb-2 flex items-center gap-2">
-                      🏁 Rounds 1–3
-                    </div>
-                    <div className="text-white/90 text-sm">
-                      Winner by total submitted premium
-                    </div>
-                  </div>
-
-                  <div className="bg-white/5 border border-white/20 rounded-xl p-4">
-                    <div className="text-base font-bold text-red-200 mb-2 flex items-center gap-2">
-                      🏆 Final Round
+      {loggedInAgent && (
+        <AgentDashboard
+          agent={loggedInAgent}
+          allAgents={salesReps}
+          onRecordSale={handleRecordSale}
+          onDeleteSale={handleDeleteSale}
+          onLogout={handleLogout}
+          recentSales={recentSalesList.filter(sale => 
+            sale.repName.toLowerCase().includes(loggedInAgent.name.toLowerCase()) ||
+            loggedInAgent.name.toLowerCase().includes(sale.repName.toLowerCase())
+          )}
+        />
+      )}
+    </div>
+  )
+}
