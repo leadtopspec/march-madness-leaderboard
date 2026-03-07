@@ -75,6 +75,7 @@ export default function MarchMadnessLeaderboard() {
   const [isClient, setIsClient] = useState(false)
   const [loggedInAgent, setLoggedInAgent] = useState<SalesRep | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [timeUntilStart, setTimeUntilStart] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
 
   useEffect(() => {
     // Set client-side flag and initial time
@@ -186,8 +187,30 @@ export default function MarchMadnessLeaderboard() {
     
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
     
+    // Countdown to Round 1 start (March 7, 2026 at 12:00 AM CST)
+    const updateCountdown = () => {
+      const startTime = new Date('2026-03-07T06:00:00.000Z') // 12:00 AM CST = 06:00 UTC
+      const now = new Date()
+      const diff = startTime.getTime() - now.getTime()
+      
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+        
+        setTimeUntilStart({ days, hours, minutes, seconds })
+      } else {
+        setTimeUntilStart(null) // Tournament has started
+      }
+    }
+    
+    updateCountdown() // Initial call
+    const countdownTimer = setInterval(updateCountdown, 1000)
+    
     return () => {
       clearInterval(timer)
+      clearInterval(countdownTimer)
       window.removeEventListener('storage', handleStorageChange)
     }
   }, [])
@@ -430,6 +453,39 @@ export default function MarchMadnessLeaderboard() {
             <div className="text-sm font-bold opacity-90">REMAINING</div>
           </motion.div>
         </div>
+
+        {/* Countdown to Round 1 */}
+        {timeUntilStart && (
+          <motion.div 
+            className="bg-gradient-to-r from-green-600 to-green-800 text-white rounded-xl p-6 text-center shadow-xl mb-8"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <div className="text-2xl font-black mb-2">⏰ ROUND 1 STARTS IN:</div>
+            <div className="flex justify-center gap-4 text-3xl font-black">
+              {timeUntilStart.days > 0 && (
+                <div className="text-center">
+                  <div>{timeUntilStart.days}</div>
+                  <div className="text-sm opacity-90">DAYS</div>
+                </div>
+              )}
+              <div className="text-center">
+                <div>{timeUntilStart.hours.toString().padStart(2, '0')}</div>
+                <div className="text-sm opacity-90">HOURS</div>
+              </div>
+              <div className="text-center">
+                <div>{timeUntilStart.minutes.toString().padStart(2, '0')}</div>
+                <div className="text-sm opacity-90">MINUTES</div>
+              </div>
+              <div className="text-center">
+                <div>{timeUntilStart.seconds.toString().padStart(2, '0')}</div>
+                <div className="text-sm opacity-90">SECONDS</div>
+              </div>
+            </div>
+            <div className="text-lg font-bold mt-2 opacity-90">March 7, 2026 • 12:00 AM CST</div>
+          </motion.div>
+        )}
 
         {/* Rules Section */}
         <motion.div

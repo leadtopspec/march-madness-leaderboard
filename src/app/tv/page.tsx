@@ -61,6 +61,7 @@ export default function TVMode() {
   const [currentTime, setCurrentTime] = useState<Date | null>(null)
   const [isClient, setIsClient] = useState(false)
   const [salesReps, setSalesReps] = useState<SalesRep[]>(bracketParticipants.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
+  const [timeUntilStart, setTimeUntilStart] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
 
   useEffect(() => {
     // Set client-side flag and initial time
@@ -117,9 +118,31 @@ export default function TVMode() {
     
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
     
+    // Countdown to Round 1 start (March 7, 2026 at 12:00 AM CST)
+    const updateCountdown = () => {
+      const startTime = new Date('2026-03-07T06:00:00.000Z') // 12:00 AM CST = 06:00 UTC
+      const now = new Date()
+      const diff = startTime.getTime() - now.getTime()
+      
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+        
+        setTimeUntilStart({ days, hours, minutes, seconds })
+      } else {
+        setTimeUntilStart(null) // Tournament has started
+      }
+    }
+    
+    updateCountdown() // Initial call
+    const countdownTimer = setInterval(updateCountdown, 1000)
+    
     return () => {
       clearInterval(timer)
       clearInterval(pollInterval)
+      clearInterval(countdownTimer)
       window.removeEventListener('storage', handleStorageChange)
     }
   }, [])
@@ -264,6 +287,36 @@ export default function TVMode() {
                 <div className="text-sm opacity-75">17 ACTIVE MATCHUPS</div>
               </div>
             </div>
+
+            {/* Countdown to Round 1 */}
+            {timeUntilStart && (
+              <div className="bg-green-600/80 backdrop-blur-sm rounded-xl p-4 border border-green-400/20">
+                <div className="text-center text-white">
+                  <div className="text-lg font-bold mb-2">⏰ ROUND 1 STARTS</div>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    {timeUntilStart.days > 0 && (
+                      <div className="text-center">
+                        <div className="text-xl font-bold">{timeUntilStart.days}</div>
+                        <div className="text-xs opacity-75">DAYS</div>
+                      </div>
+                    )}
+                    <div className="text-center">
+                      <div className="text-xl font-bold">{timeUntilStart.hours.toString().padStart(2, '0')}</div>
+                      <div className="text-xs opacity-75">HRS</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xl font-bold">{timeUntilStart.minutes.toString().padStart(2, '0')}</div>
+                      <div className="text-xs opacity-75">MIN</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xl font-bold">{timeUntilStart.seconds.toString().padStart(2, '0')}</div>
+                      <div className="text-xs opacity-75">SEC</div>
+                    </div>
+                  </div>
+                  <div className="text-xs opacity-75 mt-2">3/7/26 • 12:00 AM</div>
+                </div>
+              </div>
+            )}
 
             {/* Top Performers */}
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
