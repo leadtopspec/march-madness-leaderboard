@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, Crown, Award, Star, Target } from 'lucide-react'
 import TVBracketView from '@/components/TVBracketView'
-import BulletproofSync, { type SalesRep, type Sale } from '@/lib/bulletproof-sync'
+import SupabaseSync, { type SalesRep, type Sale } from '@/lib/supabase-sync'
 
 interface SalesRep {
   id: string
@@ -72,13 +72,13 @@ export default function TVMode() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Initialize bulletproof sync system for TV
+    // Initialize Supabase sync system for TV with real-time subscriptions
     const initializeData = async () => {
       try {
-        console.log('📺 TV: Initializing BulletproofSync...')
-        const data = await BulletproofSync.initialize()
+        console.log('📺 TV: Initializing SupabaseSync...')
+        const data = await SupabaseSync.initialize()
         setSalesReps(data.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
-        console.log('📺 TV: BulletproofSync initialized')
+        console.log('📺 TV: SupabaseSync initialized with real-time')
       } catch (error) {
         console.error('❌ TV: Failed to initialize sync:', error)
       }
@@ -86,9 +86,9 @@ export default function TVMode() {
     
     initializeData()
     
-    // Subscribe to bulletproof updates
-    const unsubscribe = BulletproofSync.subscribe((updatedData) => {
-      console.log('📺 TV: Received sync update')
+    // Subscribe to real-time Supabase updates
+    const unsubscribe = SupabaseSync.subscribe((updatedData) => {
+      console.log('📺 TV: Received real-time update from Supabase')
       setSalesReps(updatedData.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
     })
     
@@ -173,7 +173,7 @@ export default function TVMode() {
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
       unsubscribe()
-      BulletproofSync.cleanup()
+      SupabaseSync.cleanup()
     }
   }, [])
 

@@ -1,15 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-export const supabase = createClient(supabaseUrl, supabaseKey, {
-  realtime: {
-    params: {
-      eventsPerSecond: 10,
-    },
-  },
-})
+import { supabase } from './supabase'
 
 export interface SalesRep {
   id: string
@@ -31,316 +20,363 @@ export interface Sale {
   timestamp: Date
 }
 
+interface TournamentData {
+  salesReps: SalesRep[]
+  sales: Sale[]
+  lastUpdated: string
+  version: number
+}
+
 class SupabaseSync {
-  private static readonly AGENTS = [
-    'MAX KONOPKA', 'ROBERT BRADY', 'ZION RUSSELL', 'BYRON ACHA', 'JOSE VALDEZ',
-    'JADEN POPE', 'WESTON CHRISTOPHER', 'NOLAN SCHOENBACHLER', 'THOMAS FOX', 'JEREMI KISINSKI',
-    'JAKE DOLL', 'DANIEL SUAREZ', 'RYAN BOVE', 'RYAN COOPER', 'LUCAS KONSTATOS',
-    'ANTHONY MAYROSE', 'ANDREW FLASKAMP', 'FABIAN ESCATEL', 'KAMREN HERALD', 'JAYLEN BISCHOFF',
-    'BRENNAN SKODA', 'AALYIAH WASHBURN', 'KADEN CAMENZIND', 'HANNAH FRENCH', 'MICHAEL CARNEY',
-    'TAJ DHILLON', 'JACOB LEE', 'ADRIEN RAMÍREZ-RAYO', 'DENNIS CHORNIY', 'CHARLIE SIMMS',
-    'BRENON REED', 'KIRILL PAVLYCHEV', 'LAINEY DROWN', 'VALERIA ALVAL'
-  ]
+  private static listeners: ((data: TournamentData) => void)[] = []
+  private static isInitialized = false
+  private static currentData: TournamentData | null = null
 
-  // Initialize database tables and data
-  static async initialize(): Promise<void> {
-    try {
-      // Create sales_reps table
-      const { error: createRepsError } = await supabase
-        .from('sales_reps')
-        .select('id')
-        .limit(1)
-
-      if (createRepsError && createRepsError.code === '42P01') {
-        // Table doesn't exist, create it via RPC
-        console.log('Creating tables...')
-        // We'll create via direct SQL since we have service key
-      }
-
-      // Check if we have data
-      const { data: existingReps, error: checkError } = await supabase
-        .from('sales_reps')
-        .select('id')
-        .limit(1)
-
-      if (!checkError && (!existingReps || existingReps.length === 0)) {
-        // Initialize with all agents
-        const repsToInsert = this.AGENTS.map((name, index) => ({
-          id: (index + 1).toString(),
-          name,
-          total_sales: 0,
-          total_premium: 0,
-          rank: index + 1,
-          last_sale: '2024-03-01T00:00:00.000Z',
-          team: 'All In Agencies',
-          bracket_position: index + 1
-        }))
-
-        const { error: insertError } = await supabase
-          .from('sales_reps')
-          .insert(repsToInsert)
-
-        if (insertError) {
-          console.error('Error inserting reps:', insertError)
-        } else {
-          console.log('✅ Initialized 34 agents in Supabase')
-        }
-      }
-    } catch (error) {
-      console.error('Error initializing Supabase:', error)
+  static async initialize(): Promise<TournamentData> {
+    if (this.isInitialized && this.currentData) {
+      return this.currentData
     }
+
+    console.log('🚀 Initializing SupabaseSync with real-time subscriptions...')
+
+    // Load initial data
+    const data = await this.loadData()
+    this.currentData = data
+
+    // Set up real-time subscriptions
+    this.setupRealtimeSubscriptions()
+
+    this.isInitialized = true
+    return data
   }
 
-  // Load sales reps
-  static async loadSalesReps(): Promise<SalesRep[]> {
+  private static async loadData(): Promise<TournamentData> {
     try {
-      const { data, error } = await supabase
+      console.log('📊 Loading data from Supabase...')
+      
+      // Load sales reps
+      const { data: repsData, error: repsError } = await supabase
         .from('sales_reps')
         .select('*')
-        .order('rank', { ascending: true })
+        .order('total_premium', { ascending: false })
 
-      if (error) {
-        console.error('Error loading sales reps:', error)
-        return this.getFallbackReps()
+      if (repsError) {
+        console.error('❌ Error loading sales reps:', repsError)
+        throw repsError
       }
 
-      return (data || []).map(rep => ({
-        id: rep.id,
-        name: rep.name,
-        totalSales: rep.total_sales || 0,
-        totalPremium: parseFloat(rep.total_premium || '0'),
-        rank: rep.rank || 1,
-        lastSale: new Date(rep.last_sale || '2024-03-01T00:00:00.000Z'),
-        team: rep.team || 'All In Agencies',
-        bracketPosition: rep.bracket_position || parseInt(rep.id)
-      }))
-    } catch (error) {
-      console.error('Error loading sales reps:', error)
-      return this.getFallbackReps()
-    }
-  }
-
-  // Load sales
-  static async loadSales(): Promise<Sale[]> {
-    try {
-      const { data, error } = await supabase
+      // Load sales
+      const { data: salesData, error: salesError } = await supabase
         .from('sales')
         .select('*')
         .order('timestamp', { ascending: false })
-        .limit(50)
+        .limit(100)
 
-      if (error) {
-        console.error('Error loading sales:', error)
-        return []
+      if (salesError) {
+        console.error('❌ Error loading sales:', salesError)
+        throw salesError
       }
 
-      return (data || []).map(sale => ({
+      // Transform data to match our interface
+      const salesReps: SalesRep[] = (repsData || []).map((rep: any) => ({
+        id: rep.id,
+        name: rep.name,
+        totalSales: rep.total_sales || 0,
+        totalPremium: rep.total_premium || 0,
+        rank: rep.rank || 1,
+        lastSale: new Date(rep.last_sale),
+        team: rep.team || 'All In Agencies',
+        bracketPosition: rep.bracket_position || 1
+      }))
+
+      const sales: Sale[] = (salesData || []).map((sale: any) => ({
         id: sale.id,
         repName: sale.rep_name,
         clientName: sale.client_name,
         policyType: sale.policy_type,
-        premium: parseFloat(sale.premium),
+        premium: sale.premium,
         timestamp: new Date(sale.timestamp)
       }))
+
+      console.log(`✅ Loaded ${salesReps.length} reps and ${sales.length} sales from Supabase`)
+
+      return {
+        salesReps,
+        sales,
+        lastUpdated: new Date().toISOString(),
+        version: Date.now()
+      }
     } catch (error) {
-      console.error('Error loading sales:', error)
-      return []
+      console.error('❌ Failed to load data from Supabase:', error)
+      throw error
     }
   }
 
-  // Record a sale
-  static async recordSale(saleData: Omit<Sale, 'id' | 'timestamp'>): Promise<{ success: boolean }> {
+  private static setupRealtimeSubscriptions(): void {
+    console.log('📡 Setting up real-time subscriptions...')
+
+    // Subscribe to sales_reps changes
+    supabase
+      .channel('sales_reps_realtime')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'sales_reps' }, 
+        (payload) => {
+          console.log('📊 Sales reps table changed:', payload)
+          this.refreshData()
+        }
+      )
+      .subscribe((status) => {
+        console.log('📡 Sales reps subscription status:', status)
+      })
+
+    // Subscribe to sales changes
+    supabase
+      .channel('sales_realtime')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'sales' }, 
+        (payload) => {
+          console.log('💰 Sales table changed:', payload)
+          this.refreshData()
+        }
+      )
+      .subscribe((status) => {
+        console.log('📡 Sales subscription status:', status)
+      })
+  }
+
+  private static async refreshData(): Promise<void> {
     try {
-      // Insert sale
+      const freshData = await this.loadData()
+      this.currentData = freshData
+      this.notifyListeners(freshData)
+    } catch (error) {
+      console.error('❌ Failed to refresh data:', error)
+    }
+  }
+
+  static async addSale(saleData: Omit<Sale, 'id' | 'timestamp'>): Promise<void> {
+    console.log('💰 Adding sale via Supabase:', saleData)
+
+    try {
+      // Insert the sale
       const { data: saleResult, error: saleError } = await supabase
         .from('sales')
-        .insert({
+        .insert([{
           rep_name: saleData.repName,
           client_name: saleData.clientName,
           policy_type: saleData.policyType,
           premium: saleData.premium,
           timestamp: new Date().toISOString()
-        })
+        }])
         .select()
 
       if (saleError) {
-        console.error('Error recording sale:', saleError)
-        return { success: false }
+        console.error('❌ Error adding sale:', saleError)
+        throw saleError
       }
 
-      // Update rep stats
-      const { error: updateError } = await supabase.rpc('update_agent_stats', {
-        agent_name: saleData.repName,
-        sale_amount: saleData.premium
-      })
+      console.log('✅ Sale added to database')
 
-      if (updateError) {
-        // Fallback: manual update
-        await this.updateRepStatsManually(saleData.repName, saleData.premium, 'add')
+      // Update the sales rep's totals using a more flexible name matching approach
+      const { data: existingRep, error: repError } = await supabase
+        .from('sales_reps')
+        .select('*')
+        .or(`name.ilike.%${saleData.repName}%,name.ilike.%${saleData.repName.split(' ')[0]}%`)
+        .limit(1)
+        .single()
+
+      if (repError && repError.code !== 'PGRST116') { // PGRST116 = no rows found
+        console.error('❌ Error finding sales rep:', repError)
+        throw repError
       }
 
-      return { success: true }
+      if (existingRep) {
+        const { error: updateError } = await supabase
+          .from('sales_reps')
+          .update({
+            total_sales: (existingRep.total_sales || 0) + 1,
+            total_premium: (existingRep.total_premium || 0) + saleData.premium,
+            last_sale: new Date().toISOString()
+          })
+          .eq('id', existingRep.id)
+
+        if (updateError) {
+          console.error('❌ Error updating sales rep:', updateError)
+          throw updateError
+        }
+
+        console.log(`✅ Updated ${existingRep.name}: ${existingRep.total_sales} → ${(existingRep.total_sales || 0) + 1} sales`)
+      } else {
+        console.warn(`⚠️ No matching sales rep found for: ${saleData.repName}`)
+      }
+
+      // Recalculate ranks
+      await this.recalculateRanks()
+      
     } catch (error) {
-      console.error('Error recording sale:', error)
-      return { success: false }
+      console.error('❌ Failed to add sale:', error)
+      throw error
     }
   }
 
-  // Delete a sale
-  static async deleteSale(saleId: string): Promise<{ success: boolean }> {
+  static async deleteSale(saleId: string): Promise<void> {
+    console.log('🗑️ Deleting sale via Supabase:', saleId)
+
     try {
-      // Get sale details first
-      const { data: sale, error: fetchError } = await supabase
+      // Get the sale details first
+      const { data: sale, error: getSaleError } = await supabase
         .from('sales')
-        .select('rep_name, premium')
+        .select('*')
         .eq('id', saleId)
         .single()
 
-      if (fetchError || !sale) {
-        console.error('Error fetching sale:', fetchError)
-        return { success: false }
+      if (getSaleError) {
+        console.error('❌ Error finding sale to delete:', getSaleError)
+        throw getSaleError
       }
 
-      // Delete sale
+      if (!sale) {
+        console.warn('⚠️ Sale not found for deletion')
+        return
+      }
+
+      // Delete the sale
       const { error: deleteError } = await supabase
         .from('sales')
         .delete()
         .eq('id', saleId)
 
       if (deleteError) {
-        console.error('Error deleting sale:', deleteError)
-        return { success: false }
+        console.error('❌ Error deleting sale:', deleteError)
+        throw deleteError
       }
 
-      // Update rep stats
-      await this.updateRepStatsManually(sale.rep_name, parseFloat(sale.premium), 'subtract')
+      console.log('✅ Sale deleted from database')
 
-      return { success: true }
-    } catch (error) {
-      console.error('Error deleting sale:', error)
-      return { success: false }
-    }
-  }
-
-  // Manual rep stats update
-  private static async updateRepStatsManually(repName: string, premium: number, operation: 'add' | 'subtract'): Promise<void> {
-    try {
-      // Find the rep
-      const { data: reps, error: fetchError } = await supabase
+      // Update the sales rep's totals
+      const { data: existingRep, error: repError } = await supabase
         .from('sales_reps')
         .select('*')
+        .or(`name.ilike.%${sale.rep_name}%,name.ilike.%${sale.rep_name.split(' ')[0]}%`)
+        .limit(1)
+        .single()
 
-      if (fetchError || !reps) return
-
-      const targetRep = reps.find(rep => 
-        rep.name.toLowerCase().includes(repName.toLowerCase()) ||
-        repName.toLowerCase().includes(rep.name.toLowerCase())
-      )
-
-      if (!targetRep) return
-
-      // Calculate new stats
-      const newSales = operation === 'add' 
-        ? targetRep.total_sales + 1 
-        : Math.max(0, targetRep.total_sales - 1)
-      
-      const newPremium = operation === 'add'
-        ? targetRep.total_premium + premium
-        : Math.max(0, targetRep.total_premium - premium)
-
-      // Update rep
-      const { error: updateError } = await supabase
-        .from('sales_reps')
-        .update({
-          total_sales: newSales,
-          total_premium: newPremium,
-          last_sale: operation === 'add' ? new Date().toISOString() : targetRep.last_sale
-        })
-        .eq('id', targetRep.id)
-
-      if (updateError) {
-        console.error('Error updating rep stats:', updateError)
-        return
+      if (repError && repError.code !== 'PGRST116') {
+        console.error('❌ Error finding sales rep for deletion update:', repError)
+        throw repError
       }
 
-      // Recalculate all rankings
-      await this.recalculateRankings()
+      if (existingRep) {
+        const { error: updateError } = await supabase
+          .from('sales_reps')
+          .update({
+            total_sales: Math.max(0, (existingRep.total_sales || 0) - 1),
+            total_premium: Math.max(0, (existingRep.total_premium || 0) - sale.premium)
+          })
+          .eq('id', existingRep.id)
+
+        if (updateError) {
+          console.error('❌ Error updating sales rep after deletion:', updateError)
+          throw updateError
+        }
+
+        console.log(`✅ Updated ${existingRep.name} after deletion: ${existingRep.total_sales} → ${Math.max(0, (existingRep.total_sales || 0) - 1)} sales`)
+      }
+
+      // Recalculate ranks
+      await this.recalculateRanks()
+      
     } catch (error) {
-      console.error('Error in manual stats update:', error)
+      console.error('❌ Failed to delete sale:', error)
+      throw error
     }
   }
 
-  // Recalculate all rankings
-  private static async recalculateRankings(): Promise<void> {
+  private static async recalculateRanks(): Promise<void> {
+    console.log('📊 Recalculating ranks...')
+    
     try {
+      // Get all reps ordered by performance
       const { data: reps, error } = await supabase
         .from('sales_reps')
-        .select('*')
+        .select('id, total_sales, total_premium')
         .order('total_sales', { ascending: false })
         .order('total_premium', { ascending: false })
 
-      if (error || !reps) return
+      if (error) {
+        console.error('❌ Error fetching reps for ranking:', error)
+        return
+      }
 
       // Update ranks
-      for (let i = 0; i < reps.length; i++) {
+      const updates = (reps || []).map((rep, index) => ({
+        id: rep.id,
+        rank: index + 1
+      }))
+
+      for (const update of updates) {
         await supabase
           .from('sales_reps')
-          .update({ rank: i + 1 })
-          .eq('id', reps[i].id)
+          .update({ rank: update.rank })
+          .eq('id', update.id)
       }
+
+      console.log('✅ Ranks recalculated')
     } catch (error) {
-      console.error('Error recalculating rankings:', error)
+      console.error('❌ Failed to recalculate ranks:', error)
     }
   }
 
-  // Subscribe to real-time changes
-  static subscribeToChanges(
-    onSalesRepsChange: (reps: SalesRep[]) => void,
-    onSalesChange: (sales: Sale[]) => void
-  ): () => void {
-    // Subscribe to sales_reps changes
-    const repsChannel = supabase
-      .channel('sales_reps_changes')
-      .on('postgres_changes', 
-          { event: '*', schema: 'public', table: 'sales_reps' }, 
-          async () => {
-            const reps = await this.loadSalesReps()
-            onSalesRepsChange(reps)
-          }
-      )
-      .subscribe()
-
-    // Subscribe to sales changes
-    const salesChannel = supabase
-      .channel('sales_changes')
-      .on('postgres_changes',
-          { event: '*', schema: 'public', table: 'sales' },
-          async () => {
-            const sales = await this.loadSales()
-            onSalesChange(sales)
-          }
-      )
-      .subscribe()
-
+  static subscribe(callback: (data: TournamentData) => void): () => void {
+    this.listeners.push(callback)
     return () => {
-      supabase.removeChannel(repsChannel)
-      supabase.removeChannel(salesChannel)
+      this.listeners = this.listeners.filter(cb => cb !== callback)
     }
   }
 
-  // Fallback data
-  private static getFallbackReps(): SalesRep[] {
-    return this.AGENTS.map((name, index) => ({
-      id: (index + 1).toString(),
-      name,
-      totalSales: 0,
-      totalPremium: 0,
-      rank: index + 1,
-      lastSale: new Date('2024-03-01T00:00:00.000Z'),
-      team: 'All In Agencies',
-      bracketPosition: index + 1
-    }))
+  private static notifyListeners(data: TournamentData): void {
+    console.log('📢 Notifying', this.listeners.length, 'listeners of data update')
+    this.listeners.forEach(callback => {
+      try {
+        callback(data)
+      } catch (e) {
+        console.error('❌ Listener error:', e)
+      }
+    })
+  }
+
+  static cleanup(): void {
+    console.log('🧹 Cleaning up SupabaseSync subscriptions')
+    supabase.removeAllChannels()
+    this.listeners = []
+    this.isInitialized = false
+    this.currentData = null
+  }
+
+  static async hardReset(): Promise<void> {
+    console.log('🔄 HARD RESET: Resetting all tournament data in Supabase')
+    
+    try {
+      // Delete all sales
+      await supabase.from('sales').delete().neq('id', '00000000-0000-0000-0000-000000000000') // Delete all
+      
+      // Reset all sales rep totals
+      await supabase
+        .from('sales_reps')
+        .update({
+          total_sales: 0,
+          total_premium: 0,
+          rank: 1,
+          last_sale: '2024-03-01T00:00:00.000Z'
+        })
+        .neq('id', '0') // Update all
+
+      console.log('✅ Hard reset complete')
+    } catch (error) {
+      console.error('❌ Hard reset failed:', error)
+      throw error
+    }
   }
 }
 
-export { SupabaseSync }
+export default SupabaseSync

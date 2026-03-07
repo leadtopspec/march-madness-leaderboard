@@ -6,7 +6,7 @@ import { Tv, Award, Target, Star, Crown, Users, LogIn } from 'lucide-react'
 import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
 import BracketView from '@/components/BracketView'
-import BulletproofSync, { type SalesRep as SyncSalesRep, type Sale as SyncSale } from '@/lib/bulletproof-sync'
+import SupabaseSync, { type SalesRep as SyncSalesRep, type Sale as SyncSale } from '@/lib/supabase-sync'
 import { resetAllTournamentData } from '@/lib/reset-data'
 
 interface SalesRep {
@@ -90,18 +90,18 @@ export default function MarchMadnessLeaderboard() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Initialize bulletproof sync system
+    // Initialize Supabase sync system with real-time subscriptions
     const initializeData = async () => {
       try {
         setIsLoading(true)
-        console.log('🚀 Initializing BulletproofSync...')
+        console.log('🚀 Initializing SupabaseSync with real-time...')
         
-        const data = await BulletproofSync.initialize()
+        const data = await SupabaseSync.initialize()
         setSalesReps(data.salesReps)
         setRecentSales(data.sales)
         setIsLoading(false)
         
-        console.log('✅ BulletproofSync initialized with', data.salesReps.length, 'reps and', data.sales.length, 'sales')
+        console.log('✅ SupabaseSync initialized with', data.salesReps.length, 'reps and', data.sales.length, 'sales')
         
         // Check for logged in agent
         const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
@@ -117,16 +117,16 @@ export default function MarchMadnessLeaderboard() {
           }
         }
       } catch (error) {
-        console.error('❌ Failed to initialize BulletproofSync:', error)
+        console.error('❌ Failed to initialize SupabaseSync:', error)
         setIsLoading(false)
       }
     }
     
     initializeData()
     
-    // Subscribe to bulletproof updates
-    const unsubscribe = BulletproofSync.subscribe((updatedData) => {
-      console.log('📊 Received sync update:', updatedData.salesReps.reduce((sum, rep) => sum + rep.totalSales, 0), 'total sales')
+    // Subscribe to real-time Supabase updates
+    const unsubscribe = SupabaseSync.subscribe((updatedData) => {
+      console.log('📊 Received Supabase real-time update:', updatedData.salesReps.reduce((sum, rep) => sum + rep.totalSales, 0), 'total sales')
       setSalesReps(updatedData.salesReps)
       setRecentSales(updatedData.sales)
       
@@ -246,7 +246,7 @@ export default function MarchMadnessLeaderboard() {
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
       unsubscribe()
-      BulletproofSync.cleanup()
+      SupabaseSync.cleanup()
     }
   }, [])
 
@@ -265,9 +265,9 @@ export default function MarchMadnessLeaderboard() {
 
   const handleRecordSale = async (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
     try {
-      console.log('🚀 Recording sale:', saleData)
-      await BulletproofSync.addSale(saleData)
-      console.log('✅ Sale recorded and synced across all devices')
+      console.log('🚀 Recording sale via Supabase:', saleData)
+      await SupabaseSync.addSale(saleData)
+      console.log('✅ Sale recorded in Supabase with real-time sync')
     } catch (error) {
       console.error('❌ Error recording sale:', error)
     }
@@ -275,9 +275,9 @@ export default function MarchMadnessLeaderboard() {
 
   const handleDeleteSale = async (saleId: string) => {
     try {
-      console.log('🗑️ Deleting sale:', saleId)
-      await BulletproofSync.deleteSale(saleId)
-      console.log('✅ Sale deleted and synced across all devices')
+      console.log('🗑️ Deleting sale via Supabase:', saleId)
+      await SupabaseSync.deleteSale(saleId)
+      console.log('✅ Sale deleted from Supabase with real-time sync')
     } catch (error) {
       console.error('❌ Error deleting sale:', error)
     }
