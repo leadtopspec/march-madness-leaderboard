@@ -77,6 +77,7 @@ export default function MarchMadnessLeaderboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [timeUntilStart, setTimeUntilStart] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
   const [timeUntilEnd, setTimeUntilEnd] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
+  const [showRules, setShowRules] = useState(false)
 
   useEffect(() => {
     // Set client-side flag and initial time
@@ -381,25 +382,33 @@ export default function MarchMadnessLeaderboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-red-600 to-red-800 text-white py-6 shadow-2xl border-b-4 border-red-400">
+      {/* Header - Mobile Optimized */}
+      <div className="bg-gradient-to-r from-red-600 to-red-800 text-white py-4 md:py-6 shadow-2xl border-b-4 border-red-400">
         <div className="container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center justify-between"
           >
-            <div className="flex items-center gap-4">
-              <div className="text-4xl">🏀</div>
+            <div className="flex items-center gap-2 md:gap-4">
+              <div className="text-2xl md:text-4xl">🏀</div>
               <div>
-                <h1 className="text-3xl md:text-4xl font-black">MARCH MADNESS</h1>
-                <p className="text-lg font-bold opacity-90">ALL IN AGENCIES • SALES TOURNAMENT • MARCH 7-14</p>
+                <h1 className="text-xl md:text-4xl font-black">MARCH MADNESS</h1>
+                <p className="text-xs md:text-lg font-bold opacity-90">
+                  <span className="md:hidden">ALL IN • TOURNAMENT</span>
+                  <span className="hidden md:inline">ALL IN AGENCIES • SALES TOURNAMENT • MARCH 7-14</span>
+                </p>
               </div>
             </div>
-            <div className="text-right hidden md:block">
-              <div className="text-sm opacity-75">LIVE</div>
-              <div className="text-xl font-bold">
-                {isClient && currentTime ? currentTime.toLocaleTimeString() : '--:--:--'}
+            <div className="text-right">
+              <div className="text-xs md:text-sm opacity-75">LIVE</div>
+              <div className="text-sm md:text-xl font-bold">
+                {isClient && currentTime ? (
+                  <span>
+                    <span className="md:hidden">{currentTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                    <span className="hidden md:inline">{currentTime.toLocaleTimeString()}</span>
+                  </span>
+                ) : '--:--'}
               </div>
             </div>
           </motion.div>
@@ -407,79 +416,77 @@ export default function MarchMadnessLeaderboard() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        {/* Action Buttons */}
-        <div className="flex flex-wrap gap-4 justify-center mb-8">
+        {/* Action Buttons - Mobile Optimized */}
+        <div className="flex flex-col md:flex-row gap-3 md:gap-4 justify-center mb-6 md:mb-8 px-4">
           <motion.button
             onClick={() => setShowLoginModal(true)}
-            className="bg-gradient-to-r from-red-500 to-red-700 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:from-red-600 hover:to-red-800 transition-all flex items-center gap-3"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="bg-gradient-to-r from-red-500 to-red-700 text-white px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl font-bold text-base md:text-lg shadow-xl hover:from-red-600 hover:to-red-800 transition-all flex items-center justify-center gap-3"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <LogIn className="w-6 h-6" />
+            <LogIn className="w-5 h-5 md:w-6 md:h-6" />
             🏄‍♂️ AGENT LOGIN
           </motion.button>
           
           <motion.a
             href="/tv"
             target="_blank"
-            className="bg-gradient-to-r from-gray-700 to-black text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:from-gray-800 hover:to-gray-900 transition-all flex items-center gap-3"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="bg-gradient-to-r from-gray-700 to-black text-white px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl font-bold text-base md:text-lg shadow-xl hover:from-gray-800 hover:to-gray-900 transition-all flex items-center justify-center gap-3"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <Tv className="w-6 h-6" />
+            <Tv className="w-5 h-5 md:w-6 md:h-6" />
             📺 TV DISPLAY
           </motion.a>
-
-
         </div>
 
-        {/* Live Stats Banner */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {/* Live Stats Banner - Mobile Optimized */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8 px-4">
           <motion.div 
-            className="bg-gradient-to-r from-red-500 to-red-700 text-white rounded-xl p-4 text-center shadow-xl"
+            className="bg-gradient-to-r from-red-500 to-red-700 text-white rounded-lg md:rounded-xl p-3 md:p-4 text-center shadow-xl"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
           >
-            <div className="text-3xl font-black">{salesReps.length}</div>
-            <div className="text-sm font-bold opacity-90">COMPETITORS</div>
+            <div className="text-2xl md:text-3xl font-black">{salesReps.length}</div>
+            <div className="text-xs md:text-sm font-bold opacity-90">COMPETITORS</div>
           </motion.div>
 
           <motion.div 
-            className="bg-gradient-to-r from-gray-700 to-gray-900 text-white rounded-xl p-4 text-center shadow-xl"
+            className="bg-gradient-to-r from-gray-700 to-gray-900 text-white rounded-lg md:rounded-xl p-3 md:p-4 text-center shadow-xl"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="text-3xl font-black">{totalSales}</div>
-            <div className="text-sm font-bold opacity-90">TOTAL SALES</div>
+            <div className="text-2xl md:text-3xl font-black">{totalSales}</div>
+            <div className="text-xs md:text-sm font-bold opacity-90">TOTAL SALES</div>
           </motion.div>
 
           <motion.div 
-            className="bg-gradient-to-r from-red-600 to-red-800 text-white rounded-xl p-4 text-center shadow-xl"
+            className="bg-gradient-to-r from-red-600 to-red-800 text-white rounded-lg md:rounded-xl p-3 md:p-4 text-center shadow-xl"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <div className="text-2xl font-black">${totalPremium.toLocaleString()}</div>
-            <div className="text-sm font-bold opacity-90">TOTAL PREMIUM</div>
+            <div className="text-lg md:text-2xl font-black">${totalPremium.toLocaleString()}</div>
+            <div className="text-xs md:text-sm font-bold opacity-90">TOTAL PREMIUM</div>
           </motion.div>
 
           <motion.div 
-            className="bg-gradient-to-r from-black to-gray-800 text-white rounded-xl p-4 text-center shadow-xl"
+            className="bg-gradient-to-r from-black to-gray-800 text-white rounded-lg md:rounded-xl p-3 md:p-4 text-center shadow-xl"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
           >
             {timeUntilEnd ? (
               <>
-                <div className="text-lg font-black">{timeUntilEnd.days}D {timeUntilEnd.hours}H</div>
-                <div className="text-sm font-bold opacity-90">REMAINING</div>
+                <div className="text-sm md:text-lg font-black">{timeUntilEnd.days}D {timeUntilEnd.hours}H</div>
+                <div className="text-xs md:text-sm font-bold opacity-90">REMAINING</div>
               </>
             ) : (
               <>
-                <div className="text-2xl font-black">ENDED</div>
-                <div className="text-sm font-bold opacity-90">TOURNAMENT</div>
+                <div className="text-lg md:text-2xl font-black">ENDED</div>
+                <div className="text-xs md:text-sm font-bold opacity-90">TOURNAMENT</div>
               </>
             )}
           </motion.div>
@@ -518,159 +525,144 @@ export default function MarchMadnessLeaderboard() {
           </motion.div>
         )}
 
-        {/* Rules Section */}
+        {/* Compact Rules Section - Mobile Optimized */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border-2 border-red-500/30 mb-8"
+          className="bg-black/40 backdrop-blur-sm rounded-2xl p-4 md:p-8 border-2 border-red-500/30 mb-8"
         >
-          <div className="flex items-center gap-3 mb-8">
-            <div className="text-3xl">📋</div>
-            <h2 className="text-3xl font-black text-white">MARCH MADNESS SALES COMPETITION RULES</h2>
-          </div>
-          
-          <div className="text-white space-y-6">
-            <div className="bg-red-500/20 border border-red-400/30 rounded-xl p-4">
-              <div className="text-xl font-bold text-red-200 mb-2">🎯 Objective</div>
-              <div className="text-red-100">Outproduce your opponent in issued business and advance through the bracket.</div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="text-2xl md:text-3xl">📋</div>
+              <h2 className="text-xl md:text-3xl font-black text-white">TOURNAMENT RULES</h2>
             </div>
+            <button
+              onClick={() => setShowRules(!showRules)}
+              className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm font-bold transition-all"
+            >
+              {showRules ? 'HIDE' : 'SHOW'}
+            </button>
+          </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Left Column */}
-              <div className="space-y-6">
-                <div className="bg-black/20 border border-gray-600/30 rounded-xl p-6">
-                  <div className="text-lg font-bold text-gray-200 mb-3 flex items-center gap-2">
-                    <span>1.</span> 🥊 Head-to-Head Matchups
-                  </div>
-                  <ul className="text-white/90 space-y-2 text-sm">
-                    <li>• Each round you will be paired against one opponent</li>
-                    <li>• Whoever writes the most issued premium for that round advances</li>
-                  </ul>
-                </div>
+          {/* Always visible quick summary */}
+          <div className="bg-red-500/20 border border-red-400/30 rounded-xl p-3 md:p-4 mb-4">
+            <div className="text-lg md:text-xl font-bold text-red-200 mb-2">🎯 Quick Summary</div>
+            <div className="text-red-100 text-sm md:text-base">
+              Head-to-head matchups • Highest submitted premium wins • Must be in Zoom room • Final round based on issued business • Winner gets Cancun trip 🏆
+            </div>
+          </div>
 
-                <div className="bg-red-600/20 border border-red-500/30 rounded-xl p-6">
-                  <div className="text-lg font-bold text-red-200 mb-3 flex items-center gap-2">
-                    <span>2.</span> 📹 Zoom Room Requirement
-                  </div>
-                  <ul className="text-white/90 space-y-2 text-sm">
-                    <li>• Both competitors must be in the same Zoom room while selling</li>
-                    <li>• Cameras on and unmuted while working</li>
-                    <li>• You must be actively dialing or presenting during the session</li>
-                    <li className="text-purple-200 font-semibold">This keeps accountability high and creates real competition.</li>
-                  </ul>
-                </div>
-
-                <div className="bg-white/5 border border-white/20 rounded-xl p-6">
-                  <div className="text-lg font-bold text-green-200 mb-3 flex items-center gap-2">
-                    <span>3.</span> ⚖️ What Counts
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <div className="text-green-300 font-semibold">✅ Submitted premium only counts</div>
-                    <div className="text-red-300 font-semibold">❌ Rewrites do NOT count</div>
-                    <div className="text-white/90">Only new submitted and issued business applies to the scoreboard.</div>
-                  </div>
-                </div>
-
-                <div className="bg-white/5 border border-white/20 rounded-xl p-6">
-                  <div className="text-lg font-bold text-yellow-200 mb-3 flex items-center gap-2">
-                    <span>4.</span> 🏁 Rounds 1–3 (Submission Rounds)
-                  </div>
-                  <div className="text-white/90 space-y-2 text-sm">
-                    <div>For the first three rounds:</div>
-                    <ul className="space-y-1">
-                      <li>• Winner is determined by total submitted premium</li>
-                      <li>• Highest submitted production moves on to the next round</li>
+          {/* Detailed rules - collapsible on mobile */}
+          {showRules && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="text-white space-y-4"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Key Rules - Left Column */}
+                <div className="space-y-4">
+                  <div className="bg-black/20 border border-gray-600/30 rounded-xl p-4">
+                    <div className="text-base font-bold text-gray-200 mb-2 flex items-center gap-2">
+                      🥊 Head-to-Head Matchups
+                    </div>
+                    <ul className="text-white/90 space-y-1 text-sm">
+                      <li>• Paired against one opponent each round</li>
+                      <li>• Most issued premium advances</li>
                     </ul>
-                    <div className="text-yellow-200 font-semibold">These rounds are meant to keep the bracket moving quickly.</div>
+                  </div>
+
+                  <div className="bg-red-600/20 border border-red-500/30 rounded-xl p-4">
+                    <div className="text-base font-bold text-red-200 mb-2 flex items-center gap-2">
+                      📹 Zoom Room Required
+                    </div>
+                    <ul className="text-white/90 space-y-1 text-sm">
+                      <li>• Both competitors in same Zoom room</li>
+                      <li>• Cameras on, actively working</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/20 rounded-xl p-4">
+                    <div className="text-base font-bold text-green-200 mb-2 flex items-center gap-2">
+                      ⚖️ What Counts
+                    </div>
+                    <div className="space-y-1 text-sm">
+                      <div className="text-green-300 font-semibold">✅ Submitted premium only</div>
+                      <div className="text-red-300 font-semibold">❌ Rewrites don't count</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Additional Rules - Right Column */}
+                <div className="space-y-4">
+                  <div className="bg-white/5 border border-white/20 rounded-xl p-4">
+                    <div className="text-base font-bold text-yellow-200 mb-2 flex items-center gap-2">
+                      🏁 Rounds 1–3
+                    </div>
+                    <div className="text-white/90 text-sm">
+                      Winner by total submitted premium
+                    </div>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/20 rounded-xl p-4">
+                    <div className="text-base font-bold text-red-200 mb-2 flex items-center gap-2">
+                      🏆 Final Round
+                    </div>
+                    <div className="text-white/90 text-sm">
+                      Based on issued premium for entire month
+                    </div>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/20 rounded-xl p-4">
+                    <div className="text-base font-bold text-orange-200 mb-2 flex items-center gap-2">
+                      🚫 Integrity Rules
+                    </div>
+                    <div className="text-white/90 text-sm">
+                      No splitting, transferring, or sharing business
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Right Column */}
-              <div className="space-y-6">
-                <div className="bg-white/5 border border-white/20 rounded-xl p-6">
-                  <div className="text-lg font-bold text-red-200 mb-3 flex items-center gap-2">
-                    <span>5.</span> 🏆 Final Round (Issued Business)
-                  </div>
-                  <div className="text-white/90 space-y-2 text-sm">
-                    <div>The final round will be based on issued premium for the entire month.</div>
-                    <ul className="space-y-1">
-                      <li>• All production must issue during the month</li>
-                      <li>• The person with the highest issued premium wins the tournament</li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="bg-white/5 border border-white/20 rounded-xl p-6">
-                  <div className="text-lg font-bold text-orange-200 mb-3 flex items-center gap-2">
-                    <span>6.</span> 🚫 Integrity Rules
-                  </div>
-                  <ul className="text-white/90 space-y-2 text-sm">
-                    <li>• No splitting apps</li>
-                    <li>• No transferring apps</li>
-                    <li>• No counting someone else&apos;s business</li>
-                    <li>• Production must be written personally by you</li>
-                    <li className="text-red-300 font-semibold">Violation = disqualification</li>
-                  </ul>
-                </div>
-
-                <div className="bg-gradient-to-r from-red-500/20 to-red-700/20 border border-red-400/30 rounded-xl p-6">
-                  <div className="text-lg font-bold text-yellow-200 mb-3 flex items-center gap-2">
-                    <span>7.</span> 🏆 Winner
-                  </div>
-                  <div className="text-yellow-100 text-sm">
-                    The highest issued premium in the final round wins the March Madness Championship Prize (Cancun Trip).
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-r from-black/20 to-gray-800/20 border border-gray-400/30 rounded-xl p-6">
-                  <div className="text-lg font-bold text-cyan-200 mb-3 flex items-center gap-2">
-                    <span>8.</span> 🔥 Spirit of the Competition
-                  </div>
-                  <div className="text-cyan-100 space-y-2 text-sm">
-                    <div>This is meant to create:</div>
-                    <ul className="space-y-1">
-                      <li>• accountability</li>
-                      <li>• intensity</li>
-                      <li>• fun competition</li>
-                      <li>• massive production</li>
-                    </ul>
-                    <div className="text-cyan-200 font-bold text-center mt-4 text-lg">Iron sharpens iron.</div>
-                  </div>
+              <div className="bg-gradient-to-r from-red-500/20 to-red-700/20 border border-red-400/30 rounded-xl p-4 text-center">
+                <div className="text-lg font-bold text-yellow-200 mb-2">🏆 PRIZE</div>
+                <div className="text-yellow-100 text-sm">
+                  Highest issued premium wins Cancun trip!
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          )}
         </motion.div>
 
         {/* Live Leaderboard */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Top Performers */}
+          {/* Top Performers - Show more on mobile */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
+            className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-white/20"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <Crown className="w-8 h-8 text-yellow-400" />
-              <h2 className="text-2xl font-black text-white">TOP PERFORMERS</h2>
+            <div className="flex items-center gap-3 mb-4 md:mb-6">
+              <Crown className="w-6 h-6 md:w-8 md:h-8 text-yellow-400" />
+              <h2 className="text-xl md:text-2xl font-black text-white">TOP PERFORMERS</h2>
             </div>
             
-            <div className="space-y-4">
-              {salesReps.slice(0, 10).map((rep, index) => (
+            <div className="space-y-2 md:space-y-4">
+              {salesReps.slice(0, 15).map((rep, index) => (
                 <motion.div
                   key={rep.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`flex items-center justify-between p-4 rounded-xl border ${
+                  transition={{ delay: index * 0.05 }}
+                  className={`flex items-center justify-between p-3 md:p-4 rounded-xl border ${
                     index < 3 
                       ? 'bg-gradient-to-r from-red-500/20 to-red-700/20 border-red-400/30' 
                       : 'bg-white/5 border-white/10'
                   }`}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-lg ${
+                  <div className="flex items-center gap-3 md:gap-4">
+                    <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-black text-sm md:text-lg ${
                       index === 0 ? 'bg-yellow-400 text-yellow-900' :
                       index === 1 ? 'bg-gray-300 text-gray-800' :
                       index === 2 ? 'bg-orange-400 text-orange-900' :
@@ -679,82 +671,87 @@ export default function MarchMadnessLeaderboard() {
                       #{index + 1}
                     </div>
                     <div>
-                      <div className="font-bold text-white text-lg">{rep.name}</div>
-                      <div className="text-sm text-white/70">All In Agencies</div>
+                      <div className="font-bold text-white text-sm md:text-lg">
+                        <span className="md:hidden">{rep.name.split(' ')[0]}</span>
+                        <span className="hidden md:inline">{rep.name}</span>
+                      </div>
+                      <div className="text-xs md:text-sm text-white/70 hidden md:block">All In Agencies</div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-2xl font-black text-white">{rep.totalSales}</div>
-                    <div className="text-sm text-white/70">${rep.totalPremium.toLocaleString()}</div>
+                    <div className="text-lg md:text-2xl font-black text-white">{rep.totalSales}</div>
+                    <div className="text-xs md:text-sm text-white/70">${rep.totalPremium.toLocaleString()}</div>
                   </div>
                 </motion.div>
               ))}
             </div>
           </motion.div>
 
-          {/* Live Bracket Preview */}
+          {/* Tournament Status - Mobile Optimized */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
+            className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-white/20"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <Target className="w-8 h-8 text-orange-400" />
-              <h2 className="text-2xl font-black text-white">TOURNAMENT BRACKET</h2>
+            <div className="flex items-center gap-3 mb-4 md:mb-6">
+              <Target className="w-6 h-6 md:w-8 md:h-8 text-orange-400" />
+              <h2 className="text-xl md:text-2xl font-black text-white">TOURNAMENT STATUS</h2>
             </div>
             
-            {/* Bracket rounds preview */}
-            <div className="space-y-6">
-              <div className="text-center">
-                <div className="text-sm text-orange-400 font-bold mb-2">ELITE 8</div>
-                <div className="grid grid-cols-2 gap-2">
-                  {[1,2,3,4,5,6,7,8].map(i => (
-                    <div key={i} className="bg-white/5 border border-white/10 rounded-lg p-2 text-center">
-                      <div className="text-xs text-white/70">SEED #{i}</div>
-                      <div className="text-sm font-bold text-white truncate">
-                        TBD
-                      </div>
-                    </div>
-                  ))}
+            {/* Tournament Progress */}
+            <div className="space-y-4">
+              <div className="bg-gradient-to-r from-green-500/20 to-green-700/20 border border-green-400/30 rounded-xl p-4 text-center">
+                <div className="text-xl md:text-2xl font-black text-white mb-1">🔴 LIVE</div>
+                <div className="text-lg font-bold text-white">WEEK 1 PLAY-IN ROUND</div>
+                <div className="text-sm text-white/70">17 Active Matchups</div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                  <div className="text-sm text-yellow-400 font-bold mb-1">CURRENT ROUND</div>
+                  <div className="text-white font-bold">Play-In</div>
+                </div>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                  <div className="text-sm text-orange-400 font-bold mb-1">NEXT ROUND</div>
+                  <div className="text-white font-bold">Elite 8</div>
                 </div>
               </div>
 
-              <div className="text-center">
-                <div className="text-sm text-yellow-400 font-bold mb-2">FINAL FOUR</div>
-                <div className="grid grid-cols-2 gap-3">
-                  {[1,2,3,4].map(i => (
-                    <div key={i} className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-400/30 rounded-lg p-3 text-center">
-                      <div className="text-xs text-yellow-400">REGION #{i}</div>
-                      <div className="font-bold text-white">TBD</div>
-                    </div>
-                  ))}
-                </div>
+              <div className="bg-gradient-to-r from-red-600/20 to-black/20 border border-red-400/30 rounded-xl p-4 text-center">
+                <div className="text-xl font-black text-white mb-1">🏆</div>
+                <div className="text-lg font-bold text-white">CHAMPIONSHIP PRIZE</div>
+                <div className="text-sm text-yellow-200">Cancun Trip</div>
               </div>
 
               <div className="text-center">
-                <div className="text-sm text-red-400 font-bold mb-2">CHAMPIONSHIP</div>
-                <div className="bg-gradient-to-r from-red-600/20 to-black/20 border border-red-400/30 rounded-xl p-4">
-                  <div className="text-2xl font-black text-white mb-1">🏆</div>
-                  <div className="text-lg font-bold text-white">MARCH MADNESS</div>
-                  <div className="text-sm text-white/70">CHAMPION</div>
-                </div>
+                <a 
+                  href="/tv" 
+                  target="_blank"
+                  className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-4 py-2 rounded-xl font-bold text-sm hover:from-blue-700 hover:to-blue-900 transition-all inline-flex items-center gap-2"
+                >
+                  <Tv className="w-4 h-4" />
+                  VIEW FULL BRACKET
+                </a>
               </div>
             </div>
           </motion.div>
         </div>
 
-        {/* All Competitors Grid */}
+        {/* All Competitors Grid - Mobile Optimized */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 mb-8"
+          className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-white/20 mb-8"
         >
-          <div className="flex items-center gap-3 mb-6">
-            <Users className="w-8 h-8 text-cyan-400" />
-            <h2 className="text-2xl font-black text-white">ALL COMPETITORS</h2>
+          <div className="flex items-center justify-between mb-4 md:mb-6">
+            <div className="flex items-center gap-3">
+              <Users className="w-6 h-6 md:w-8 md:h-8 text-cyan-400" />
+              <h2 className="text-xl md:text-2xl font-black text-white">ALL COMPETITORS</h2>
+            </div>
+            <div className="text-sm text-white/70 font-bold">34 Total</div>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-3">
             {salesReps.map((rep, index) => {
               const badge = getRankBadge(rep.rank)
               const IconComponent = badge.icon
@@ -763,48 +760,48 @@ export default function MarchMadnessLeaderboard() {
                   key={rep.id}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.02 }}
-                  className="bg-white/5 border border-white/10 rounded-xl p-3 text-center hover:bg-white/10 transition-all"
+                  transition={{ delay: index * 0.01 }}
+                  className="bg-white/5 border border-white/10 rounded-lg p-2 md:p-3 text-center hover:bg-white/10 transition-all"
                 >
-                  <div className={`w-8 h-8 rounded-full mx-auto mb-2 bg-gradient-to-r ${badge.color} flex items-center justify-center`}>
-                    <IconComponent className="w-4 h-4 text-white" />
+                  <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full mx-auto mb-1 md:mb-2 bg-gradient-to-r ${badge.color} flex items-center justify-center`}>
+                    <IconComponent className="w-3 h-3 md:w-4 md:h-4 text-white" />
                   </div>
                   <div className="text-white text-xs font-bold truncate">{rep.name.split(' ')[0]}</div>
                   <div className="text-white/50 text-xs">#{rep.rank}</div>
-                  <div className="text-white text-sm font-bold">{rep.totalSales}</div>
+                  <div className="text-white text-xs md:text-sm font-bold">{rep.totalSales}</div>
                 </motion.div>
               )
             })}
           </div>
         </motion.div>
 
-        {/* Tournament Bracket - Full View */}
+        {/* Tournament Bracket - Hidden on mobile, visible on desktop */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
+          className="hidden lg:block bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
         >
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="text-2xl">🏀</div>
               <h2 className="text-2xl font-black text-white">LIVE TOURNAMENT BRACKET</h2>
             </div>
-            <div className="text-sm text-white/70 font-bold">March 7-14, 2025</div>
+            <div className="text-sm text-white/70 font-bold">March 7-14, 2026</div>
           </div>
           <BracketView />
         </motion.div>
 
-        {/* Call to Action */}
-        <div className="text-center mt-12">
+        {/* Call to Action - Mobile Optimized */}
+        <div className="text-center mt-8 md:mt-12">
           <motion.button
             onClick={() => setShowLoginModal(true)}
-            className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-12 py-6 rounded-3xl font-black text-2xl shadow-2xl hover:from-green-600 hover:to-emerald-700 transition-all"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 md:px-12 py-4 md:py-6 rounded-2xl md:rounded-3xl font-black text-lg md:text-2xl shadow-2xl hover:from-green-600 hover:to-emerald-700 transition-all w-full max-w-md mx-auto block"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             🏄‍♂️ JOIN THE COMPETITION
           </motion.button>
-          <p className="text-white/70 mt-4 text-lg font-bold">
+          <p className="text-white/70 mt-4 text-base md:text-lg font-bold">
             Enter your access code to start competing!
           </p>
         </div>
