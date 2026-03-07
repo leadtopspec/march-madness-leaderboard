@@ -130,15 +130,15 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900">
       {/* Personal Header - Mobile Optimized */}
-      <nav className="bg-black/90 backdrop-blur-xl shadow-2xl border-b-2 border-red-500 sticky top-0 z-50">
-        <div className="max-w-8xl mx-auto px-4 md:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            <div className="flex items-center space-x-2 md:space-x-4">
-              <div className={`w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-r ${agentBadge.color} flex items-center justify-center shadow-lg`}>
+      <nav className="bg-black/90 backdrop-blur-xl shadow-2xl border-b-2 border-red-500 sticky top-0 z-50 overflow-hidden">
+        <div className="max-w-8xl mx-auto px-2 md:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20 min-w-0">
+            <div className="flex items-center space-x-2 md:space-x-4 min-w-0 flex-1">
+              <div className={`w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-r ${agentBadge.color} flex items-center justify-center shadow-lg flex-shrink-0`}>
                 <AgentIcon className="w-5 h-5 md:w-8 md:h-8 text-white" />
               </div>
-              <div>
-                <h1 className="text-lg md:text-3xl font-black text-white">
+              <div className="min-w-0 flex-1">
+                <h1 className="text-lg md:text-3xl font-black text-white truncate">
                   <span className="md:hidden">Welcome, {agent.name.split(' ')[0]}</span>
                   <span className="hidden md:inline">👋 Welcome, {agent.name.split(' ')[0]}</span>
                 </h1>
@@ -146,7 +146,7 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
               </div>
             </div>
             
-            <div className="flex items-center space-x-2 md:space-x-6">
+            <div className="flex items-center space-x-1 md:space-x-6 flex-shrink-0">
               <div className="text-right hidden md:block">
                 <div className="text-sm text-gray-400 font-medium">🏀 Live Updates</div>
                 <div className="text-xl font-bold text-white">
@@ -154,24 +154,24 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
                 </div>
               </div>
               <div className="md:hidden text-right">
-                <div className="text-sm font-bold text-white">
+                <div className="text-xs font-bold text-white">
                   {isClient && currentTime ? currentTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--:--'}
                 </div>
               </div>
               <button
                 onClick={onLogout}
-                className="flex items-center space-x-1 md:space-x-2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:from-red-600 hover:to-pink-600 transition-all shadow-lg"
+                className="flex items-center space-x-1 md:space-x-2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:from-red-600 hover:to-pink-600 transition-all shadow-lg flex-shrink-0"
               >
                 <LogOut className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="font-semibold text-sm md:text-base">Logout</span>
+                <span className="font-semibold text-xs md:text-base hidden sm:inline">Logout</span>
               </button>
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-8xl mx-auto px-4 md:px-8 py-4 md:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
+      <div className="max-w-8xl mx-auto px-2 md:px-8 py-4 md:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8 overflow-hidden">
           {/* My Stats */}
           <div className="lg:col-span-2 space-y-4 md:space-y-8">
             {/* Performance Overview - Mobile Optimized */}
@@ -180,7 +180,8 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <div className="flex items-center justify-between mb-4 md:mb-6">
+              {/* Mobile: Stack vertically, Desktop: Side by side */}
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 md:mb-6 gap-3 md:gap-0">
                 <div className="flex items-center space-x-2 md:space-x-4">
                   <div className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-r ${agentBadge.color} flex items-center justify-center shadow-lg relative`}>
                     <AgentIcon className="w-6 h-6 md:w-8 md:h-8 text-white" />
@@ -188,12 +189,12 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
                       #{agent.rank}
                     </div>
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h2 className="text-xl md:text-3xl font-black text-white">Your Performance</h2>
                     <p className="text-sm md:text-lg text-red-300 font-semibold">{agent.team}</p>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="text-center md:text-right bg-black/20 md:bg-transparent rounded-lg md:rounded-none p-2 md:p-0">
                   <div className="text-sm md:text-lg text-gray-400">Tournament Rank</div>
                   <div className="text-2xl md:text-4xl font-black text-white">#{agent.rank}</div>
                 </div>
