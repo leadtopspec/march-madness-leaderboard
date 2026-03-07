@@ -76,6 +76,7 @@ export default function MarchMadnessLeaderboard() {
   const [loggedInAgent, setLoggedInAgent] = useState<SalesRep | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [timeUntilStart, setTimeUntilStart] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
+  const [timeUntilEnd, setTimeUntilEnd] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
 
   useEffect(() => {
     // Set client-side flag and initial time
@@ -204,13 +205,34 @@ export default function MarchMadnessLeaderboard() {
         setTimeUntilStart(null) // Tournament has started
       }
     }
+
+    // Countdown to Tournament end (March 14, 2026 at 11:59 PM CST)
+    const updateEndCountdown = () => {
+      const endTime = new Date('2026-03-15T05:59:00.000Z') // 11:59 PM CST = 05:59 UTC next day
+      const now = new Date()
+      const diff = endTime.getTime() - now.getTime()
+      
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+        
+        setTimeUntilEnd({ days, hours, minutes, seconds })
+      } else {
+        setTimeUntilEnd(null) // Tournament has ended
+      }
+    }
     
     updateCountdown() // Initial call
+    updateEndCountdown() // Initial call for end countdown
     const countdownTimer = setInterval(updateCountdown, 1000)
+    const endCountdownTimer = setInterval(updateEndCountdown, 1000)
     
     return () => {
       clearInterval(timer)
       clearInterval(countdownTimer)
+      clearInterval(endCountdownTimer)
       window.removeEventListener('storage', handleStorageChange)
     }
   }, [])
@@ -449,8 +471,17 @@ export default function MarchMadnessLeaderboard() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="text-2xl font-black">7 DAYS</div>
-            <div className="text-sm font-bold opacity-90">REMAINING</div>
+            {timeUntilEnd ? (
+              <>
+                <div className="text-lg font-black">{timeUntilEnd.days}D {timeUntilEnd.hours}H</div>
+                <div className="text-sm font-bold opacity-90">REMAINING</div>
+              </>
+            ) : (
+              <>
+                <div className="text-2xl font-black">ENDED</div>
+                <div className="text-sm font-bold opacity-90">TOURNAMENT</div>
+              </>
+            )}
           </motion.div>
         </div>
 

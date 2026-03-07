@@ -62,6 +62,7 @@ export default function TVMode() {
   const [isClient, setIsClient] = useState(false)
   const [salesReps, setSalesReps] = useState<SalesRep[]>(bracketParticipants.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
   const [timeUntilStart, setTimeUntilStart] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
+  const [timeUntilEnd, setTimeUntilEnd] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
 
   useEffect(() => {
     // Set client-side flag and initial time
@@ -135,14 +136,35 @@ export default function TVMode() {
         setTimeUntilStart(null) // Tournament has started
       }
     }
+
+    // Countdown to Tournament end (March 14, 2026 at 11:59 PM CST)
+    const updateEndCountdown = () => {
+      const endTime = new Date('2026-03-15T05:59:00.000Z') // 11:59 PM CST = 05:59 UTC next day
+      const now = new Date()
+      const diff = endTime.getTime() - now.getTime()
+      
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+        
+        setTimeUntilEnd({ days, hours, minutes, seconds })
+      } else {
+        setTimeUntilEnd(null) // Tournament has ended
+      }
+    }
     
     updateCountdown() // Initial call
+    updateEndCountdown() // Initial call for end countdown
     const countdownTimer = setInterval(updateCountdown, 1000)
+    const endCountdownTimer = setInterval(updateEndCountdown, 1000)
     
     return () => {
       clearInterval(timer)
       clearInterval(pollInterval)
       clearInterval(countdownTimer)
+      clearInterval(endCountdownTimer)
       window.removeEventListener('storage', handleStorageChange)
     }
   }, [])
@@ -314,6 +336,36 @@ export default function TVMode() {
                     </div>
                   </div>
                   <div className="text-xs opacity-75 mt-2">3/7/26 • 12:00 AM</div>
+                </div>
+              </div>
+            )}
+
+            {/* Countdown to Tournament End */}
+            {timeUntilEnd && (
+              <div className="bg-red-600/80 backdrop-blur-sm rounded-xl p-4 border border-red-400/20">
+                <div className="text-center text-white">
+                  <div className="text-lg font-bold mb-2">🏁 TOURNAMENT ENDS</div>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    {timeUntilEnd.days > 0 && (
+                      <div className="text-center">
+                        <div className="text-xl font-bold">{timeUntilEnd.days}</div>
+                        <div className="text-xs opacity-75">DAYS</div>
+                      </div>
+                    )}
+                    <div className="text-center">
+                      <div className="text-xl font-bold">{timeUntilEnd.hours.toString().padStart(2, '0')}</div>
+                      <div className="text-xs opacity-75">HRS</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xl font-bold">{timeUntilEnd.minutes.toString().padStart(2, '0')}</div>
+                      <div className="text-xs opacity-75">MIN</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xl font-bold">{timeUntilEnd.seconds.toString().padStart(2, '0')}</div>
+                      <div className="text-xs opacity-75">SEC</div>
+                    </div>
+                  </div>
+                  <div className="text-xs opacity-75 mt-2">3/14/26 • 11:59 PM</div>
                 </div>
               </div>
             )}
