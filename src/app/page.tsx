@@ -10,7 +10,7 @@ import MaintenanceMode from '@/components/MaintenanceMode'
 import { SupabaseSync, type SalesRep, type Sale } from '@/lib/supabase-sync'
 
 // MAINTENANCE MODE - Set to true to show maintenance page
-const MAINTENANCE_MODE = true
+const MAINTENANCE_MODE = false
 
 export default function MarchMadnessLeaderboard() {
   // Show maintenance mode if enabled
