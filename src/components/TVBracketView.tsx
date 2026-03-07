@@ -25,16 +25,16 @@ export default function TVBracketView() {
   ]
 
   return (
-    <div className="w-full h-full bg-transparent overflow-hidden">
+    <div className="w-full h-full bg-transparent overflow-auto">
       {/* TV-Optimized Traditional Bracket Layout */}
-      <div className="flex items-start justify-between h-full gap-2 text-sm min-w-[900px] max-w-[1100px] mx-auto">
+      <div className="flex items-start justify-between min-h-full gap-2 text-sm min-w-[900px] max-w-[1100px] mx-auto py-4">
         
         {/* Left Side - Round 1 */}
-        <div className="flex flex-col min-w-[140px] h-full">
+        <div className="flex flex-col min-w-[140px] min-h-full">
           <div className="text-center text-white font-bold text-sm mb-2 bg-red-600/80 rounded-lg py-2 border border-red-400">
             PLAY-IN LEFT
           </div>
-          <div className="flex-1 flex flex-col justify-start space-y-1">
+          <div className="flex flex-col justify-start space-y-1 flex-grow">
             {playInRoundMatchups.slice(0, 9).map((matchup, index) => (
               <motion.div
                 key={`left-${index}`}
@@ -52,7 +52,7 @@ export default function TVBracketView() {
         </div>
 
         {/* Left Side - Round 2 */}
-        <div className="flex flex-col min-w-[90px] h-full">
+        <div className="flex flex-col min-w-[90px] min-h-full">
           <div className="text-center text-white font-bold text-sm mb-2 bg-red-700/80 rounded-lg py-2 border border-red-500">
             ROUND 2
           </div>
@@ -72,7 +72,7 @@ export default function TVBracketView() {
         </div>
 
         {/* Left Side - Round 3 */}
-        <div className="flex flex-col min-w-[90px] h-full">
+        <div className="flex flex-col min-w-[90px] min-h-full">
           <div className="text-center text-white font-bold text-sm mb-2 bg-red-800/80 rounded-lg py-2 border border-red-600">
             ROUND 3
           </div>
@@ -129,7 +129,7 @@ export default function TVBracketView() {
         </div>
 
         {/* Right Side - Round 3 */}
-        <div className="flex flex-col min-w-[90px] h-full">
+        <div className="flex flex-col min-w-[90px] min-h-full">
           <div className="text-center text-white font-bold text-sm mb-2 bg-red-800/80 rounded-lg py-2 border border-red-600">
             ROUND 3
           </div>
@@ -149,7 +149,7 @@ export default function TVBracketView() {
         </div>
 
         {/* Right Side - Round 2 */}
-        <div className="flex flex-col min-w-[90px] h-full">
+        <div className="flex flex-col min-w-[90px] min-h-full">
           <div className="text-center text-white font-bold text-sm mb-2 bg-red-700/80 rounded-lg py-2 border border-red-500">
             ROUND 2
           </div>
@@ -169,11 +169,11 @@ export default function TVBracketView() {
         </div>
 
         {/* Right Side - Round 1 */}
-        <div className="flex flex-col min-w-[140px] h-full">
+        <div className="flex flex-col min-w-[140px] min-h-full">
           <div className="text-center text-white font-bold text-sm mb-2 bg-red-600/80 rounded-lg py-2 border border-red-400">
             PLAY-IN RIGHT
           </div>
-          <div className="flex-1 flex flex-col justify-start space-y-1">
+          <div className="flex flex-col justify-start space-y-1 flex-grow">
             {playInRoundMatchups.slice(9, 17).map((matchup, index) => (
               <motion.div
                 key={`right-${index}`}
