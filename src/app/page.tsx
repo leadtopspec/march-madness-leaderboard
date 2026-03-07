@@ -78,6 +78,7 @@ export default function MarchMadnessLeaderboard() {
   const [timeUntilStart, setTimeUntilStart] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
   const [timeUntilEnd, setTimeUntilEnd] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
   const [showRules, setShowRules] = useState(false)
+  const [showAllCompetitors, setShowAllCompetitors] = useState(false)
 
   useEffect(() => {
     // Set client-side flag and initial time
@@ -649,7 +650,7 @@ export default function MarchMadnessLeaderboard() {
             </div>
             
             <div className="space-y-2 md:space-y-4">
-              {salesReps.slice(0, 15).map((rep, index) => (
+              {salesReps.slice(0, 10).map((rep, index) => (
                 <motion.div
                   key={rep.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -737,7 +738,7 @@ export default function MarchMadnessLeaderboard() {
           </motion.div>
         </div>
 
-        {/* All Competitors Grid - Mobile Optimized */}
+        {/* All Competitors Grid - Ultra Mobile Optimized */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -746,13 +747,17 @@ export default function MarchMadnessLeaderboard() {
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <div className="flex items-center gap-3">
               <Users className="w-6 h-6 md:w-8 md:h-8 text-cyan-400" />
-              <h2 className="text-xl md:text-2xl font-black text-white">ALL COMPETITORS</h2>
+              <h2 className="text-xl md:text-2xl font-black text-white">
+                <span className="md:hidden">COMPETITORS</span>
+                <span className="hidden md:inline">ALL COMPETITORS</span>
+              </h2>
             </div>
             <div className="text-sm text-white/70 font-bold">34 Total</div>
           </div>
           
+          {/* Mobile: Show top 12, Desktop: Show all 34 */}
           <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-3">
-            {salesReps.map((rep, index) => {
+            {(showAllCompetitors ? salesReps : salesReps.slice(0, 12)).map((rep, index) => {
               const badge = getRankBadge(rep.rank)
               const IconComponent = badge.icon
               return (
@@ -761,17 +766,29 @@ export default function MarchMadnessLeaderboard() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.01 }}
-                  className="bg-white/5 border border-white/10 rounded-lg p-2 md:p-3 text-center hover:bg-white/10 transition-all"
+                  className={`bg-white/5 border border-white/10 rounded-lg p-2 md:p-3 text-center hover:bg-white/10 transition-all ${
+                    rep.rank <= 3 ? 'border-yellow-400/30 bg-yellow-400/10' : ''
+                  }`}
                 >
-                  <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full mx-auto mb-1 md:mb-2 bg-gradient-to-r ${badge.color} flex items-center justify-center`}>
+                  <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full mx-auto mb-1 md:mb-2 bg-gradient-to-r ${badge.color} flex items-center justify-center`}>
                     <IconComponent className="w-3 h-3 md:w-4 md:h-4 text-white" />
                   </div>
-                  <div className="text-white text-xs font-bold truncate">{rep.name.split(' ')[0]}</div>
+                  <div className="text-white text-xs md:text-xs font-bold truncate">{rep.name.split(' ')[0]}</div>
                   <div className="text-white/50 text-xs">#{rep.rank}</div>
-                  <div className="text-white text-xs md:text-sm font-bold">{rep.totalSales}</div>
+                  <div className="text-white text-sm md:text-sm font-bold">{rep.totalSales}</div>
                 </motion.div>
               )
             })}
+          </div>
+
+          {/* Show More/Less button - Mobile only */}
+          <div className="md:hidden mt-4 text-center">
+            <button
+              onClick={() => setShowAllCompetitors(!showAllCompetitors)}
+              className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:from-cyan-700 hover:to-blue-700 transition-all"
+            >
+              {showAllCompetitors ? `Show Less ↑` : `Show All 34 ↓`}
+            </button>
           </div>
         </motion.div>
 
