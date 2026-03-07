@@ -99,7 +99,7 @@ export default function TVMode() {
     
     window.addEventListener('storage', handleStorageChange)
     
-    // Also poll every 5 seconds to catch same-tab updates
+    // Also poll every 2 seconds to catch same-tab updates
     const pollInterval = setInterval(() => {
       const savedSalesReps = localStorage.getItem('salesReps')
       if (savedSalesReps) {
@@ -113,7 +113,7 @@ export default function TVMode() {
           console.error('Error polling sales reps:', e)
         }
       }
-    }, 5000)
+    }, 2000)
     
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
     
@@ -221,11 +221,15 @@ export default function TVMode() {
             <div className="text-lg text-yellow-100 font-semibold">COMPETITORS</div>
           </div>
           <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3 text-center">
-            <div className="text-3xl font-bold text-white">$0</div>
+            <div className="text-3xl font-bold text-white">
+              {formatCurrency(salesReps.reduce((sum, rep) => sum + rep.totalPremium, 0))}
+            </div>
             <div className="text-lg text-yellow-100 font-semibold">TOTAL SALES</div>
           </div>
           <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3 text-center">
-            <div className="text-3xl font-bold text-white">0</div>
+            <div className="text-3xl font-bold text-white">
+              {salesReps.reduce((sum, rep) => sum + rep.totalSales, 0)}
+            </div>
             <div className="text-lg text-yellow-100 font-semibold">POLICIES SOLD</div>
           </div>
         </div>
