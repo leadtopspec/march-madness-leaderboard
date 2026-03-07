@@ -25,83 +25,83 @@ export default function TVBracketView() {
   ]
 
   return (
-    <div className="w-full h-full bg-transparent overflow-auto">
+    <div className="w-full h-full bg-transparent overflow-hidden">
       {/* TV-Optimized Traditional Bracket Layout */}
-      <div className="flex items-start justify-between min-h-full gap-2 text-sm min-w-[900px] max-w-[1100px] mx-auto py-4">
+      <div className="flex items-start justify-between h-full gap-2 text-xs min-w-[900px] max-w-[1100px] mx-auto py-2">
         
         {/* Left Side - Round 1 */}
-        <div className="flex flex-col min-w-[140px] min-h-full">
-          <div className="text-center text-white font-bold text-sm mb-2 bg-red-600/80 rounded-lg py-2 border border-red-400">
+        <div className="flex flex-col min-w-[140px] h-full">
+          <div className="text-center text-white font-bold text-xs mb-1 bg-red-600/80 rounded py-1 border border-red-400">
             PLAY-IN LEFT
           </div>
-          <div className="flex flex-col justify-start space-y-1 flex-grow">
+          <div className="flex-1 flex flex-col justify-evenly">
             {playInRoundMatchups.slice(0, 9).map((matchup, index) => (
               <motion.div
                 key={`left-${index}`}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.02 }}
-                className="bg-gray-900/95 rounded border-2 border-red-600 p-2 shadow-sm"
+                className="bg-gray-900/95 rounded border-2 border-red-600 p-1 shadow-sm"
               >
-                <div className="text-white font-semibold text-xs truncate">G{matchup.game}: {matchup.team1}</div>
-                <div className="text-red-300 text-xs text-center font-bold">VS</div>
-                <div className="text-white font-semibold text-xs truncate">{matchup.team2}</div>
+                <div className="text-white font-semibold text-[10px] truncate">G{matchup.game}: {matchup.team1}</div>
+                <div className="text-red-300 text-[9px] text-center font-bold">VS</div>
+                <div className="text-white font-semibold text-[10px] truncate">{matchup.team2}</div>
               </motion.div>
             ))}
           </div>
         </div>
 
         {/* Left Side - Round 2 */}
-        <div className="flex flex-col min-w-[90px] min-h-full">
-          <div className="text-center text-white font-bold text-sm mb-2 bg-red-700/80 rounded-lg py-2 border border-red-500">
+        <div className="flex flex-col min-w-[90px] h-full">
+          <div className="text-center text-white font-bold text-xs mb-1 bg-red-700/80 rounded py-1 border border-red-500">
             ROUND 2
           </div>
-          <div className="flex-1 flex flex-col justify-center space-y-3">
+          <div className="flex-1 flex flex-col justify-center space-y-2">
             {[...Array(9)].map((_, index) => (
               <motion.div
                 key={`left-r2-${index}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 + index * 0.03 }}
-                className="bg-black/80 rounded border-2 border-red-500 p-2 text-center shadow-sm"
+                className="bg-black/80 rounded border-2 border-red-500 p-1 text-center shadow-sm"
               >
-                <div className="text-red-300 font-semibold text-xs">TBD</div>
+                <div className="text-red-300 font-semibold text-[10px]">TBD</div>
               </motion.div>
             ))}
           </div>
         </div>
 
         {/* Left Side - Round 3 */}
-        <div className="flex flex-col min-w-[90px] min-h-full">
-          <div className="text-center text-white font-bold text-sm mb-2 bg-red-800/80 rounded-lg py-2 border border-red-600">
+        <div className="flex flex-col min-w-[90px] h-full">
+          <div className="text-center text-white font-bold text-xs mb-1 bg-red-800/80 rounded py-1 border border-red-600">
             ROUND 3
           </div>
-          <div className="flex-1 flex flex-col justify-center space-y-6">
+          <div className="flex-1 flex flex-col justify-center space-y-4">
             {[...Array(5)].map((_, index) => (
               <motion.div
                 key={`left-r3-${index}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1 + index * 0.05 }}
-                className="bg-gray-800/80 rounded border-2 border-red-400 p-2 text-center shadow-sm"
+                className="bg-gray-800/80 rounded border-2 border-red-400 p-1 text-center shadow-sm"
               >
-                <div className="text-red-300 font-semibold text-xs">TBD</div>
+                <div className="text-red-300 font-semibold text-[10px]">TBD</div>
               </motion.div>
             ))}
           </div>
         </div>
 
         {/* Championship Center Column */}
-        <div className="flex flex-col items-center justify-center min-w-[160px] space-y-4">
+        <div className="flex flex-col items-center justify-center min-w-[160px] space-y-3">
           {/* Final Four - Left */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.5 }}
-            className="bg-gradient-to-r from-red-600 to-red-800 rounded-lg border-2 border-red-400 p-3 text-center shadow-lg w-full"
+            className="bg-gradient-to-r from-red-600 to-red-800 rounded border-2 border-red-400 p-2 text-center shadow-lg w-full"
           >
-            <div className="text-white font-black text-sm">FINAL FOUR</div>
-            <div className="text-red-200 text-xs mt-1">LEFT REGION</div>
+            <div className="text-white font-black text-xs">FINAL FOUR</div>
+            <div className="text-red-200 text-[10px] mt-1">LEFT REGION</div>
           </motion.div>
 
           {/* Championship */}
@@ -109,11 +109,11 @@ export default function TVBracketView() {
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 2 }}
-            className="bg-gradient-to-r from-red-700 to-black rounded-xl border-2 border-red-500 p-4 text-center shadow-xl w-full"
+            className="bg-gradient-to-r from-red-700 to-black rounded-lg border-2 border-red-500 p-3 text-center shadow-xl w-full"
           >
-            <div className="text-2xl mb-2">🏆</div>
-            <div className="text-white font-black text-lg">CHAMPION</div>
-            <div className="text-red-200 text-sm mt-1">MARCH MADNESS 2026</div>
+            <div className="text-xl mb-1">🏆</div>
+            <div className="text-white font-black text-sm">CHAMPION</div>
+            <div className="text-red-200 text-xs mt-1">MARCH MADNESS 2026</div>
           </motion.div>
 
           {/* Final Four - Right */}
@@ -121,70 +121,70 @@ export default function TVBracketView() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.5 }}
-            className="bg-gradient-to-r from-red-600 to-red-800 rounded-lg border-2 border-red-400 p-3 text-center shadow-lg w-full"
+            className="bg-gradient-to-r from-red-600 to-red-800 rounded border-2 border-red-400 p-2 text-center shadow-lg w-full"
           >
-            <div className="text-white font-black text-sm">FINAL FOUR</div>
-            <div className="text-red-200 text-xs mt-1">RIGHT REGION</div>
+            <div className="text-white font-black text-xs">FINAL FOUR</div>
+            <div className="text-red-200 text-[10px] mt-1">RIGHT REGION</div>
           </motion.div>
         </div>
 
         {/* Right Side - Round 3 */}
-        <div className="flex flex-col min-w-[90px] min-h-full">
-          <div className="text-center text-white font-bold text-sm mb-2 bg-red-800/80 rounded-lg py-2 border border-red-600">
+        <div className="flex flex-col min-w-[90px] h-full">
+          <div className="text-center text-white font-bold text-xs mb-1 bg-red-800/80 rounded py-1 border border-red-600">
             ROUND 3
           </div>
-          <div className="flex-1 flex flex-col justify-center space-y-6">
+          <div className="flex-1 flex flex-col justify-center space-y-4">
             {[...Array(5)].map((_, index) => (
               <motion.div
                 key={`right-r3-${index}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1 + index * 0.05 }}
-                className="bg-gray-800/80 rounded border-2 border-red-400 p-2 text-center shadow-sm"
+                className="bg-gray-800/80 rounded border-2 border-red-400 p-1 text-center shadow-sm"
               >
-                <div className="text-red-300 font-semibold text-xs">TBD</div>
+                <div className="text-red-300 font-semibold text-[10px]">TBD</div>
               </motion.div>
             ))}
           </div>
         </div>
 
         {/* Right Side - Round 2 */}
-        <div className="flex flex-col min-w-[90px] min-h-full">
-          <div className="text-center text-white font-bold text-sm mb-2 bg-red-700/80 rounded-lg py-2 border border-red-500">
+        <div className="flex flex-col min-w-[90px] h-full">
+          <div className="text-center text-white font-bold text-xs mb-1 bg-red-700/80 rounded py-1 border border-red-500">
             ROUND 2
           </div>
-          <div className="flex-1 flex flex-col justify-center space-y-3">
+          <div className="flex-1 flex flex-col justify-center space-y-2">
             {[...Array(9)].map((_, index) => (
               <motion.div
                 key={`right-r2-${index}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 + index * 0.03 }}
-                className="bg-black/80 rounded border-2 border-red-500 p-2 text-center shadow-sm"
+                className="bg-black/80 rounded border-2 border-red-500 p-1 text-center shadow-sm"
               >
-                <div className="text-red-300 font-semibold text-xs">TBD</div>
+                <div className="text-red-300 font-semibold text-[10px]">TBD</div>
               </motion.div>
             ))}
           </div>
         </div>
 
         {/* Right Side - Round 1 */}
-        <div className="flex flex-col min-w-[140px] min-h-full">
-          <div className="text-center text-white font-bold text-sm mb-2 bg-red-600/80 rounded-lg py-2 border border-red-400">
+        <div className="flex flex-col min-w-[140px] h-full">
+          <div className="text-center text-white font-bold text-xs mb-1 bg-red-600/80 rounded py-1 border border-red-400">
             PLAY-IN RIGHT
           </div>
-          <div className="flex flex-col justify-start space-y-1 flex-grow">
+          <div className="flex-1 flex flex-col justify-evenly">
             {playInRoundMatchups.slice(9, 17).map((matchup, index) => (
               <motion.div
                 key={`right-${index}`}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.02 }}
-                className="bg-gray-900/95 rounded border-2 border-red-600 p-2 shadow-sm"
+                className="bg-gray-900/95 rounded border-2 border-red-600 p-1 shadow-sm"
               >
-                <div className="text-white text-right font-semibold text-xs truncate">G{matchup.game}: {matchup.team1}</div>
-                <div className="text-red-300 text-xs text-center font-bold">VS</div>
-                <div className="text-white text-right font-semibold text-xs truncate">{matchup.team2}</div>
+                <div className="text-white text-right font-semibold text-[10px] truncate">G{matchup.game}: {matchup.team1}</div>
+                <div className="text-red-300 text-[9px] text-center font-bold">VS</div>
+                <div className="text-white text-right font-semibold text-[10px] truncate">{matchup.team2}</div>
               </motion.div>
             ))}
           </div>
@@ -192,15 +192,15 @@ export default function TVBracketView() {
       </div>
 
       {/* Tournament Status */}
-      <div className="text-center mt-2">
+      <div className="text-center mt-1">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.5 }}
-          className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md inline-flex items-center gap-2 border border-green-400"
+          className="bg-green-600 text-white px-3 py-1 rounded shadow-md inline-flex items-center gap-2 border border-green-400"
         >
           <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
-          <span className="font-bold text-sm">🔴 LIVE • PLAY-IN ROUND • 17 GAMES • COMPETE NOW!</span>
+          <span className="font-bold text-xs">🔴 LIVE • PLAY-IN ROUND • 17 GAMES • COMPETE NOW!</span>
           <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
         </motion.div>
       </div>
