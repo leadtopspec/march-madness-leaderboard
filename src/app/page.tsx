@@ -6,7 +6,7 @@ import { Tv, Award, Target, Star, Crown, Users, LogIn } from 'lucide-react'
 import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
 import BracketView from '@/components/BracketView'
-import HybridSync, { type SalesRep as SyncSalesRep, type Sale as SyncSale } from '@/lib/hybrid-sync'
+import SimpleSync, { type SalesRep as SyncSalesRep, type Sale as SyncSale } from '@/lib/simple-sync'
 import { resetAllTournamentData } from '@/lib/reset-data'
 
 interface SalesRep {
@@ -90,18 +90,18 @@ export default function MarchMadnessLeaderboard() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Initialize HybridSync (Supabase + Polling for reliability)
+    // Initialize SimpleSync (Direct Supabase + 2s polling)
     const initializeData = async () => {
       try {
         setIsLoading(true)
-        console.log('🚀 Initializing HybridSync (Supabase + Polling)...')
+        console.log('🔥 Initializing SimpleSync...')
         
-        const data = await HybridSync.initialize()
+        const data = await SimpleSync.initialize()
         setSalesReps(data.salesReps)
         setRecentSales(data.sales)
         setIsLoading(false)
         
-        console.log('✅ HybridSync initialized with', data.salesReps.length, 'reps and', data.sales.length, 'sales')
+        console.log('✅ SimpleSync initialized with', data.salesReps.length, 'reps and', data.sales.length, 'sales')
         
         // Check for logged in agent
         const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
@@ -117,16 +117,16 @@ export default function MarchMadnessLeaderboard() {
           }
         }
       } catch (error) {
-        console.error('❌ Failed to initialize HybridSync:', error)
+        console.error('❌ Failed to initialize SimpleSync:', error)
         setIsLoading(false)
       }
     }
     
     initializeData()
     
-    // Subscribe to hybrid updates (real-time + polling)
-    const unsubscribe = HybridSync.subscribe((updatedData) => {
-      console.log('📊 Received HybridSync update:', updatedData.salesReps.reduce((sum, rep) => sum + rep.totalSales, 0), 'total sales')
+    // Subscribe to simple sync updates (2s polling)
+    const unsubscribe = SimpleSync.subscribe((updatedData) => {
+      console.log('📊 Received SimpleSync update:', updatedData.salesReps.reduce((sum, rep) => sum + rep.totalSales, 0), 'total sales')
       setSalesReps(updatedData.salesReps)
       setRecentSales(updatedData.sales)
       
@@ -246,7 +246,7 @@ export default function MarchMadnessLeaderboard() {
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
       unsubscribe()
-      HybridSync.cleanup()
+      SimpleSync.cleanup()
     }
   }, [])
 
@@ -265,9 +265,9 @@ export default function MarchMadnessLeaderboard() {
 
   const handleRecordSale = async (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
     try {
-      console.log('🚀 Recording sale via HybridSync:', saleData)
-      await HybridSync.addSale(saleData)
-      console.log('✅ Sale recorded with hybrid sync (Supabase + polling)')
+      console.log('🔥 Recording sale via SimpleSync:', saleData)
+      await SimpleSync.addSale(saleData)
+      console.log('✅ Sale recorded with SimpleSync')
     } catch (error) {
       console.error('❌ Error recording sale:', error)
     }
@@ -275,9 +275,9 @@ export default function MarchMadnessLeaderboard() {
 
   const handleDeleteSale = async (saleId: string) => {
     try {
-      console.log('🗑️ Deleting sale via HybridSync:', saleId)
-      await HybridSync.deleteSale(saleId)
-      console.log('✅ Sale deleted with hybrid sync (Supabase + polling)')
+      console.log('🗑️ Deleting sale via SimpleSync:', saleId)
+      await SimpleSync.deleteSale(saleId)
+      console.log('✅ Sale deleted with SimpleSync')
     } catch (error) {
       console.error('❌ Error deleting sale:', error)
     }

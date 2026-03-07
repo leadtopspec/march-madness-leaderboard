@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, Crown, Award, Star, Target } from 'lucide-react'
 import TVBracketView from '@/components/TVBracketView'
-import HybridSync, { type SalesRep, type Sale } from '@/lib/hybrid-sync'
+import SimpleSync, { type SalesRep, type Sale } from '@/lib/simple-sync'
 
 interface SalesRep {
   id: string
@@ -72,13 +72,13 @@ export default function TVMode() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Initialize HybridSync for TV (Supabase + Polling)
+    // Initialize SimpleSync for TV
     const initializeData = async () => {
       try {
-        console.log('📺 TV: Initializing HybridSync...')
-        const data = await HybridSync.initialize()
+        console.log('📺 TV: Initializing SimpleSync...')
+        const data = await SimpleSync.initialize()
         setSalesReps(data.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
-        console.log('📺 TV: HybridSync initialized')
+        console.log('📺 TV: SimpleSync initialized')
       } catch (error) {
         console.error('❌ TV: Failed to initialize sync:', error)
       }
@@ -86,9 +86,9 @@ export default function TVMode() {
     
     initializeData()
     
-    // Subscribe to hybrid updates (real-time + polling)
-    const unsubscribe = HybridSync.subscribe((updatedData) => {
-      console.log('📺 TV: Received hybrid sync update')
+    // Subscribe to simple sync updates
+    const unsubscribe = SimpleSync.subscribe((updatedData) => {
+      console.log('📺 TV: Received SimpleSync update')
       setSalesReps(updatedData.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
     })
     
@@ -173,7 +173,7 @@ export default function TVMode() {
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
       unsubscribe()
-      HybridSync.cleanup()
+      SimpleSync.cleanup()
     }
   }, [])
 

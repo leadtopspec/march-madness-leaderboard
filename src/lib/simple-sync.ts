@@ -1,5 +1,5 @@
-// Ultra-simple sync using a direct API endpoint
-// This ensures all devices see the same data instantly
+// SIMPLE SYNC - Direct Supabase calls without complex subscriptions
+import { supabase } from './supabase'
 
 export interface SalesRep {
   id: string
@@ -21,244 +21,232 @@ export interface Sale {
   timestamp: Date
 }
 
+interface TournamentData {
+  salesReps: SalesRep[]
+  sales: Sale[]
+  lastUpdated: string
+  version: number
+}
+
 class SimpleSync {
-  // Use a simple JSON file hosting service for shared state
-  private static readonly API_URL = 'https://api.jsonbin.io/v3/b/6754465aad19ca34f8cec3a7'
-  private static readonly API_KEY = '$2a$10$n8r4VBF7v2MgUgzHLRRpW.pRaHQ4SLo9uMlOCb0e/YyE.NBK0lBNu'
-  
-  private static readonly AGENTS = [
-    'MAX KONOPKA', 'ROBERT BRADY', 'ZION RUSSELL', 'BYRON ACHA', 'JOSE VALDEZ',
-    'JADEN POPE', 'WESTON CHRISTOPHER', 'NOLAN SCHOENBACHLER', 'THOMAS FOX', 'JEREMI KISINSKI',
-    'JAKE DOLL', 'DANIEL SUAREZ', 'RYAN BOVE', 'RYAN COOPER', 'LUCAS KONSTATOS',
-    'ANTHONY MAYROSE', 'ANDREW FLASKAMP', 'FABIAN ESCATEL', 'KAMREN HERALD', 'JAYLEN BISCHOFF',
-    'BRENNAN SKODA', 'AALYIAH WASHBURN', 'KADEN CAMENZIND', 'HANNAH FRENCH', 'MICHAEL CARNEY',
-    'TAJ DHILLON', 'JACOB LEE', 'ADRIEN RAMÍREZ-RAYO', 'DENNIS CHORNIY', 'CHARLIE SIMMS',
-    'BRENON REED', 'KIRILL PAVLYCHEV', 'LAINEY DROWN', 'VALERIA ALVAL'
-  ]
+  private static listeners: ((data: TournamentData) => void)[] = []
+  private static pollInterval: NodeJS.Timeout | null = null
+  private static currentData: TournamentData | null = null
 
-  private static getInitialState() {
-    const salesReps = this.AGENTS.map((name, index) => ({
-      id: (index + 1).toString(),
-      name,
-      totalSales: 0,
-      totalPremium: 0,
-      rank: index + 1,
-      lastSale: '2024-03-01T00:00:00.000Z',
-      team: 'All In Agencies',
-      bracketPosition: index + 1
-    }))
+  static async initialize(): Promise<TournamentData> {
+    console.log('🔥 SimpleSync: Starting initialization...')
 
-    return {
-      salesReps,
-      sales: [],
-      lastUpdated: new Date().toISOString()
-    }
-  }
-
-  // Load current state from cloud
-  static async loadState(): Promise<{ salesReps: SalesRep[], sales: Sale[] }> {
     try {
-      const response = await fetch(`${this.API_URL}/latest`, {
-        headers: {
-          'X-Master-Key': this.API_KEY
-        }
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        const record = data.record
-
-        const salesReps = record.salesReps.map((rep: any) => ({
-          ...rep,
-          lastSale: new Date(rep.lastSale)
-        }))
-
-        const sales = record.sales.map((sale: any) => ({
-          ...sale,
-          timestamp: new Date(sale.timestamp)
-        }))
-
-        return { salesReps, sales }
-      }
-    } catch (error) {
-      console.error('Error loading state:', error)
-    }
-
-    // Return initial state if loading fails
-    const initial = this.getInitialState()
-    return {
-      salesReps: initial.salesReps.map(rep => ({
-        ...rep,
-        lastSale: new Date(rep.lastSale)
-      })),
-      sales: []
-    }
-  }
-
-  // Save state to cloud
-  static async saveState(salesReps: SalesRep[], sales: Sale[]): Promise<boolean> {
-    try {
-      const data = {
-        salesReps: salesReps.map(rep => ({
-          ...rep,
-          lastSale: rep.lastSale.toISOString()
-        })),
-        sales: sales.map(sale => ({
-          ...sale,
-          timestamp: sale.timestamp.toISOString()
-        })),
-        lastUpdated: new Date().toISOString()
-      }
-
-      const response = await fetch(this.API_URL, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Master-Key': this.API_KEY
-        },
-        body: JSON.stringify(data)
-      })
-
-      return response.ok
-    } catch (error) {
-      console.error('Error saving state:', error)
-      return false
-    }
-  }
-
-  // Record a sale
-  static async recordSale(saleData: Omit<Sale, 'id' | 'timestamp'>): Promise<{ salesReps: SalesRep[], sales: Sale[] }> {
-    const currentState = await this.loadState()
-    
-    // Create new sale
-    const newSale: Sale = {
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      ...saleData,
-      timestamp: new Date()
-    }
-    
-    // Add to sales list (keep most recent 50)
-    const updatedSales = [newSale, ...currentState.sales].slice(0, 50)
-    
-    // Update agent stats
-    const updatedReps = currentState.salesReps.map(rep => {
-      if (rep.name.toLowerCase().includes(saleData.repName.toLowerCase()) ||
-          saleData.repName.toLowerCase().includes(rep.name.toLowerCase())) {
-        return {
-          ...rep,
-          totalSales: rep.totalSales + 1,
-          totalPremium: rep.totalPremium + saleData.premium,
-          lastSale: new Date()
-        }
-      }
-      return rep
-    })
-    
-    // Recalculate rankings
-    const sortedReps = updatedReps
-      .sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium)
-      .map((rep, index) => ({ ...rep, rank: index + 1 }))
-    
-    // Save to cloud
-    await this.saveState(sortedReps, updatedSales)
-    
-    return { salesReps: sortedReps, sales: updatedSales }
-  }
-
-  // Delete a sale
-  static async deleteSale(saleId: string): Promise<{ salesReps: SalesRep[], sales: Sale[] }> {
-    const currentState = await this.loadState()
-    
-    const saleToDelete = currentState.sales.find(sale => sale.id === saleId)
-    if (!saleToDelete) {
-      return currentState
-    }
-    
-    // Remove sale
-    const updatedSales = currentState.sales.filter(sale => sale.id !== saleId)
-    
-    // Update agent stats
-    const updatedReps = currentState.salesReps.map(rep => {
-      if (rep.name.toLowerCase().includes(saleToDelete.repName.toLowerCase()) ||
-          saleToDelete.repName.toLowerCase().includes(rep.name.toLowerCase())) {
-        return {
-          ...rep,
-          totalSales: Math.max(0, rep.totalSales - 1),
-          totalPremium: Math.max(0, rep.totalPremium - saleToDelete.premium),
-          lastSale: rep.totalSales > 1 ? rep.lastSale : new Date('2024-03-01T00:00:00.000Z')
-        }
-      }
-      return rep
-    })
-    
-    // Recalculate rankings
-    const sortedReps = updatedReps
-      .sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium)
-      .map((rep, index) => ({ ...rep, rank: index + 1 }))
-    
-    // Save to cloud
-    await this.saveState(sortedReps, updatedSales)
-    
-    return { salesReps: sortedReps, sales: updatedSales }
-  }
-
-  // Initialize with fresh data
-  static async initialize(): Promise<{ salesReps: SalesRep[], sales: Sale[] }> {
-    try {
-      // Try to load existing state
-      const state = await this.loadState()
+      // Load data immediately
+      const data = await this.loadData()
+      this.currentData = data
       
-      // If no sales exist and all agents have 0 sales, initialize fresh
-      if (state.sales.length === 0 && state.salesReps.every(rep => rep.totalSales === 0)) {
-        const fresh = this.getInitialState()
-        await this.saveState(fresh.salesReps.map(rep => ({
-          ...rep,
-          lastSale: new Date(rep.lastSale)
-        })), [])
-        
-        return {
-          salesReps: fresh.salesReps.map(rep => ({
-            ...rep,
-            lastSale: new Date(rep.lastSale)
-          })),
-          sales: []
+      // Start aggressive polling every 2 seconds
+      this.pollInterval = setInterval(async () => {
+        try {
+          const freshData = await this.loadData()
+          
+          // Compare data to see if anything changed
+          const oldTotalSales = this.currentData?.salesReps.reduce((sum, rep) => sum + rep.totalSales, 0) || 0
+          const newTotalSales = freshData.salesReps.reduce((sum, rep) => sum + rep.totalSales, 0)
+          
+          if (oldTotalSales !== newTotalSales) {
+            console.log(`🔄 SimpleSync: Data changed! ${oldTotalSales} → ${newTotalSales} total sales`)
+            this.currentData = freshData
+            this.notifyListeners(freshData)
+          }
+        } catch (error) {
+          console.log('🔄 SimpleSync: Polling error (non-critical):', error)
         }
-      }
+      }, 2000) // Every 2 seconds
       
-      return state
+      console.log('✅ SimpleSync: Initialized successfully')
+      return data
     } catch (error) {
-      console.error('Error initializing:', error)
-      const initial = this.getInitialState()
+      console.error('❌ SimpleSync: Initialization failed:', error)
+      throw error
+    }
+  }
+
+  private static async loadData(): Promise<TournamentData> {
+    console.log('📊 SimpleSync: Loading data from Supabase...')
+    
+    try {
+      // Load sales reps
+      const { data: repsData, error: repsError } = await supabase
+        .from('sales_reps')
+        .select('*')
+        .order('total_sales', { ascending: false })
+        .order('total_premium', { ascending: false })
+
+      if (repsError) throw repsError
+
+      // Load recent sales
+      const { data: salesData, error: salesError } = await supabase
+        .from('sales')
+        .select('*')
+        .order('timestamp', { ascending: false })
+        .limit(50)
+
+      if (salesError) throw salesError
+
+      // Transform data
+      const salesReps: SalesRep[] = (repsData || []).map((rep: any, index: number) => ({
+        id: rep.id,
+        name: rep.name,
+        totalSales: rep.total_sales || 0,
+        totalPremium: rep.total_premium || 0,
+        rank: index + 1,
+        lastSale: new Date(rep.last_sale || '2024-03-01T00:00:00.000Z'),
+        team: 'All In Agencies',
+        bracketPosition: parseInt(rep.id) || index + 1
+      }))
+
+      const sales: Sale[] = (salesData || []).map((sale: any) => ({
+        id: sale.id,
+        repName: sale.rep_name,
+        clientName: sale.client_name,
+        policyType: sale.policy_type,
+        premium: sale.premium,
+        timestamp: new Date(sale.timestamp)
+      }))
+
+      const totalSales = salesReps.reduce((sum, rep) => sum + rep.totalSales, 0)
+      console.log(`📊 SimpleSync: Loaded ${salesReps.length} reps, ${sales.length} sales, ${totalSales} total sales`)
+
       return {
-        salesReps: initial.salesReps.map(rep => ({
-          ...rep,
-          lastSale: new Date(rep.lastSale)
-        })),
-        sales: []
+        salesReps,
+        sales,
+        lastUpdated: new Date().toISOString(),
+        version: Date.now()
       }
+    } catch (error) {
+      console.error('❌ SimpleSync: Failed to load data:', error)
+      throw error
     }
   }
 
-  // Periodic sync
-  static startPeriodicSync(
-    onUpdate: (data: { salesReps: SalesRep[], sales: Sale[] }) => void,
-    intervalMs: number = 10000 // 10 seconds
-  ): () => void {
-    // Initial load
-    this.initialize().then(onUpdate)
-    
-    // Set up interval
-    const interval = setInterval(async () => {
-      try {
-        const state = await this.loadState()
-        onUpdate(state)
-      } catch (error) {
-        console.error('Error in periodic sync:', error)
+  static async addSale(saleData: Omit<Sale, 'id' | 'timestamp'>): Promise<void> {
+    console.log('💰 SimpleSync: Adding sale:', saleData)
+
+    try {
+      // Insert sale
+      const { error: saleError } = await supabase
+        .from('sales')
+        .insert({
+          rep_name: saleData.repName,
+          client_name: saleData.clientName,
+          policy_type: saleData.policyType,
+          premium: saleData.premium
+        })
+
+      if (saleError) throw saleError
+
+      // Find and update the rep
+      const { data: allReps } = await supabase.from('sales_reps').select('*')
+      const matchingRep = allReps?.find(rep => 
+        rep.name.toLowerCase().includes(saleData.repName.toLowerCase()) ||
+        saleData.repName.toLowerCase().includes(rep.name.toLowerCase())
+      )
+
+      if (matchingRep) {
+        await supabase
+          .from('sales_reps')
+          .update({
+            total_sales: (matchingRep.total_sales || 0) + 1,
+            total_premium: (matchingRep.total_premium || 0) + saleData.premium,
+            last_sale: new Date().toISOString()
+          })
+          .eq('id', matchingRep.id)
+
+        console.log(`✅ SimpleSync: Updated ${matchingRep.name}`)
       }
-    }, intervalMs)
-    
-    return () => clearInterval(interval)
+
+      // Force immediate refresh
+      setTimeout(async () => {
+        const freshData = await this.loadData()
+        this.currentData = freshData
+        this.notifyListeners(freshData)
+      }, 500)
+
+    } catch (error) {
+      console.error('❌ SimpleSync: Failed to add sale:', error)
+      throw error
+    }
+  }
+
+  static async deleteSale(saleId: string): Promise<void> {
+    console.log('🗑️ SimpleSync: Deleting sale:', saleId)
+
+    try {
+      // Get sale details
+      const { data: sale } = await supabase
+        .from('sales')
+        .select('*')
+        .eq('id', saleId)
+        .single()
+
+      if (!sale) return
+
+      // Delete sale
+      await supabase.from('sales').delete().eq('id', saleId)
+
+      // Update rep
+      const { data: allReps } = await supabase.from('sales_reps').select('*')
+      const matchingRep = allReps?.find(rep => 
+        rep.name.toLowerCase().includes(sale.rep_name.toLowerCase())
+      )
+
+      if (matchingRep) {
+        await supabase
+          .from('sales_reps')
+          .update({
+            total_sales: Math.max(0, (matchingRep.total_sales || 0) - 1),
+            total_premium: Math.max(0, (matchingRep.total_premium || 0) - sale.premium)
+          })
+          .eq('id', matchingRep.id)
+      }
+
+      // Force immediate refresh
+      setTimeout(async () => {
+        const freshData = await this.loadData()
+        this.currentData = freshData
+        this.notifyListeners(freshData)
+      }, 500)
+
+    } catch (error) {
+      console.error('❌ SimpleSync: Failed to delete sale:', error)
+      throw error
+    }
+  }
+
+  static subscribe(callback: (data: TournamentData) => void): () => void {
+    this.listeners.push(callback)
+    console.log(`📢 SimpleSync: Added listener, total: ${this.listeners.length}`)
+    return () => {
+      this.listeners = this.listeners.filter(cb => cb !== callback)
+    }
+  }
+
+  private static notifyListeners(data: TournamentData): void {
+    console.log('📢 SimpleSync: Notifying listeners')
+    this.listeners.forEach(callback => {
+      try {
+        callback(data)
+      } catch (e) {
+        console.error('❌ SimpleSync: Listener error:', e)
+      }
+    })
+  }
+
+  static cleanup(): void {
+    console.log('🧹 SimpleSync: Cleaning up')
+    if (this.pollInterval) {
+      clearInterval(this.pollInterval)
+      this.pollInterval = null
+    }
+    this.listeners = []
   }
 }
 
-export { SimpleSync }
+export default SimpleSync
