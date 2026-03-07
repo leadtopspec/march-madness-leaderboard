@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, Crown, Award, Star, Target } from 'lucide-react'
 import TVBracketView from '@/components/TVBracketView'
-import EmergencyFallback, { type SalesRep, type Sale } from '@/lib/emergency-fallback'
+import SupabaseSync, { type SalesRep, type Sale } from '@/lib/supabase-sync'
 
 interface SalesRep {
   id: string
@@ -72,13 +72,13 @@ export default function TVMode() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Initialize EmergencyFallback for TV
+    // Initialize SupabaseSync for TV
     const initializeData = async () => {
       try {
-        console.log('📺 TV: Initializing EmergencyFallback...')
-        const data = await EmergencyFallback.initialize()
+        console.log('📺 TV: Initializing SupabaseSync...')
+        const data = await SupabaseSync.initialize()
         setSalesReps(data.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
-        console.log('📺 TV: EmergencyFallback initialized')
+        console.log('📺 TV: SupabaseSync initialized')
       } catch (error) {
         console.error('❌ TV: Failed to initialize sync:', error)
       }
@@ -87,8 +87,8 @@ export default function TVMode() {
     initializeData()
     
     // Subscribe to emergency fallback updates
-    const unsubscribe = EmergencyFallback.subscribe((updatedData) => {
-      console.log('📺 TV: Received EmergencyFallback update')
+    const unsubscribe = SupabaseSync.subscribe((updatedData) => {
+      console.log('📺 TV: Received SupabaseSync real-time update')
       setSalesReps(updatedData.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
     })
     
@@ -173,7 +173,7 @@ export default function TVMode() {
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
       unsubscribe()
-      EmergencyFallback.cleanup()
+      SupabaseSync.cleanup()
     }
   }, [])
 
