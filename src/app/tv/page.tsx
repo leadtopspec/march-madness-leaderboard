@@ -215,76 +215,146 @@ export default function TVMode() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-red-700/5 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
 
-      {/* Header */}
-      <div className="relative bg-gradient-to-r from-red-600 via-red-700 to-red-800 p-8 shadow-2xl border-b-8 border-red-400">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-6">
-            <motion.div 
-              className="w-24 h-24 bg-gradient-to-r from-red-500 to-red-700 rounded-full flex items-center justify-center shadow-2xl relative"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            >
-              <Trophy className="w-12 h-12 text-white" />
-              <div className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 rounded-full animate-ping"></div>
-            </motion.div>
-            <div>
-              <motion.h1 
-                className="text-6xl font-black text-white mb-2"
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.5 }}
+      {/* Header - Responsive */}
+      <div className="relative bg-gradient-to-r from-red-600 via-red-700 to-red-800 shadow-2xl border-b-4 md:border-b-8 border-red-400">
+        {/* Mobile Header */}
+        <div className="md:hidden p-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <motion.div 
+                className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-700 rounded-full flex items-center justify-center shadow-2xl relative"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               >
-                🏀 MARCH MADNESS
-              </motion.h1>
-              <p className="text-3xl text-red-100 font-bold">All In Agencies • Sales Tournament</p>
-              <div className="flex items-center space-x-4 mt-2">
-                <div className="bg-green-500 text-white px-4 py-1 rounded-full text-lg font-bold animate-pulse">
-                  ● LIVE
-                </div>
-                <div className="text-red-100 text-lg font-bold">
-                  March 7-14, 2026
-                </div>
+                <Trophy className="w-6 h-6 text-white" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+              </motion.div>
+              <div>
+                <motion.h1 
+                  className="text-2xl font-black text-white"
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  🏀 MARCH MADNESS
+                </motion.h1>
+                <p className="text-sm text-red-100 font-bold">All In Agencies</p>
+              </div>
+            </div>
+            
+            {/* Mobile Clock */}
+            <div className="text-right">
+              <div className="text-lg font-bold text-white">
+                {isClient && currentTime ? currentTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--:--'}
+              </div>
+              <div className="text-xs text-yellow-100">
+                {isClient && currentTime ? currentTime.toLocaleDateString() : '--/--/----'}
               </div>
             </div>
           </div>
-          
-          {/* Live Clock */}
-          <div className="text-right">
-            <div className="text-4xl font-bold text-white">
-              {isClient && currentTime ? currentTime.toLocaleTimeString() : '--:--:--'}
+
+          {/* Mobile Stats Grid */}
+          <div className="grid grid-cols-3 gap-2">
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-2 text-center">
+              <div className="text-lg font-bold text-white">34</div>
+              <div className="text-xs text-yellow-100 font-semibold">COMPETITORS</div>
             </div>
-            <div className="text-xl text-yellow-100">
-              {isClient && currentTime ? currentTime.toLocaleDateString() : '--/--/----'}
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-2 text-center">
+              <div className="text-lg font-bold text-white">
+                {formatCurrency(salesReps.reduce((sum, rep) => sum + rep.totalPremium, 0)).replace('$', '').replace(',000', 'K')}
+              </div>
+              <div className="text-xs text-yellow-100 font-semibold">TOTAL SALES</div>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-2 text-center">
+              <div className="text-lg font-bold text-white">
+                {salesReps.reduce((sum, rep) => sum + rep.totalSales, 0)}
+              </div>
+              <div className="text-xs text-yellow-100 font-semibold">POLICIES</div>
+            </div>
+          </div>
+
+          {/* Mobile Status */}
+          <div className="flex justify-center space-x-4 mt-3">
+            <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold animate-pulse">
+              ● LIVE
+            </div>
+            <div className="text-red-100 text-sm font-bold">
+              March 7-14, 2026
             </div>
           </div>
         </div>
 
-        {/* Stats Bar */}
-        <div className="flex justify-center space-x-8 mt-6">
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3 text-center">
-            <div className="text-3xl font-bold text-white">34</div>
-            <div className="text-lg text-yellow-100 font-semibold">COMPETITORS</div>
-          </div>
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3 text-center">
-            <div className="text-3xl font-bold text-white">
-              {formatCurrency(salesReps.reduce((sum, rep) => sum + rep.totalPremium, 0))}
+        {/* Desktop Header */}
+        <div className="hidden md:block p-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-6">
+              <motion.div 
+                className="w-24 h-24 bg-gradient-to-r from-red-500 to-red-700 rounded-full flex items-center justify-center shadow-2xl relative"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              >
+                <Trophy className="w-12 h-12 text-white" />
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 rounded-full animate-ping"></div>
+              </motion.div>
+              <div>
+                <motion.h1 
+                  className="text-6xl font-black text-white mb-2"
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  🏀 MARCH MADNESS
+                </motion.h1>
+                <p className="text-3xl text-red-100 font-bold">All In Agencies • Sales Tournament</p>
+                <div className="flex items-center space-x-4 mt-2">
+                  <div className="bg-green-500 text-white px-4 py-1 rounded-full text-lg font-bold animate-pulse">
+                    ● LIVE
+                  </div>
+                  <div className="text-red-100 text-lg font-bold">
+                    March 7-14, 2026
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="text-lg text-yellow-100 font-semibold">TOTAL SALES</div>
-          </div>
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3 text-center">
-            <div className="text-3xl font-bold text-white">
-              {salesReps.reduce((sum, rep) => sum + rep.totalSales, 0)}
+            
+            {/* Desktop Clock */}
+            <div className="text-right">
+              <div className="text-4xl font-bold text-white">
+                {isClient && currentTime ? currentTime.toLocaleTimeString() : '--:--:--'}
+              </div>
+              <div className="text-xl text-yellow-100">
+                {isClient && currentTime ? currentTime.toLocaleDateString() : '--/--/----'}
+              </div>
             </div>
-            <div className="text-lg text-yellow-100 font-semibold">POLICIES SOLD</div>
+          </div>
+
+          {/* Desktop Stats Bar */}
+          <div className="flex justify-center space-x-8 mt-6">
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3 text-center">
+              <div className="text-3xl font-bold text-white">34</div>
+              <div className="text-lg text-yellow-100 font-semibold">COMPETITORS</div>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3 text-center">
+              <div className="text-3xl font-bold text-white">
+                {formatCurrency(salesReps.reduce((sum, rep) => sum + rep.totalPremium, 0))}
+              </div>
+              <div className="text-lg text-yellow-100 font-semibold">TOTAL SALES</div>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3 text-center">
+              <div className="text-3xl font-bold text-white">
+                {salesReps.reduce((sum, rep) => sum + rep.totalSales, 0)}
+              </div>
+              <div className="text-lg text-yellow-100 font-semibold">POLICIES SOLD</div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content - TV Optimized Layout */}
+      {/* Main Content - Responsive Layout */}
       <div className="relative p-4">
-        {/* Larger, TV-Optimized Title */}
+        {/* Title - Responsive */}
         <motion.h2 
-          className="text-6xl font-black text-white mb-8 text-center"
+          className="text-3xl md:text-6xl font-black text-white mb-4 md:mb-8 text-center"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -292,8 +362,80 @@ export default function TVMode() {
           🏀 LIVE TOURNAMENT BRACKET 🏀
         </motion.h2>
         
-        {/* Split Layout: Bracket + Leaderboard */}
-        <div className="grid grid-cols-5 gap-4 h-full">
+        {/* Mobile Layout - Stacked */}
+        <div className="md:hidden space-y-4">
+          {/* Mobile Countdown Cards */}
+          <div className="grid grid-cols-2 gap-3">
+            {/* Countdown to Tournament End */}
+            {timeUntilEnd && (
+              <div className="bg-red-600/80 backdrop-blur-sm rounded-xl p-3 border border-red-400/20">
+                <div className="text-center text-white">
+                  <div className="text-sm font-bold mb-2">🏁 TOURNAMENT ENDS</div>
+                  <div className="grid grid-cols-2 gap-1 text-xs">
+                    <div className="text-center">
+                      <div className="text-lg font-bold">{timeUntilEnd.days}</div>
+                      <div className="text-xs opacity-75">DAYS</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-lg font-bold">{timeUntilEnd.hours.toString().padStart(2, '0')}</div>
+                      <div className="text-xs opacity-75">HRS</div>
+                    </div>
+                  </div>
+                  <div className="text-xs opacity-75 mt-1">3/14/26 • 11:59 PM</div>
+                </div>
+              </div>
+            )}
+
+            {/* Live Status */}
+            <div className="bg-black/80 backdrop-blur-sm rounded-xl p-3 border border-white/20">
+              <div className="text-center text-white">
+                <div className="text-lg font-bold text-green-400 mb-1">🔴 LIVE</div>
+                <div className="text-base font-bold">ROUND 1</div>
+                <div className="text-xs opacity-75">17 ACTIVE MATCHUPS</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Top 10 */}
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+            <h3 className="text-xl font-bold text-white mb-4 text-center">🏆 TOP 10</h3>
+            <div className="space-y-2">
+              {salesReps.slice(0, 10).map((agent, index) => {
+                const badge = getRankBadge(agent.rank)
+                const IconComponent = badge.icon
+                return (
+                  <div
+                    key={agent.id}
+                    className={`flex items-center justify-between p-3 rounded-lg ${badge.bg} border border-white/20`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 bg-gradient-to-r ${badge.color} rounded-full flex items-center justify-center`}>
+                        <IconComponent className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white">
+                          #{index + 1} {agent.name.split(' ')[0]} {agent.name.split(' ')[1] ? agent.name.split(' ')[1].charAt(0) + '.' : ''}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-lg font-bold text-white">{agent.totalSales}</div>
+                      <div className="text-xs text-white/70">{formatCurrency(agent.totalPremium).replace('$', '').replace(',000', 'K')}</div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Mobile Bracket - Full Width */}
+          <div className="bg-white/5 backdrop-blur-xl rounded-xl p-4 shadow-xl border border-white/20">
+            <TVBracketView />
+          </div>
+        </div>
+
+        {/* Desktop Layout - Split Layout: Bracket + Leaderboard */}
+        <div className="hidden md:grid grid-cols-5 gap-4 h-full">
           {/* Main Bracket - 4/5 of screen */}
           <div className="col-span-4 bg-white/5 backdrop-blur-xl rounded-xl p-4 shadow-xl border border-white/20 h-[650px]">
             <TVBracketView />

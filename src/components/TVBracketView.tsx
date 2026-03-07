@@ -25,9 +25,57 @@ export default function TVBracketView() {
   ]
 
   return (
-    <div className="w-full h-full bg-transparent overflow-hidden">
-      {/* TV-Optimized Traditional Bracket Layout */}
-      <div className="flex items-start justify-between h-full gap-2 text-xs min-w-[900px] max-w-[1100px] mx-auto py-2">
+    <div className="w-full h-full bg-transparent overflow-auto">
+      {/* Mobile Layout */}
+      <div className="md:hidden">
+        {/* Mobile Bracket Title */}
+        <div className="text-center mb-4">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md inline-flex items-center gap-2 border border-green-400"
+          >
+            <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+            <span className="font-bold text-sm">🔴 LIVE • PLAY-IN ROUND • 17 GAMES</span>
+            <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+          </motion.div>
+        </div>
+
+        {/* Mobile Games Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[500px] overflow-y-auto">
+          {playInRoundMatchups.map((matchup, index) => (
+            <motion.div
+              key={`mobile-${index}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="bg-gray-900/95 rounded-xl border-2 border-red-600 p-3 shadow-lg"
+            >
+              <div className="text-center mb-2">
+                <div className="text-red-400 font-bold text-sm">GAME #{matchup.game}</div>
+              </div>
+              <div className="space-y-2">
+                <div className="bg-red-600/20 rounded-lg p-2 border border-red-500">
+                  <div className="text-white font-semibold text-sm text-center truncate">
+                    {matchup.team1}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-red-300 text-sm font-bold">VS</div>
+                </div>
+                <div className="bg-gray-700/30 rounded-lg p-2 border border-gray-500">
+                  <div className="text-white font-semibold text-sm text-center truncate">
+                    {matchup.team2}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop TV-Optimized Traditional Bracket Layout */}
+      <div className="hidden md:flex items-start justify-between h-full gap-2 text-xs min-w-[900px] max-w-[1100px] mx-auto py-2">
         
         {/* Left Side - Round 1 */}
         <div className="flex flex-col min-w-[140px] h-full">
@@ -189,20 +237,20 @@ export default function TVBracketView() {
             ))}
           </div>
         </div>
-      </div>
 
-      {/* Tournament Status */}
-      <div className="text-center mt-1">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.5 }}
-          className="bg-green-600 text-white px-3 py-1 rounded shadow-md inline-flex items-center gap-2 border border-green-400"
-        >
-          <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
-          <span className="font-bold text-xs">🔴 LIVE • PLAY-IN ROUND • 17 GAMES • COMPETE NOW!</span>
-          <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
-        </motion.div>
+        {/* Desktop Tournament Status */}
+        <div className="text-center mt-1">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2.5 }}
+            className="bg-green-600 text-white px-3 py-1 rounded shadow-md inline-flex items-center gap-2 border border-green-400"
+          >
+            <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+            <span className="font-bold text-xs">🔴 LIVE • PLAY-IN ROUND • 17 GAMES • COMPETE NOW!</span>
+            <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+          </motion.div>
+        </div>
       </div>
 
 
