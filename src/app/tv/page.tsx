@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, Crown, Award, Star, Target } from 'lucide-react'
 import TVBracketView from '@/components/TVBracketView'
-import SimpleSync, { type SalesRep, type Sale } from '@/lib/simple-sync'
+import EmergencyFallback, { type SalesRep, type Sale } from '@/lib/emergency-fallback'
 
 interface SalesRep {
   id: string
@@ -72,13 +72,13 @@ export default function TVMode() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Initialize SimpleSync for TV
+    // Initialize EmergencyFallback for TV
     const initializeData = async () => {
       try {
-        console.log('📺 TV: Initializing SimpleSync...')
-        const data = await SimpleSync.initialize()
+        console.log('📺 TV: Initializing EmergencyFallback...')
+        const data = await EmergencyFallback.initialize()
         setSalesReps(data.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
-        console.log('📺 TV: SimpleSync initialized')
+        console.log('📺 TV: EmergencyFallback initialized')
       } catch (error) {
         console.error('❌ TV: Failed to initialize sync:', error)
       }
@@ -86,9 +86,9 @@ export default function TVMode() {
     
     initializeData()
     
-    // Subscribe to simple sync updates
-    const unsubscribe = SimpleSync.subscribe((updatedData) => {
-      console.log('📺 TV: Received SimpleSync update')
+    // Subscribe to emergency fallback updates
+    const unsubscribe = EmergencyFallback.subscribe((updatedData) => {
+      console.log('📺 TV: Received EmergencyFallback update')
       setSalesReps(updatedData.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
     })
     
@@ -173,7 +173,7 @@ export default function TVMode() {
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
       unsubscribe()
-      SimpleSync.cleanup()
+      EmergencyFallback.cleanup()
     }
   }, [])
 

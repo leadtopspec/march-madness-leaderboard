@@ -6,7 +6,7 @@ import { Tv, Award, Target, Star, Crown, Users, LogIn } from 'lucide-react'
 import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
 import BracketView from '@/components/BracketView'
-import SimpleSync, { type SalesRep as SyncSalesRep, type Sale as SyncSale } from '@/lib/simple-sync'
+import EmergencyFallback, { type SalesRep as SyncSalesRep, type Sale as SyncSale } from '@/lib/emergency-fallback'
 import { resetAllTournamentData } from '@/lib/reset-data'
 
 interface SalesRep {
@@ -90,18 +90,18 @@ export default function MarchMadnessLeaderboard() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Initialize SimpleSync (Direct Supabase + 2s polling)
+    // Initialize EmergencyFallback (Supabase with localStorage backup)
     const initializeData = async () => {
       try {
         setIsLoading(true)
-        console.log('🔥 Initializing SimpleSync...')
+        console.log('🆘 Initializing EmergencyFallback...')
         
-        const data = await SimpleSync.initialize()
+        const data = await EmergencyFallback.initialize()
         setSalesReps(data.salesReps)
         setRecentSales(data.sales)
         setIsLoading(false)
         
-        console.log('✅ SimpleSync initialized with', data.salesReps.length, 'reps and', data.sales.length, 'sales')
+        console.log('✅ EmergencyFallback initialized with', data.salesReps.length, 'reps and', data.sales.length, 'sales')
         
         // Check for logged in agent
         const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
@@ -117,16 +117,16 @@ export default function MarchMadnessLeaderboard() {
           }
         }
       } catch (error) {
-        console.error('❌ Failed to initialize SimpleSync:', error)
+        console.error('❌ Failed to initialize EmergencyFallback:', error)
         setIsLoading(false)
       }
     }
     
     initializeData()
     
-    // Subscribe to simple sync updates (2s polling)
-    const unsubscribe = SimpleSync.subscribe((updatedData) => {
-      console.log('📊 Received SimpleSync update:', updatedData.salesReps.reduce((sum, rep) => sum + rep.totalSales, 0), 'total sales')
+    // Subscribe to emergency fallback updates
+    const unsubscribe = EmergencyFallback.subscribe((updatedData) => {
+      console.log('📊 Received EmergencyFallback update:', updatedData.salesReps.reduce((sum, rep) => sum + rep.totalSales, 0), 'total sales')
       setSalesReps(updatedData.salesReps)
       setRecentSales(updatedData.sales)
       
@@ -246,7 +246,7 @@ export default function MarchMadnessLeaderboard() {
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
       unsubscribe()
-      SimpleSync.cleanup()
+      EmergencyFallback.cleanup()
     }
   }, [])
 
@@ -265,9 +265,9 @@ export default function MarchMadnessLeaderboard() {
 
   const handleRecordSale = async (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
     try {
-      console.log('🔥 Recording sale via SimpleSync:', saleData)
-      await SimpleSync.addSale(saleData)
-      console.log('✅ Sale recorded with SimpleSync')
+      console.log('🆘 Recording sale via EmergencyFallback:', saleData)
+      await EmergencyFallback.addSale(saleData)
+      console.log('✅ Sale recorded with EmergencyFallback')
     } catch (error) {
       console.error('❌ Error recording sale:', error)
     }
@@ -275,9 +275,9 @@ export default function MarchMadnessLeaderboard() {
 
   const handleDeleteSale = async (saleId: string) => {
     try {
-      console.log('🗑️ Deleting sale via SimpleSync:', saleId)
-      await SimpleSync.deleteSale(saleId)
-      console.log('✅ Sale deleted with SimpleSync')
+      console.log('🗑️ Deleting sale via EmergencyFallback:', saleId)
+      await EmergencyFallback.deleteSale(saleId)
+      console.log('✅ Sale deleted with EmergencyFallback')
     } catch (error) {
       console.error('❌ Error deleting sale:', error)
     }
