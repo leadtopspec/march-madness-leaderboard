@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, Crown, Award, Star, Target } from 'lucide-react'
 import TVBracketView from '@/components/TVBracketView'
-import RealTimeSync, { type SalesRep, type Sale } from '@/lib/real-time-sync'
+import BulletproofSync, { type SalesRep, type Sale } from '@/lib/bulletproof-sync'
 
 interface SalesRep {
   id: string
@@ -72,29 +72,23 @@ export default function TVMode() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // EMERGENCY: Reset all data to fix inconsistencies
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('march_madness_data')
-      localStorage.removeItem('march_madness_emergency') 
-      localStorage.removeItem('salesReps')
-      localStorage.removeItem('recentSales')
-      console.log('🔄 TV: Cleared all cached tournament data')
-    }
-    
-    // Initialize real-time sync system
+    // Initialize bulletproof sync system for TV
     const initializeData = async () => {
       try {
-        const data = await RealTimeSync.initialize()
+        console.log('📺 TV: Initializing BulletproofSync...')
+        const data = await BulletproofSync.initialize()
         setSalesReps(data.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
+        console.log('📺 TV: BulletproofSync initialized')
       } catch (error) {
-        console.error('Failed to initialize sync:', error)
+        console.error('❌ TV: Failed to initialize sync:', error)
       }
     }
     
     initializeData()
     
-    // Subscribe to real-time updates
-    const unsubscribe = RealTimeSync.subscribe((updatedData) => {
+    // Subscribe to bulletproof updates
+    const unsubscribe = BulletproofSync.subscribe((updatedData) => {
+      console.log('📺 TV: Received sync update')
       setSalesReps(updatedData.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
     })
     
@@ -179,7 +173,7 @@ export default function TVMode() {
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
       unsubscribe()
-      RealTimeSync.cleanup()
+      BulletproofSync.cleanup()
     }
   }, [])
 

@@ -6,7 +6,7 @@ import { Tv, Award, Target, Star, Crown, Users, LogIn } from 'lucide-react'
 import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
 import BracketView from '@/components/BracketView'
-import RealTimeSync, { type SalesRep as SyncSalesRep, type Sale as SyncSale } from '@/lib/real-time-sync'
+import BulletproofSync, { type SalesRep as SyncSalesRep, type Sale as SyncSale } from '@/lib/bulletproof-sync'
 import { resetAllTournamentData } from '@/lib/reset-data'
 
 interface SalesRep {
@@ -90,22 +90,18 @@ export default function MarchMadnessLeaderboard() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // EMERGENCY: Reset all data to fix inconsistencies
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('march_madness_data')
-      localStorage.removeItem('march_madness_emergency') 
-      localStorage.removeItem('salesReps')
-      localStorage.removeItem('recentSales')
-      console.log('🔄 Cleared all cached tournament data')
-    }
-    
-    // Initialize real-time sync system
+    // Initialize bulletproof sync system
     const initializeData = async () => {
       try {
-        const data = await RealTimeSync.initialize()
+        setIsLoading(true)
+        console.log('🚀 Initializing BulletproofSync...')
+        
+        const data = await BulletproofSync.initialize()
         setSalesReps(data.salesReps)
         setRecentSales(data.sales)
         setIsLoading(false)
+        
+        console.log('✅ BulletproofSync initialized with', data.salesReps.length, 'reps and', data.sales.length, 'sales')
         
         // Check for logged in agent
         const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
@@ -121,15 +117,16 @@ export default function MarchMadnessLeaderboard() {
           }
         }
       } catch (error) {
-        console.error('Failed to initialize sync:', error)
+        console.error('❌ Failed to initialize BulletproofSync:', error)
         setIsLoading(false)
       }
     }
     
     initializeData()
     
-    // Subscribe to real-time updates
-    const unsubscribe = RealTimeSync.subscribe((updatedData) => {
+    // Subscribe to bulletproof updates
+    const unsubscribe = BulletproofSync.subscribe((updatedData) => {
+      console.log('📊 Received sync update:', updatedData.salesReps.reduce((sum, rep) => sum + rep.totalSales, 0), 'total sales')
       setSalesReps(updatedData.salesReps)
       setRecentSales(updatedData.sales)
       
@@ -249,7 +246,7 @@ export default function MarchMadnessLeaderboard() {
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
       unsubscribe()
-      RealTimeSync.cleanup()
+      BulletproofSync.cleanup()
     }
   }, [])
 
@@ -268,19 +265,21 @@ export default function MarchMadnessLeaderboard() {
 
   const handleRecordSale = async (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
     try {
-      await RealTimeSync.addSale(saleData)
-      console.log('Sale recorded and synced across all devices')
+      console.log('🚀 Recording sale:', saleData)
+      await BulletproofSync.addSale(saleData)
+      console.log('✅ Sale recorded and synced across all devices')
     } catch (error) {
-      console.error('Error recording sale:', error)
+      console.error('❌ Error recording sale:', error)
     }
   }
 
   const handleDeleteSale = async (saleId: string) => {
     try {
-      await RealTimeSync.deleteSale(saleId)
-      console.log('Sale deleted and synced across all devices')
+      console.log('🗑️ Deleting sale:', saleId)
+      await BulletproofSync.deleteSale(saleId)
+      console.log('✅ Sale deleted and synced across all devices')
     } catch (error) {
-      console.error('Error deleting sale:', error)
+      console.error('❌ Error deleting sale:', error)
     }
   }
 
