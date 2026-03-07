@@ -239,12 +239,10 @@ export default function MarchMadnessLeaderboard() {
     }
   }, [])
 
-  const handleLogin = (agentId: string) => {
-    const agent = salesReps.find(rep => rep.id === agentId)
-    if (agent) {
-      setLoggedInAgent(agent)
-      localStorage.setItem('loggedInAgent', JSON.stringify(agent))
-    }
+  const handleLogin = (agent: SalesRep) => {
+    setLoggedInAgent(agent)
+    localStorage.setItem('loggedInAgent', JSON.stringify(agent))
+    setShowLoginModal(false)
   }
 
   const handleLogout = () => {
@@ -743,12 +741,13 @@ export default function MarchMadnessLeaderboard() {
         </div>
       </div>
 
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        onLogin={handleLogin}
-        agents={salesReps}
-      />
+      {showLoginModal && (
+        <LoginModal
+          salesReps={salesReps}
+          onClose={() => setShowLoginModal(false)}
+          onLogin={handleLogin}
+        />
+      )}
     </div>
   )
 }
