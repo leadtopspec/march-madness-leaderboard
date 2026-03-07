@@ -6,7 +6,7 @@ import { Tv, Award, Target, Star, Crown, Users, LogIn } from 'lucide-react'
 import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
 import BracketView from '@/components/BracketView'
-import { SimpleSync, type SalesRep, type Sale } from '@/lib/simple-sync'
+import { ManualSync, type SalesRep, type Sale } from '@/lib/manual-sync'
 
 export default function MarchMadnessLeaderboard() {
   const [salesReps, setSalesReps] = useState<SalesRep[]>([])
@@ -26,30 +26,40 @@ export default function MarchMadnessLeaderboard() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Set up simple sync with 10 second intervals
-    const unsubscribe = SimpleSync.startPeriodicSync(({ salesReps, sales }) => {
+    // Load initial data
+    const loadData = () => {
+      const { salesReps, sales } = ManualSync.loadData()
       setSalesReps(salesReps)
       setRecentSales(sales)
       
-      // Update logged in agent if their data changed
-      const currentLoggedInAgent = localStorage.getItem('loggedInAgent')
-      if (currentLoggedInAgent) {
+      // Check for logged in agent
+      const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
+      if (savedLoggedInAgent) {
         try {
-          const parsedLoggedInAgent = JSON.parse(currentLoggedInAgent)
-          const updatedAgent = salesReps.find((rep: SalesRep) => rep.id === parsedLoggedInAgent.id)
-          if (updatedAgent) {
-            setLoggedInAgent(updatedAgent)
-            localStorage.setItem('loggedInAgent', JSON.stringify(updatedAgent))
+          const parsedAgent = JSON.parse(savedLoggedInAgent)
+          const currentAgent = salesReps.find(rep => rep.id === parsedAgent.id)
+          if (currentAgent) {
+            setLoggedInAgent(currentAgent)
           }
-        } catch (error) {
-          console.error('Error updating logged in agent:', error)
+        } catch (e) {
+          console.error('Error parsing saved logged in agent:', e)
+          localStorage.removeItem('loggedInAgent')
         }
       }
       
-      if (isLoading) {
-        setIsLoading(false)
+      setIsLoading(false)
+    }
+    
+    loadData()
+    
+    // Set up cross-tab sync for same device
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key && e.key.startsWith('tournament_')) {
+        loadData()
       }
-    }, 10000) // Sync every 10 seconds
+    }
+    
+    window.addEventListener('storage', handleStorageChange)
     
     // Check for logged in agent
     const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
@@ -115,7 +125,7 @@ export default function MarchMadnessLeaderboard() {
       clearInterval(timer)
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
-      unsubscribe()
+      window.removeEventListener('storage', handleStorageChange)
     }
   }, [])
 
@@ -134,7 +144,7 @@ export default function MarchMadnessLeaderboard() {
 
   const handleRecordSale = async (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
     try {
-      const { salesReps: updatedReps, sales: updatedSales } = await SimpleSync.recordSale(saleData)
+      const { salesReps: updatedReps, sales: updatedSales } = ManualSync.recordSale(saleData)
       setSalesReps(updatedReps)
       setRecentSales(updatedSales)
       
@@ -153,7 +163,7 @@ export default function MarchMadnessLeaderboard() {
 
   const handleDeleteSale = async (saleId: string) => {
     try {
-      const { salesReps: updatedReps, sales: updatedSales } = await SimpleSync.deleteSale(saleId)
+      const { salesReps: updatedReps, sales: updatedSales } = ManualSync.deleteSale(saleId)
       setSalesReps(updatedReps)
       setRecentSales(updatedSales)
       
@@ -269,6 +279,15 @@ export default function MarchMadnessLeaderboard() {
             <Tv className="w-5 h-5 md:w-6 md:h-6" />
             📺 TV DISPLAY
           </motion.a>
+          
+          <motion.button
+            onClick={() => window.location.reload()}
+            className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl font-bold text-sm md:text-base shadow-xl hover:from-blue-600 hover:to-blue-800 transition-all flex items-center justify-center gap-2"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            🔄 REFRESH DATA
+          </motion.button>
         </div>
 
         {/* Live Stats Banner - Mobile Optimized */}
