@@ -34,6 +34,11 @@ export default function MarchMadnessLeaderboard() {
     setIsClient(true)
     setCurrentTime(new Date())
     
+    // Force clear any localStorage cache
+    localStorage.removeItem('salesReps')
+    localStorage.removeItem('recentSales')
+    localStorage.removeItem('lastSync')
+    
     // Initialize Supabase and load data
     const initializeData = async () => {
       try {
@@ -43,6 +48,8 @@ export default function MarchMadnessLeaderboard() {
           SupabaseSync.loadSalesReps(),
           SupabaseSync.loadSales()
         ])
+        
+        console.log('Loaded from Supabase:', { salesReps: salesReps.length, sales: sales.length })
         
         setSalesReps(salesReps)
         setRecentSales(sales)
