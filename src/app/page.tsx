@@ -6,7 +6,7 @@ import { Tv, Award, Target, Star, Crown, Users, LogIn } from 'lucide-react'
 import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
 import BracketView from '@/components/BracketView'
-import { ManualSync, type SalesRep, type Sale } from '@/lib/manual-sync'
+import { SupabaseSync, type SalesRep, type Sale } from '@/lib/supabase-sync'
 
 export default function MarchMadnessLeaderboard() {
   const [salesReps, setSalesReps] = useState<SalesRep[]>([])
@@ -26,40 +26,67 @@ export default function MarchMadnessLeaderboard() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Load initial data
-    const loadData = () => {
-      const { salesReps, sales } = ManualSync.loadData()
-      setSalesReps(salesReps)
-      setRecentSales(sales)
-      
-      // Check for logged in agent
-      const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
-      if (savedLoggedInAgent) {
-        try {
-          const parsedAgent = JSON.parse(savedLoggedInAgent)
-          const currentAgent = salesReps.find(rep => rep.id === parsedAgent.id)
-          if (currentAgent) {
-            setLoggedInAgent(currentAgent)
+    // Initialize Supabase and load data
+    const initializeData = async () => {
+      try {
+        await SupabaseSync.initialize()
+        
+        const [salesReps, sales] = await Promise.all([
+          SupabaseSync.loadSalesReps(),
+          SupabaseSync.loadSales()
+        ])
+        
+        setSalesReps(salesReps)
+        setRecentSales(sales)
+        
+        // Check for logged in agent
+        const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
+        if (savedLoggedInAgent) {
+          try {
+            const parsedAgent = JSON.parse(savedLoggedInAgent)
+            const currentAgent = salesReps.find(rep => rep.id === parsedAgent.id)
+            if (currentAgent) {
+              setLoggedInAgent(currentAgent)
+            }
+          } catch (e) {
+            console.error('Error parsing saved logged in agent:', e)
+            localStorage.removeItem('loggedInAgent')
           }
-        } catch (e) {
-          console.error('Error parsing saved logged in agent:', e)
-          localStorage.removeItem('loggedInAgent')
         }
-      }
-      
-      setIsLoading(false)
-    }
-    
-    loadData()
-    
-    // Set up cross-tab sync for same device
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key && e.key.startsWith('tournament_')) {
-        loadData()
+        
+        setIsLoading(false)
+      } catch (error) {
+        console.error('Error initializing data:', error)
+        setIsLoading(false)
       }
     }
     
-    window.addEventListener('storage', handleStorageChange)
+    initializeData()
+    
+    // Set up real-time subscriptions
+    const unsubscribe = SupabaseSync.subscribeToChanges(
+      (updatedReps) => {
+        setSalesReps(updatedReps)
+        
+        // Update logged in agent if their data changed
+        const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
+        if (savedLoggedInAgent) {
+          try {
+            const parsedAgent = JSON.parse(savedLoggedInAgent)
+            const updatedAgent = updatedReps.find(rep => rep.id === parsedAgent.id)
+            if (updatedAgent) {
+              setLoggedInAgent(updatedAgent)
+              localStorage.setItem('loggedInAgent', JSON.stringify(updatedAgent))
+            }
+          } catch (error) {
+            console.error('Error updating logged in agent:', error)
+          }
+        }
+      },
+      (updatedSales) => {
+        setRecentSales(updatedSales)
+      }
+    )
     
     // Check for logged in agent
     const savedLoggedInAgent = localStorage.getItem('loggedInAgent')
@@ -125,7 +152,7 @@ export default function MarchMadnessLeaderboard() {
       clearInterval(timer)
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
-      window.removeEventListener('storage', handleStorageChange)
+      unsubscribe()
     }
   }, [])
 
@@ -144,17 +171,12 @@ export default function MarchMadnessLeaderboard() {
 
   const handleRecordSale = async (saleData: Omit<Sale, 'id' | 'timestamp'>) => {
     try {
-      const { salesReps: updatedReps, sales: updatedSales } = ManualSync.recordSale(saleData)
-      setSalesReps(updatedReps)
-      setRecentSales(updatedSales)
-      
-      // Update logged in agent if this was their sale
-      if (loggedInAgent) {
-        const updatedAgent = updatedReps.find(rep => rep.id === loggedInAgent.id)
-        if (updatedAgent) {
-          setLoggedInAgent(updatedAgent)
-          localStorage.setItem('loggedInAgent', JSON.stringify(updatedAgent))
-        }
+      const { success } = await SupabaseSync.recordSale(saleData)
+      if (success) {
+        console.log('Sale recorded successfully')
+        // Real-time subscription will update the UI automatically
+      } else {
+        console.error('Failed to record sale')
       }
     } catch (error) {
       console.error('Error recording sale:', error)
@@ -163,17 +185,12 @@ export default function MarchMadnessLeaderboard() {
 
   const handleDeleteSale = async (saleId: string) => {
     try {
-      const { salesReps: updatedReps, sales: updatedSales } = ManualSync.deleteSale(saleId)
-      setSalesReps(updatedReps)
-      setRecentSales(updatedSales)
-      
-      // Update logged in agent
-      if (loggedInAgent) {
-        const updatedAgent = updatedReps.find(rep => rep.id === loggedInAgent.id)
-        if (updatedAgent) {
-          setLoggedInAgent(updatedAgent)
-          localStorage.setItem('loggedInAgent', JSON.stringify(updatedAgent))
-        }
+      const { success } = await SupabaseSync.deleteSale(saleId)
+      if (success) {
+        console.log('Sale deleted successfully')
+        // Real-time subscription will update the UI automatically
+      } else {
+        console.error('Failed to delete sale')
       }
     } catch (error) {
       console.error('Error deleting sale:', error)
