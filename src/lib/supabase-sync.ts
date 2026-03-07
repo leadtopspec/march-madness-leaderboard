@@ -37,6 +37,12 @@ class SupabaseSync {
       return this.currentData
     }
 
+    // Check if Supabase is available
+    if (!supabase) {
+      console.warn('⚠️ Supabase client not available, falling back to EmergencyFallback')
+      throw new Error('Supabase not configured')
+    }
+
     console.log('🚀 Initializing SupabaseSync with real-time subscriptions...')
 
     // Load initial data
@@ -53,6 +59,10 @@ class SupabaseSync {
   private static async loadData(): Promise<TournamentData> {
     try {
       console.log('📊 Loading data from Supabase...')
+      
+      if (!supabase) {
+        throw new Error('Supabase client not available')
+      }
       
       // Load sales reps
       const { data: repsData, error: repsError } = await supabase
@@ -114,6 +124,11 @@ class SupabaseSync {
 
   private static setupRealtimeSubscriptions(): void {
     console.log('📡 Setting up real-time subscriptions...')
+
+    if (!supabase) {
+      console.warn('⚠️ Cannot set up real-time subscriptions: Supabase client not available')
+      return
+    }
 
     // Subscribe to sales_reps changes
     supabase
