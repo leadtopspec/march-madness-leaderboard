@@ -69,8 +69,8 @@ const bracketParticipants: SalesRep[] = [
   { id: '34', name: 'FABIAN ESCATEL', totalSales: 0, totalPremium: 0, rank: 34, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 34 },
   { id: '35', name: 'DANIEL SUAREZ', totalSales: 0, totalPremium: 0, rank: 35, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 35 },
   { id: '36', name: 'KIRILL PAVLYCHEV', totalSales: 0, totalPremium: 0, rank: 36, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 36 },
-  { id: '37', name: 'MASON GARCIA', totalSales: 0, totalPremium: 0, rank: 37, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 37 },
-  { id: '38', name: 'SOPHIA MARTINEZ', totalSales: 0, totalPremium: 0, rank: 38, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 38 },
+  { id: '37', name: 'KADEN BAKER', totalSales: 0, totalPremium: 0, rank: 37, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 37 },
+  { id: '38', name: 'LYNDSEY NOOMAN', totalSales: 0, totalPremium: 0, rank: 38, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 38 },
 ]
 
 export default function MarchMadnessLeaderboard() {

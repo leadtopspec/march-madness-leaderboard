@@ -22,7 +22,7 @@ export default function BracketView() {
     { game: 15, team1: "DENNIS CHORNIY", team2: "CHARLIE SIMMS", winner: null },
     { game: 16, team1: "BRENON REED", team2: "KIRILL PAVLYCHEV", winner: null },
     { game: 17, team1: "LAINEY DROWN", team2: "VALERIA ALVAL", winner: null },
-    { game: 18, team1: "MASON GARCIA", team2: "SOPHIA MARTINEZ", winner: null },
+    { game: 18, team1: "KADEN BAKER", team2: "LYNDSEY NOOMAN", winner: null },
   ]
 
   return (

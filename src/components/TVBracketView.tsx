@@ -22,7 +22,7 @@ export default function TVBracketView() {
     { game: 15, team1: "DENNIS CHORNIY", team2: "CHARLIE SIMMS" },
     { game: 16, team1: "BRENON REED", team2: "KIRILL PAVLYCHEV" },
     { game: 17, team1: "LAINEY DROWN", team2: "VALERIA ALVAL" },
-    { game: 18, team1: "MASON GARCIA", team2: "SOPHIA MARTINEZ" },
+    { game: 18, team1: "KADEN BAKER", team2: "LYNDSEY NOOMAN" },
   ]
 
   return (
