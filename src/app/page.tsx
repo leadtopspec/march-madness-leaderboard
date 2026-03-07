@@ -590,7 +590,7 @@ export default function MarchMadnessLeaderboard() {
                     </div>
                     <div className="space-y-1 text-sm">
                       <div className="text-green-300 font-semibold">✅ Submitted premium only</div>
-                      <div className="text-red-300 font-semibold">❌ Rewrites don't count</div>
+                      <div className="text-red-300 font-semibold">❌ Rewrites don&apos;t count</div>
                     </div>
                   </div>
                 </div>
