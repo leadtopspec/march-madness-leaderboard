@@ -6,9 +6,17 @@ import { Tv, Award, Target, Star, Crown, Users, LogIn } from 'lucide-react'
 import LoginModal from '@/components/LoginModal'
 import AgentDashboard from '@/components/AgentDashboard'
 import BracketView from '@/components/BracketView'
+import MaintenanceMode from '@/components/MaintenanceMode'
 import { SupabaseSync, type SalesRep, type Sale } from '@/lib/supabase-sync'
 
+// MAINTENANCE MODE - Set to true to show maintenance page
+const MAINTENANCE_MODE = true
+
 export default function MarchMadnessLeaderboard() {
+  // Show maintenance mode if enabled
+  if (MAINTENANCE_MODE) {
+    return <MaintenanceMode />
+  }
   const [salesReps, setSalesReps] = useState<SalesRep[]>([])
   const [recentSalesList, setRecentSales] = useState<Sale[]>([])
   const [showLoginModal, setShowLoginModal] = useState(false)

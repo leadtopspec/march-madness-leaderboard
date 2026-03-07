@@ -5,7 +5,6 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Database types
 export interface SalesRep {
   id: string
   name: string
@@ -18,88 +17,140 @@ export interface SalesRep {
 }
 
 export interface Sale {
-  id: string
+  id?: string
   rep_name: string
   client_name: string
   policy_type: string
   premium: number
-  timestamp: string
+  timestamp?: string
 }
 
-// Database operations
-export class TournamentDB {
-  static async getSalesReps(): Promise<SalesRep[]> {
+export class SupabaseSync {
+  private static instance: SupabaseSync
+  private listeners: Array<() => void> = []
+
+  static getInstance(): SupabaseSync {
+    if (!SupabaseSync.instance) {
+      SupabaseSync.instance = new SupabaseSync()
+    }
+    return SupabaseSync.instance
+  }
+
+  // Subscribe to real-time changes
+  subscribeToChanges(callback: () => void) {
+    this.listeners.push(callback)
+    
+    // Subscribe to sales_reps changes
+    supabase
+      .channel('sales_reps_changes')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'sales_reps' }, 
+        () => {
+          this.notifyListeners()
+        }
+      )
+      .subscribe()
+
+    // Subscribe to sales changes
+    supabase
+      .channel('sales_changes')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'sales' }, 
+        () => {
+          this.notifyListeners()
+        }
+      )
+      .subscribe()
+  }
+
+  private notifyListeners() {
+    this.listeners.forEach(callback => callback())
+  }
+
+  // Get all sales reps, sorted by total_premium descending
+  async getSalesReps(): Promise<SalesRep[]> {
     const { data, error } = await supabase
       .from('sales_reps')
       .select('*')
-      .order('total_sales', { ascending: false })
       .order('total_premium', { ascending: false })
-    
+
     if (error) {
       console.error('Error fetching sales reps:', error)
       return []
     }
-    
+
     return data || []
   }
 
-  static async getSales(): Promise<Sale[]> {
+  // Get all sales
+  async getSales(): Promise<Sale[]> {
     const { data, error } = await supabase
       .from('sales')
       .select('*')
       .order('timestamp', { ascending: false })
-      .limit(20)
-    
+
     if (error) {
       console.error('Error fetching sales:', error)
       return []
     }
-    
+
     return data || []
   }
 
-  static async recordSale(sale: Omit<Sale, 'id' | 'timestamp'>): Promise<Sale | null> {
-    const newSale = {
-      ...sale,
-      timestamp: new Date().toISOString()
-    }
-
-    // Insert the sale
-    const { data: saleData, error: saleError } = await supabase
+  // Add a new sale
+  async addSale(sale: Omit<Sale, 'id' | 'timestamp'>): Promise<boolean> {
+    const { error: saleError } = await supabase
       .from('sales')
-      .insert(newSale)
-      .select()
-      .single()
-    
+      .insert([{
+        rep_name: sale.rep_name,
+        client_name: sale.client_name,
+        policy_type: sale.policy_type,
+        premium: sale.premium,
+        timestamp: new Date().toISOString()
+      }])
+
     if (saleError) {
-      console.error('Error recording sale:', saleError)
-      return null
+      console.error('Error adding sale:', saleError)
+      return false
     }
 
-    // Update the sales rep stats
-    const { error: updateError } = await supabase.rpc('update_rep_stats', {
-      rep_name: sale.rep_name,
-      premium_amount: sale.premium
-    })
+    // Update the sales rep's totals
+    const { data: currentRep } = await supabase
+      .from('sales_reps')
+      .select('total_sales, total_premium')
+      .eq('name', sale.rep_name)
+      .single()
 
-    if (updateError) {
-      console.error('Error updating rep stats:', updateError)
-      return null
+    if (currentRep) {
+      const { error: updateError } = await supabase
+        .from('sales_reps')
+        .update({
+          total_sales: currentRep.total_sales + 1,
+          total_premium: currentRep.total_premium + sale.premium,
+          last_sale: new Date().toISOString()
+        })
+        .eq('name', sale.rep_name)
+
+      if (updateError) {
+        console.error('Error updating sales rep:', updateError)
+        return false
+      }
     }
 
-    return saleData
+    return true
   }
 
-  static async deleteSale(saleId: string): Promise<boolean> {
-    // First get the sale to know which rep to update
-    const { data: sale, error: fetchError } = await supabase
+  // Delete a sale
+  async deleteSale(saleId: string): Promise<boolean> {
+    // First get the sale details
+    const { data: sale } = await supabase
       .from('sales')
-      .select('rep_name, premium')
+      .select('*')
       .eq('id', saleId)
       .single()
-    
-    if (fetchError) {
-      console.error('Error fetching sale for deletion:', fetchError)
+
+    if (!sale) {
+      console.error('Sale not found')
       return false
     }
 
@@ -108,99 +159,64 @@ export class TournamentDB {
       .from('sales')
       .delete()
       .eq('id', saleId)
-    
+
     if (deleteError) {
       console.error('Error deleting sale:', deleteError)
       return false
     }
 
-    // Update the sales rep stats (subtract the sale)
-    const { error: updateError } = await supabase.rpc('subtract_rep_stats', {
-      rep_name: sale.rep_name,
-      premium_amount: sale.premium
-    })
+    // Update the sales rep's totals
+    const { data: currentRep } = await supabase
+      .from('sales_reps')
+      .select('total_sales, total_premium')
+      .eq('name', sale.rep_name)
+      .single()
 
-    if (updateError) {
-      console.error('Error updating rep stats after deletion:', updateError)
-      return false
+    if (currentRep) {
+      const { error: updateError } = await supabase
+        .from('sales_reps')
+        .update({
+          total_sales: Math.max(0, currentRep.total_sales - 1),
+          total_premium: Math.max(0, currentRep.total_premium - sale.premium)
+        })
+        .eq('name', sale.rep_name)
+
+      if (updateError) {
+        console.error('Error updating sales rep after deletion:', updateError)
+        return false
+      }
     }
 
     return true
   }
 
-  static async initializeReps() {
-    // Check if reps are already initialized
-    const { data: existingReps } = await supabase
-      .from('sales_reps')
-      .select('id')
-      .limit(1)
-    
-    if (existingReps && existingReps.length > 0) {
-      console.log('Sales reps already initialized')
-      return
-    }
+  // Recalculate all totals (useful for data integrity)
+  async recalculateTotals(): Promise<void> {
+    const { data: sales } = await supabase
+      .from('sales')
+      .select('rep_name, premium')
 
-    // Initialize with all 34 agents
-    const initialReps = [
-      'MAX KONOPKA', 'ROBERT BRADY', 'ZION RUSSELL', 'BYRON ACHA', 'JOSE VALDEZ',
-      'JADEN POPE', 'WESTON CHRISTOPHER', 'NOLAN SCHOENBACHLER', 'THOMAS FOX', 'JEREMI KISINSKI',
-      'JAKE DOLL', 'DANIEL SUAREZ', 'RYAN BOVE', 'RYAN COOPER', 'LUCAS KONSTATOS',
-      'ANTHONY MAYROSE', 'ANDREW FLASKAMP', 'FABIAN ESCATEL', 'KAMREN HERALD', 'JAYLEN BISCHOFF',
-      'BRENNAN SKODA', 'AALYIAH WASHBURN', 'KADEN CAMENZIND', 'HANNAH FRENCH', 'MICHAEL CARNEY',
-      'TAJ DHILLON', 'JACOB LEE', 'ADRIEN RAMÍREZ-RAYO', 'DENNIS CHORNIY', 'CHARLIE SIMMS',
-      'BRENON REED', 'KIRILL PAVLYCHEV', 'LAINEY DROWN', 'VALERIA ALVAL'
-    ]
+    if (!sales) return
 
-    const repsToInsert = initialReps.map((name, index) => ({
-      id: (index + 1).toString(),
-      name,
-      total_sales: 0,
-      total_premium: 0,
-      rank: index + 1,
-      last_sale: '2024-03-01T00:00:00.000Z',
-      team: 'All In Agencies',
-      bracket_position: index + 1
-    }))
+    // Group sales by rep
+    const repTotals: { [key: string]: { count: number, total: number } } = {}
+    sales.forEach(sale => {
+      if (!repTotals[sale.rep_name]) {
+        repTotals[sale.rep_name] = { count: 0, total: 0 }
+      }
+      repTotals[sale.rep_name].count++
+      repTotals[sale.rep_name].total += sale.premium
+    })
 
-    const { error } = await supabase
-      .from('sales_reps')
-      .insert(repsToInsert)
-    
-    if (error) {
-      console.error('Error initializing sales reps:', error)
-    } else {
-      console.log('Sales reps initialized successfully')
-    }
-  }
-
-  static subscribeToChanges(onSalesRepsChange: (reps: SalesRep[]) => void, onSalesChange: (sales: Sale[]) => void) {
-    // Subscribe to sales_reps changes
-    const repsSubscription = supabase
-      .channel('sales_reps_channel')
-      .on('postgres_changes', 
-          { event: '*', schema: 'public', table: 'sales_reps' }, 
-          async () => {
-            const reps = await this.getSalesReps()
-            onSalesRepsChange(reps)
-          }
-      )
-      .subscribe()
-
-    // Subscribe to sales changes
-    const salesSubscription = supabase
-      .channel('sales_channel')
-      .on('postgres_changes',
-          { event: '*', schema: 'public', table: 'sales' },
-          async () => {
-            const sales = await this.getSales()
-            onSalesChange(sales)
-          }
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(repsSubscription)
-      supabase.removeChannel(salesSubscription)
+    // Update each rep
+    for (const [repName, totals] of Object.entries(repTotals)) {
+      await supabase
+        .from('sales_reps')
+        .update({
+          total_sales: totals.count,
+          total_premium: totals.total
+        })
+        .eq('name', repName)
     }
   }
 }
