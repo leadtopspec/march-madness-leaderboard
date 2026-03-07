@@ -122,8 +122,16 @@ export default function MarchMadnessLeaderboard() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            🏄‍♂️ AGENT LOGIN
+            AGENT LOGIN
           </motion.button>
+          <motion.a
+            href="/tv"
+            className="bg-gradient-to-r from-gray-700 to-gray-900 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:from-gray-600 hover:to-gray-800 transition-all inline-flex items-center"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            TV DISPLAY
+          </motion.a>
         </div>
 
         {/* Stats Banner */}

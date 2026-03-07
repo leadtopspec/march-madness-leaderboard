@@ -33,10 +33,7 @@ interface AgentDashboardProps {
   recentSales: Sale[]
 }
 
-export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordSale, onDeleteSale, onLogout, recentSales }: AgentDashboardProps) {
-  // Keep allAgents for future matchup functionality
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _unused = _allAgents;
+export default function AgentDashboard({ agent, allAgents, onRecordSale, onDeleteSale, onLogout, recentSales }: AgentDashboardProps) {
   const [newSale, setNewSale] = useState({
     carrier: '',
     eftDate: '',
@@ -115,7 +112,7 @@ export default function AgentDashboard({ agent, allAgents: _allAgents, onRecordS
     
     if (matchup) {
       const opponent = matchup.team1 === agent.name ? matchup.team2 : matchup.team1
-      const opponentAgent = _allAgents.find(a => a.name === opponent)
+      const opponentAgent = allAgents.find(a => a.name === opponent)
       return { opponent: opponentAgent, matchup, gameNumber: matchup.game }
     }
     
