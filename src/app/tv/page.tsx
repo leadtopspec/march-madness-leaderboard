@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Trophy, Crown, Award, Star, Target } from 'lucide-react'
 import TVBracketView from '@/components/TVBracketView'
-import SupabaseSync, { type SalesRep, type Sale } from '@/lib/supabase-sync'
+import HybridSync, { type SalesRep, type Sale } from '@/lib/hybrid-sync'
 
 interface SalesRep {
   id: string
@@ -72,13 +72,13 @@ export default function TVMode() {
     setIsClient(true)
     setCurrentTime(new Date())
     
-    // Initialize Supabase sync system for TV with real-time subscriptions
+    // Initialize HybridSync for TV (Supabase + Polling)
     const initializeData = async () => {
       try {
-        console.log('📺 TV: Initializing SupabaseSync...')
-        const data = await SupabaseSync.initialize()
+        console.log('📺 TV: Initializing HybridSync...')
+        const data = await HybridSync.initialize()
         setSalesReps(data.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
-        console.log('📺 TV: SupabaseSync initialized with real-time')
+        console.log('📺 TV: HybridSync initialized')
       } catch (error) {
         console.error('❌ TV: Failed to initialize sync:', error)
       }
@@ -86,9 +86,9 @@ export default function TVMode() {
     
     initializeData()
     
-    // Subscribe to real-time Supabase updates
-    const unsubscribe = SupabaseSync.subscribe((updatedData) => {
-      console.log('📺 TV: Received real-time update from Supabase')
+    // Subscribe to hybrid updates (real-time + polling)
+    const unsubscribe = HybridSync.subscribe((updatedData) => {
+      console.log('📺 TV: Received hybrid sync update')
       setSalesReps(updatedData.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
     })
     
@@ -173,7 +173,7 @@ export default function TVMode() {
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
       unsubscribe()
-      SupabaseSync.cleanup()
+      HybridSync.cleanup()
     }
   }, [])
 
