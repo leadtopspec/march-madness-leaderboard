@@ -192,11 +192,11 @@ class SupabaseSync {
 
       console.log('✅ Sale added to database')
 
-      // Update the sales rep's totals using a more flexible name matching approach
+      // Update the sales rep's totals using EXACT name matching
       const { data: existingRep, error: repError } = await supabase
         .from('sales_reps')
         .select('*')
-        .or(`name.ilike.%${saleData.repName}%,name.ilike.%${saleData.repName.split(' ')[0]}%`)
+        .eq('name', saleData.repName)
         .limit(1)
         .single()
 

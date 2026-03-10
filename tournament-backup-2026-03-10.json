@@ -1,0 +1,827 @@
+{
+  "timestamp": "2026-03-10T15:10:42.210Z",
+  "salesReps": [
+    {
+      "id": "1",
+      "name": "MAX KONOPKA",
+      "total_sales": 4,
+      "total_premium": 5811.6,
+      "rank": 3,
+      "last_sale": "2026-03-10T00:33:39.794+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 1,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "15",
+      "name": "LUCAS KONSTATOS",
+      "total_sales": 6,
+      "total_premium": 4465.4400000000005,
+      "rank": 1,
+      "last_sale": "2026-03-10T02:30:37.885+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 15,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "22",
+      "name": "AALYIAH WASHBURN",
+      "total_sales": 4,
+      "total_premium": 4438.76,
+      "rank": 4,
+      "last_sale": "2026-03-09T22:14:32.686+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 22,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "5",
+      "name": "JOSE VALDEZ",
+      "total_sales": 5,
+      "total_premium": 4286.76,
+      "rank": 2,
+      "last_sale": "2026-03-09T22:48:25.005+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 5,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "13",
+      "name": "RYAN BOVE",
+      "total_sales": 2,
+      "total_premium": 4142.16,
+      "rank": 9,
+      "last_sale": "2026-03-09T23:15:33.37+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 13,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "9",
+      "name": "THOMAS FOX",
+      "total_sales": 3,
+      "total_premium": 3503.64,
+      "rank": 5,
+      "last_sale": "2026-03-09T23:32:58.005+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 9,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "2",
+      "name": "ROBERT BRADY",
+      "total_sales": 3,
+      "total_premium": 3058.17,
+      "rank": 6,
+      "last_sale": "2026-03-10T02:03:13.511+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 2,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "18",
+      "name": "FABIAN ESCATEL",
+      "total_sales": 3,
+      "total_premium": 2802.48,
+      "rank": 7,
+      "last_sale": "2026-03-09T23:40:01.504+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 18,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "32",
+      "name": "KIRILL PAVLYCHEV",
+      "total_sales": 3,
+      "total_premium": 2686.32,
+      "rank": 8,
+      "last_sale": "2026-03-10T02:52:01.502+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 32,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "34",
+      "name": "VALERIA ALVAL",
+      "total_sales": 2,
+      "total_premium": 2188.08,
+      "rank": 10,
+      "last_sale": "2026-03-09T20:56:52.624+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 34,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "8",
+      "name": "NOLAN SCHOENBACHLER",
+      "total_sales": 1,
+      "total_premium": 2098.32,
+      "rank": 11,
+      "last_sale": "2026-03-10T14:27:45.13+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 8,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "17",
+      "name": "ANDREW FLASKAMP",
+      "total_sales": 1,
+      "total_premium": 1034.4,
+      "rank": 12,
+      "last_sale": "2026-03-09T22:28:47.268+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 17,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "10",
+      "name": "JEREMI KISINSKI",
+      "total_sales": 1,
+      "total_premium": 1023,
+      "rank": 13,
+      "last_sale": "2026-03-10T14:48:29.794+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 10,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "4",
+      "name": "BYRON ACHA",
+      "total_sales": 1,
+      "total_premium": 982.32,
+      "rank": 14,
+      "last_sale": "2026-03-07T21:58:18.848+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 4,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "16",
+      "name": "ANTHONY MAYROSE",
+      "total_sales": 1,
+      "total_premium": 871.27,
+      "rank": 15,
+      "last_sale": "2026-03-07T22:06:53.08+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 16,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "19",
+      "name": "KAMREN HERALD",
+      "total_sales": 1,
+      "total_premium": 765.72,
+      "rank": 16,
+      "last_sale": "2026-03-07T22:09:48.79+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 19,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "31",
+      "name": "BRENON REED",
+      "total_sales": 1,
+      "total_premium": 356.4,
+      "rank": 16,
+      "last_sale": "2026-03-08T06:06:14.98+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 31,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "25",
+      "name": "MICHAEL CARNEY",
+      "total_sales": 1,
+      "total_premium": 79,
+      "rank": 17,
+      "last_sale": "2026-03-09T23:09:01.741+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 25,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "33",
+      "name": "LAINEY DROWN",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 35,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 33,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "26",
+      "name": "TAJ DHILLON",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 34,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 26,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "28",
+      "name": "ADRIEN RAMÍREZ-RAYO",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 20,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 28,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "6",
+      "name": "JADEN POPE",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 33,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 6,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "3",
+      "name": "ZION RUSSELL",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 19,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 3,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "14",
+      "name": "RYAN COOPER",
+      "total_sales": 1,
+      "total_premium": 0,
+      "rank": 18,
+      "last_sale": "2026-03-09T14:12:45.692+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 14,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "7",
+      "name": "WESTON CHRISTOPHER",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 32,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 7,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "29",
+      "name": "DENNIS CHORNIY",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 31,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 29,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "11",
+      "name": "JAKE DOLL",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 30,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 11,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "30",
+      "name": "CHARLIE SIMMS",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 29,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 30,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "20",
+      "name": "TIVON BURNS",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 28,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 20,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "21",
+      "name": "BRENNAN SKODA",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 27,
+      "last_sale": "2026-03-09T22:36:55.762+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 21,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "35",
+      "name": "KADEN BAKER",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 18,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 35,
+      "created_at": "2026-03-07T20:14:42.685673+00:00",
+      "updated_at": "2026-03-07T20:14:42.685673+00:00"
+    },
+    {
+      "id": "12",
+      "name": "DANIEL SUAREZ",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 19,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 12,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "24",
+      "name": "HANNAH FRENCH",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 21,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 24,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "23",
+      "name": "KADEN CAMENZIND",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 22,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 23,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    },
+    {
+      "id": "36",
+      "name": "LYNDSEY NOOMAN",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 36,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 36,
+      "created_at": "2026-03-07T20:14:42.685673+00:00",
+      "updated_at": "2026-03-07T20:14:42.685673+00:00"
+    },
+    {
+      "id": "27",
+      "name": "JACOB LEE",
+      "total_sales": 0,
+      "total_premium": 0,
+      "rank": 25,
+      "last_sale": "2024-03-01T00:00:00+00:00",
+      "team": "All In Agencies",
+      "bracket_position": 27,
+      "created_at": "2026-03-07T18:06:44.018685+00:00",
+      "updated_at": "2026-03-07T18:06:44.018685+00:00"
+    }
+  ],
+  "sales": [
+    {
+      "id": "b32e3f17-c1c8-483e-bfaa-de0b93b0b78b",
+      "rep_name": "JEREMI KISINSKI",
+      "client_name": "Americo | Bronze",
+      "policy_type": "Whole Life",
+      "premium": 1023,
+      "timestamp": "2026-03-10T14:48:28.996+00:00",
+      "created_at": "2026-03-10T14:48:28.491433+00:00"
+    },
+    {
+      "id": "1f3bbcd2-04f5-42df-8315-4da44ebe7af5",
+      "rep_name": "NOLAN SCHOENBACHLER",
+      "client_name": "AMAM | FEX",
+      "policy_type": "Whole Life",
+      "premium": 2098.32,
+      "timestamp": "2026-03-10T14:27:44.371+00:00",
+      "created_at": "2026-03-10T14:27:44.798671+00:00"
+    },
+    {
+      "id": "cc808a13-3c8b-4ca7-8d6c-a14ebc9418cb",
+      "rep_name": "KIRILL PAVLYCHEV",
+      "client_name": "AETNA | INTEGRITY",
+      "policy_type": "Whole Life",
+      "premium": 586.32,
+      "timestamp": "2026-03-10T02:52:00.691+00:00",
+      "created_at": "2026-03-10T02:52:01.222082+00:00"
+    },
+    {
+      "id": "d603e59c-f4fd-4cdc-ac0d-6c82e86e8219",
+      "rep_name": "LUCAS KONSTATOS",
+      "client_name": "AMERICAN AMICABLE | Bronze lead ",
+      "policy_type": "Whole Life",
+      "premium": 659.52,
+      "timestamp": "2026-03-10T02:30:37.006+00:00",
+      "created_at": "2026-03-10T02:30:37.49707+00:00"
+    },
+    {
+      "id": "898eef8b-215d-4e54-b57e-cc9a7e579a09",
+      "rep_name": "ROBERT BRADY",
+      "client_name": "AMAM | Integrity",
+      "policy_type": "Whole Life",
+      "premium": 700.2,
+      "timestamp": "2026-03-10T02:03:12.995+00:00",
+      "created_at": "2026-03-10T02:03:13.156647+00:00"
+    },
+    {
+      "id": "ca89112d-6cda-4e6a-92b2-c3149760c9b6",
+      "rep_name": "MAX KONOPKA",
+      "client_name": "Aetna | ILC",
+      "policy_type": "Whole Life",
+      "premium": 2648,
+      "timestamp": "2026-03-10T00:33:39.108+00:00",
+      "created_at": "2026-03-10T00:33:39.314815+00:00"
+    },
+    {
+      "id": "64270b7c-fdd3-422d-babe-71b525019238",
+      "rep_name": "FABIAN ESCATEL",
+      "client_name": "American Amicable  | Silver",
+      "policy_type": "Term Life",
+      "premium": 325.44,
+      "timestamp": "2026-03-09T23:40:01.025+00:00",
+      "created_at": "2026-03-09T23:40:01.220406+00:00"
+    },
+    {
+      "id": "d56d33e0-0af8-49a3-a7e1-b79c8fea3ec1",
+      "rep_name": "THOMAS FOX",
+      "client_name": "Corebridge | Silver",
+      "policy_type": "Whole Life",
+      "premium": 769.32,
+      "timestamp": "2026-03-09T23:32:57.481+00:00",
+      "created_at": "2026-03-09T23:32:57.67967+00:00"
+    },
+    {
+      "id": "b303dec1-6514-41a9-a950-16e9cbc8a7b6",
+      "rep_name": "RYAN COOPER",
+      "client_name": "AMAM | Integrity ",
+      "policy_type": "Whole Life",
+      "premium": 2071.08,
+      "timestamp": "2026-03-09T23:15:32.664+00:00",
+      "created_at": "2026-03-09T23:15:33.062395+00:00"
+    },
+    {
+      "id": "e449ca2c-709e-4244-af95-b0a7ff9d00e4",
+      "rep_name": "MICHAEL CARNEY",
+      "client_name": "Aetna | Silver ",
+      "policy_type": "Whole Life",
+      "premium": 79,
+      "timestamp": "2026-03-09T23:09:00.642+00:00",
+      "created_at": "2026-03-09T23:09:00.789788+00:00"
+    },
+    {
+      "id": "ecf5573d-57dd-4fff-914d-d9eec48da26b",
+      "rep_name": "LUCAS KONSTATOS",
+      "client_name": "MOO IUL | RLEADZ",
+      "policy_type": "IUL",
+      "premium": 322.56,
+      "timestamp": "2026-03-09T23:02:18.146+00:00",
+      "created_at": "2026-03-09T23:02:18.445057+00:00"
+    },
+    {
+      "id": "0f0391bf-5200-41b0-8f35-163e058bd85b",
+      "rep_name": "JOSE VALDEZ",
+      "client_name": "MOO IULE | Self Gen",
+      "policy_type": "IUL",
+      "premium": 1331.52,
+      "timestamp": "2026-03-09T22:44:28.17+00:00",
+      "created_at": "2026-03-09T22:44:28.274302+00:00"
+    },
+    {
+      "id": "a8b17ac3-6a42-4bda-8c75-d1b9176ea75c",
+      "rep_name": "JOSE VALDEZ",
+      "client_name": "TRANSAMERICA FEX | Self Gen",
+      "policy_type": "Whole Life",
+      "premium": 654,
+      "timestamp": "2026-03-09T22:43:56.95+00:00",
+      "created_at": "2026-03-09T22:43:57.06585+00:00"
+    },
+    {
+      "id": "0f221c35-1ee0-4e14-8a2f-38f3e9f51fea",
+      "rep_name": "JOSE VALDEZ",
+      "client_name": "MOO GRADED | Self Gen",
+      "policy_type": "Whole Life",
+      "premium": 923.04,
+      "timestamp": "2026-03-09T22:43:03.115+00:00",
+      "created_at": "2026-03-09T22:43:03.665675+00:00"
+    },
+    {
+      "id": "7cfd650d-7f0f-4f3a-85bf-802e928eb6a6",
+      "rep_name": "THOMAS FOX",
+      "client_name": "Royal Neighbors | Silver ",
+      "policy_type": "Whole Life",
+      "premium": 1242.96,
+      "timestamp": "2026-03-09T22:35:26.145+00:00",
+      "created_at": "2026-03-09T22:35:26.779149+00:00"
+    },
+    {
+      "id": "3e39f8bd-fa30-44f4-bd4a-a770679c07f9",
+      "rep_name": "ANDREW FLASKAMP",
+      "client_name": "TransAm  | Bronze",
+      "policy_type": "Whole Life",
+      "premium": 1034.4,
+      "timestamp": "2026-03-09T22:28:46.421+00:00",
+      "created_at": "2026-03-09T22:28:46.83193+00:00"
+    },
+    {
+      "id": "a187d0b2-c847-4150-90f0-8a18b4b7921b",
+      "rep_name": "AALYIAH WASHBURN",
+      "client_name": "American Amicable  | silver ",
+      "policy_type": "Whole Life",
+      "premium": 421.32,
+      "timestamp": "2026-03-09T22:14:32.106+00:00",
+      "created_at": "2026-03-09T22:14:32.255271+00:00"
+    },
+    {
+      "id": "958d29a5-8179-4361-a2f2-b3534e1d0f80",
+      "rep_name": "AALYIAH WASHBURN",
+      "client_name": "Mutual  | VET",
+      "policy_type": "Whole Life",
+      "premium": 3296,
+      "timestamp": "2026-03-09T21:09:39.642+00:00",
+      "created_at": "2026-03-09T21:09:39.930012+00:00"
+    },
+    {
+      "id": "2c1472a0-62cc-44d2-9f05-77923d39a88e",
+      "rep_name": "FABIAN ESCATEL",
+      "client_name": "Corebridge | Silver",
+      "policy_type": "Whole Life",
+      "premium": 1019.64,
+      "timestamp": "2026-03-09T20:59:07.546+00:00",
+      "created_at": "2026-03-09T20:59:07.735362+00:00"
+    },
+    {
+      "id": "74467b29-30b9-42f6-ae48-2e417d491b69",
+      "rep_name": "VALERIA ALVAL",
+      "client_name": "Americo | ILC Bronze",
+      "policy_type": "Whole Life",
+      "premium": 1710.48,
+      "timestamp": "2026-03-09T20:56:52.174+00:00",
+      "created_at": "2026-03-09T20:56:52.347405+00:00"
+    },
+    {
+      "id": "367ab35c-93fc-4598-8e1f-17b0752f97e7",
+      "rep_name": "LUCAS KONSTATOS",
+      "client_name": "ROYAL NEIGHBORS | BRONZE LEAD",
+      "policy_type": "Whole Life",
+      "premium": 1744.8,
+      "timestamp": "2026-03-09T20:23:58.721+00:00",
+      "created_at": "2026-03-09T20:23:58.830884+00:00"
+    },
+    {
+      "id": "0c68b36a-77f4-4792-98c3-13d3897dad66",
+      "rep_name": "LUCAS KONSTATOS",
+      "client_name": "MUTUAL OF OMAHA | RLEADZ inbound REF",
+      "policy_type": "IUL",
+      "premium": 283.92,
+      "timestamp": "2026-03-09T20:23:13.411+00:00",
+      "created_at": "2026-03-09T20:23:13.62867+00:00"
+    },
+    {
+      "id": "4285e5b9-290d-4337-affe-d464d68d1b7b",
+      "rep_name": "LUCAS KONSTATOS",
+      "client_name": "AMERICAN AMICABLE | RLEADZ INBOUND",
+      "policy_type": "Whole Life",
+      "premium": 473.52,
+      "timestamp": "2026-03-09T20:22:24.394+00:00",
+      "created_at": "2026-03-09T20:22:24.694727+00:00"
+    },
+    {
+      "id": "46a20587-97ab-4baf-84fd-532a3c1a8c7f",
+      "rep_name": "LUCAS KONSTATOS",
+      "client_name": "TRANSAMERICA | RLEADZ VET",
+      "policy_type": "Whole Life",
+      "premium": 981.12,
+      "timestamp": "2026-03-09T20:20:16.115+00:00",
+      "created_at": "2026-03-09T20:20:16.239591+00:00"
+    },
+    {
+      "id": "28d98be3-0d6b-4aa5-96be-4c1b9b2c5eaa",
+      "rep_name": "MAX KONOPKA",
+      "client_name": "Aetna | Ilc",
+      "policy_type": "Whole Life",
+      "premium": 502,
+      "timestamp": "2026-03-09T15:45:44.232+00:00",
+      "created_at": "2026-03-09T15:45:44.427126+00:00"
+    },
+    {
+      "id": "0799814f-2dd1-4dbc-9d59-e45e3588a9fc",
+      "rep_name": "ROBERT BRADY",
+      "client_name": "American Amicable  | Integrity connect",
+      "policy_type": "Whole Life",
+      "premium": 887.61,
+      "timestamp": "2026-03-09T15:32:42.305+00:00",
+      "created_at": "2026-03-09T15:32:42.710128+00:00"
+    },
+    {
+      "id": "bf080873-ec0b-4b27-81d5-55355029683d",
+      "rep_name": "ROBERT BRADY",
+      "client_name": "AIG Corebridge  | Integrity connect",
+      "policy_type": "Whole Life",
+      "premium": 1470.36,
+      "timestamp": "2026-03-09T15:30:27.66+00:00",
+      "created_at": "2026-03-09T15:30:27.946331+00:00"
+    },
+    {
+      "id": "9a04f7bb-fec5-4210-bc97-4f1d4149e60f",
+      "rep_name": "RYAN COOPER",
+      "client_name": "Corebridge | Bronze",
+      "policy_type": "Whole Life",
+      "premium": 601.44,
+      "timestamp": "2026-03-09T14:12:44.98+00:00",
+      "created_at": "2026-03-09T14:12:45.351135+00:00"
+    },
+    {
+      "id": "1272ccaa-aad5-47dd-a933-f24432f8aa7a",
+      "rep_name": "KIRILL PAVLYCHEV",
+      "client_name": "Mutual Of Omaha | Bronze IL",
+      "policy_type": "Whole Life",
+      "premium": 660,
+      "timestamp": "2026-03-09T13:22:22.233+00:00",
+      "created_at": "2026-03-09T13:22:22.742668+00:00"
+    },
+    {
+      "id": "b5927e65-a98b-44df-9313-fe9a362ded8d",
+      "rep_name": "BRENON REED",
+      "client_name": "Corebridge | Goat Fex",
+      "policy_type": "Whole Life",
+      "premium": 356.4,
+      "timestamp": "2026-03-08T06:06:14.521+00:00",
+      "created_at": "2026-03-08T06:06:14.648126+00:00"
+    },
+    {
+      "id": "c2266af0-6f72-489c-b16e-50fd56c3e08b",
+      "rep_name": "JOSE VALDEZ",
+      "client_name": "TransAmerica | Referral",
+      "policy_type": "Whole Life",
+      "premium": 925.2,
+      "timestamp": "2026-03-08T06:03:05.679+00:00",
+      "created_at": "2026-03-08T06:03:05.783781+00:00"
+    },
+    {
+      "id": "0eb05dbe-0c69-45b7-940a-d04a0afd913d",
+      "rep_name": "JOSE VALDEZ",
+      "client_name": "TransAmerica | ??",
+      "policy_type": "Whole Life",
+      "premium": 453,
+      "timestamp": "2026-03-08T06:02:11.194+00:00",
+      "created_at": "2026-03-08T06:02:11.582845+00:00"
+    },
+    {
+      "id": "4fdb6ea5-2a78-4d16-8894-75674f025994",
+      "rep_name": "AALYIAH WASHBURN",
+      "client_name": "mutual  | ref ",
+      "policy_type": "IUL",
+      "premium": 360.72,
+      "timestamp": "2026-03-08T03:17:11.114+00:00",
+      "created_at": "2026-03-08T03:17:11.218136+00:00"
+    },
+    {
+      "id": "bbdc889d-af0e-4dd6-af25-d9092b808f20",
+      "rep_name": "AALYIAH WASHBURN",
+      "client_name": "mutual  | Ref",
+      "policy_type": "IUL",
+      "premium": 360.72,
+      "timestamp": "2026-03-08T03:16:40.703+00:00",
+      "created_at": "2026-03-08T03:16:40.848137+00:00"
+    },
+    {
+      "id": "dc4ee5d0-6d0f-4be9-bc6f-7fb6ee50e644",
+      "rep_name": "KAMREN HERALD",
+      "client_name": "Mutual of Omaha | Goat Leads",
+      "policy_type": "Whole Life",
+      "premium": 765.72,
+      "timestamp": "2026-03-07T22:09:48.328+00:00",
+      "created_at": "2026-03-07T22:09:48.535751+00:00"
+    },
+    {
+      "id": "bfdfeabe-63e1-4754-be68-9cdacc2b1f22",
+      "rep_name": "ANTHONY MAYROSE",
+      "client_name": "Transamerica | Bronze",
+      "policy_type": "Whole Life",
+      "premium": 871.27,
+      "timestamp": "2026-03-07T22:06:52.386+00:00",
+      "created_at": "2026-03-07T22:06:52.651325+00:00"
+    },
+    {
+      "id": "5458e117-1fb1-4acf-9137-6b643bf3d8cf",
+      "rep_name": "KIRILL PAVLYCHEV",
+      "client_name": "Corebridge | ????",
+      "policy_type": "Whole Life",
+      "premium": 1440,
+      "timestamp": "2026-03-07T22:02:39.64+00:00",
+      "created_at": "2026-03-07T22:02:40.090341+00:00"
+    },
+    {
+      "id": "5a9382de-ec84-40e5-9169-58b2559b291d",
+      "rep_name": "BYRON ACHA",
+      "client_name": "American Amicable | Bronze",
+      "policy_type": "Whole Life",
+      "premium": 982.32,
+      "timestamp": "2026-03-07T21:58:18.276+00:00",
+      "created_at": "2026-03-07T21:58:18.585893+00:00"
+    },
+    {
+      "id": "8ab8cd8a-62a3-4022-a224-38924da7ebb0",
+      "rep_name": "FABIAN ESCATEL",
+      "client_name": "American Amicable | ???",
+      "policy_type": "Whole Life",
+      "premium": 1457.4,
+      "timestamp": "2026-03-07T21:56:38.69+00:00",
+      "created_at": "2026-03-07T21:56:38.856092+00:00"
+    },
+    {
+      "id": "8f8d9940-0592-46c9-8039-f4f0251a4b53",
+      "rep_name": "VALERIA ALVAL",
+      "client_name": "Royal Neighbors | ???",
+      "policy_type": "Whole Life",
+      "premium": 477.6,
+      "timestamp": "2026-03-07T21:54:21.997+00:00",
+      "created_at": "2026-03-07T21:54:22.252471+00:00"
+    },
+    {
+      "id": "1fc710fb-eef5-4de5-829b-69677142d22f",
+      "rep_name": "MAX KONOPKA",
+      "client_name": "Ethos | ???",
+      "policy_type": "Whole Life",
+      "premium": 1788,
+      "timestamp": "2026-03-07T21:51:32.449+00:00",
+      "created_at": "2026-03-07T21:51:32.792612+00:00"
+    },
+    {
+      "id": "bff6cc3e-f58a-4637-90b4-06c96c62d06c",
+      "rep_name": "MAX KONOPKA",
+      "client_name": "Aetna | ???",
+      "policy_type": "Whole Life",
+      "premium": 873.6,
+      "timestamp": "2026-03-07T21:50:04.268+00:00",
+      "created_at": "2026-03-07T21:50:04.696396+00:00"
+    },
+    {
+      "id": "5b30b162-c2e4-4bee-9758-bd320b7c1b63",
+      "rep_name": "THOMAS FOX",
+      "client_name": "Mutual Of Omaha | Bronze",
+      "policy_type": "IUL",
+      "premium": 1491.36,
+      "timestamp": "2026-03-07T21:41:53.632+00:00",
+      "created_at": "2026-03-07T21:41:53.797219+00:00"
+    }
+  ],
+  "notes": "Backup before fixing Ryan Cooper/Ryan Bove confusion issue"
+}
