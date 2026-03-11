@@ -38,7 +38,7 @@ const bracketParticipants: SalesRep[] = [
   { id: '3', name: 'HANNAH FRENCH', totalSales: 0, totalPremium: 0, rank: 3, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 3 },
   { id: '4', name: 'TAJ DHILLON', totalSales: 0, totalPremium: 0, rank: 4, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 4 },
   { id: '5', name: 'KADEN BAKER', totalSales: 0, totalPremium: 0, rank: 5, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 5 },
-  { id: '6', name: 'LYNDSEY NOOMAN', totalSales: 0, totalPremium: 0, rank: 6, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 6 },
+  { id: '6', name: 'LINDSEY NOONAN', totalSales: 0, totalPremium: 0, rank: 6, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 6 },
   { id: '7', name: 'MAX KONOPKA', totalSales: 0, totalPremium: 0, rank: 7, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 7 },
   { id: '8', name: 'MICHAEL CARNEY', totalSales: 0, totalPremium: 0, rank: 8, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 8 },
   { id: '9', name: 'AALYIAH WASHBURN', totalSales: 0, totalPremium: 0, rank: 9, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 9 },
@@ -70,7 +70,7 @@ const bracketParticipants: SalesRep[] = [
   { id: '35', name: 'DANIEL SUAREZ', totalSales: 0, totalPremium: 0, rank: 35, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 35 },
   { id: '36', name: 'KIRILL PAVLYCHEV', totalSales: 0, totalPremium: 0, rank: 36, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 36 },
   { id: '37', name: 'KADEN BAKER', totalSales: 0, totalPremium: 0, rank: 37, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 37 },
-  { id: '38', name: 'LYNDSEY NOOMAN', totalSales: 0, totalPremium: 0, rank: 38, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 38 },
+  { id: '38', name: 'LINDSEY NOONAN', totalSales: 0, totalPremium: 0, rank: 38, lastSale: FIXED_DATE, team: 'All In Agencies', bracketPosition: 38 },
 ]
 
 export default function MarchMadnessLeaderboard() {
