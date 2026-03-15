@@ -160,8 +160,8 @@ export default function BracketView() {
                   <div className="text-white truncate">G{matchup.game}: {matchup.team1}</div>
                   <div className="text-gray-300 text-[7px] text-center">vs</div>
                   <div className="text-white truncate">{matchup.team2}</div>
-                  <div className="text-green-400 text-[7px] text-center mt-0.5">
-                    {matchup.winner ? `✓ ${matchup.winner.split(' ')[0]}` : "TBD"}
+                  <div className={`text-[7px] text-center mt-0.5 ${matchup.winner ? 'text-green-400' : (matchup.game === 18 ? 'text-red-400' : 'text-gray-400')}`}>
+                    {matchup.winner ? `✓ ${matchup.winner.split(' ')[0]}` : (matchup.game === 18 ? "DNQ" : "TBD")}
                   </div>
                 </motion.div>
               ))}
@@ -311,8 +311,8 @@ export default function BracketView() {
                   <div className="text-white text-right truncate">G{matchup.game}: {matchup.team1}</div>
                   <div className="text-gray-300 text-[7px] text-center">vs</div>
                   <div className="text-white text-right truncate">{matchup.team2}</div>
-                  <div className="text-green-400 text-[7px] text-center mt-0.5">
-                    {matchup.winner ? `✓ ${matchup.winner.split(' ')[0]}` : "TBD"}
+                  <div className={`text-[7px] text-center mt-0.5 ${matchup.winner ? 'text-green-400' : (matchup.game === 18 ? 'text-red-400' : 'text-gray-400')}`}>
+                    {matchup.winner ? `✓ ${matchup.winner.split(' ')[0]}` : (matchup.game === 18 ? "DNQ" : "TBD")}
                   </div>
                 </motion.div>
               ))}
