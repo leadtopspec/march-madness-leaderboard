@@ -680,7 +680,7 @@ export default function MarchMadnessLeaderboard() {
                 <div className="text-lg font-bold text-white">{currentRound.description}</div>
                 <div className="text-sm text-white/70">
                   {currentRound.name === "Play-In" ? "18 Active Matchups" : 
-                   currentRound.name === "Round 2" ? "9 Active Matchups" : 
+                   currentRound.name === "Round 2" ? "8 Active Matchups" : 
                    currentRound.name === "Round 3" ? "4 Active Matchups" : 
                    currentRound.name === "Final Four" ? "2 Active Matchups" : 
                    "Championship Match"}

@@ -1,8 +1,56 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 
 export default function BracketView() {
+  const [currentRound, setCurrentRound] = useState<{name: string, description: string, matchups: any[]}>({
+    name: "Round 2", 
+    description: "WEEK 2 ROUND 2",
+    matchups: []
+  })
+
+  useEffect(() => {
+    // Determine current tournament round based on date
+    const updateCurrentRound = () => {
+      const now = new Date()
+      const playInStart = new Date('2026-03-07T06:00:00.000Z') // March 7, 12:00 AM CST
+      const round2Start = new Date('2026-03-15T06:00:00.000Z')  // March 15, 12:00 AM CST
+      const round3Start = new Date('2026-03-21T06:00:00.000Z')  // March 21, 12:00 AM CST
+      
+      if (now < playInStart) {
+        setCurrentRound({
+          name: "Pre-Tournament", 
+          description: "TOURNAMENT STARTS SOON",
+          matchups: playInRoundMatchups
+        })
+      } else if (now < round2Start) {
+        setCurrentRound({
+          name: "Play-In", 
+          description: "WEEK 1 PLAY-IN ROUND",
+          matchups: playInRoundMatchups
+        })
+      } else if (now < round3Start) {
+        setCurrentRound({
+          name: "Round 2", 
+          description: "WEEK 2 ROUND 2",
+          matchups: round2Matchups
+        })
+      } else {
+        setCurrentRound({
+          name: "Round 3", 
+          description: "WEEK 3 ELITE 8",
+          matchups: []
+        })
+      }
+    }
+    
+    updateCurrentRound()
+    const timer = setInterval(updateCurrentRound, 60000) // Check every minute
+    
+    return () => clearInterval(timer)
+  }, [])
+
   // Week 1 - Play-In Round Matchups (18 games total)
   const playInRoundMatchups = [
     { game: 1, team1: "MAX KONOPKA", team2: "ROBERT BRADY", winner: null },
@@ -25,6 +73,18 @@ export default function BracketView() {
     { game: 18, team1: "KADEN BAKER", team2: "LINDSEY NOONAN", winner: null },
   ]
 
+  // Week 2 - Round 2 Matchups (8 games total)
+  const round2Matchups = [
+    { game: 1, team1: "MAX KONOPKA", team2: "BYRON ACHA", winner: null },
+    { game: 2, team1: "JOSE VALDEZ", team2: "NOLAN SCHOENBACHLER", winner: null },
+    { game: 3, team1: "THOMAS FOX", team2: "VALERIA ALVAL", winner: null },
+    { game: 4, team1: "RYAN COOPER", team2: "LUCAS KONSTATOS", winner: null },
+    { game: 5, team1: "FABIAN ESCATEL", team2: "KAMREN HERALD", winner: null },
+    { game: 6, team1: "AALYIAH WASHBURN", team2: "HANNAH FRENCH", winner: null },
+    { game: 7, team1: "TAJ DHILLON", team2: "DENNIS CHORNIY", winner: null },
+    { game: 8, team1: "JACOB LEE", team2: "KIRILL PAVLYCHEV", winner: null },
+  ]
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900 p-4 lg:p-8">
       {/* Tournament Header */}
@@ -39,11 +99,13 @@ export default function BracketView() {
         </motion.div>
       </div>
 
-      {/* Play-In Round Matchups */}
+      {/* Current Round Matchups */}
       <div className="mb-8">
-        <h3 className="text-center text-red-300 font-bold text-lg mb-6">🥊 LIVE TOURNAMENT MATCHUPS 🥊</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-7xl mx-auto">
-          {playInRoundMatchups.map((matchup, index) => (
+        <h3 className="text-center text-red-300 font-bold text-lg mb-6">🥊 {currentRound.description} MATCHUPS 🥊</h3>
+        <div className={`grid gap-4 max-w-7xl mx-auto ${
+          currentRound.matchups.length <= 8 ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+        }`}>
+          {currentRound.matchups.map((matchup, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, scale: 0.9 }}
@@ -83,13 +145,13 @@ export default function BracketView() {
       <div className="w-full mx-auto overflow-x-auto pb-4">
         <div className="flex items-center justify-between min-w-[320px] sm:min-w-[480px] md:min-w-[600px] lg:min-w-[800px] gap-1 md:gap-2 lg:gap-4 px-1 sm:px-2">
           
-          {/* Left Side - Round 1 */}
+          {/* Left Side - Current Round */}
           <div className="flex flex-col min-w-[65px] sm:min-w-[80px] md:min-w-[110px] lg:min-w-[140px]">
             <div className="text-center text-white font-bold text-[8px] sm:text-[10px] md:text-xs lg:text-sm mb-2 md:mb-3 bg-red-600/80 rounded-lg py-1 md:py-2 border border-red-400">
-              PLAY-IN LEFT
+              {currentRound.name} LEFT
             </div>
             <div className="space-y-2">
-              {playInRoundMatchups.slice(0, 9).map((matchup, index) => (
+              {currentRound.matchups.slice(0, Math.ceil(currentRound.matchups.length / 2)).map((matchup, index) => (
                 <motion.div
                   key={`left-${index}`}
                   initial={{ opacity: 0, x: -30 }}
@@ -222,13 +284,13 @@ export default function BracketView() {
             </div>
           </div>
 
-          {/* Right Side - Round 1 */}
+          {/* Right Side - Current Round */}
           <div className="flex flex-col min-w-[65px] sm:min-w-[80px] md:min-w-[110px] lg:min-w-[140px]">
             <div className="text-center text-white font-bold text-[8px] sm:text-[10px] md:text-xs lg:text-sm mb-2 md:mb-3 bg-red-600/80 rounded-lg py-1 md:py-2 border border-red-400">
-              PLAY-IN RIGHT
+              {currentRound.name} RIGHT
             </div>
             <div className="space-y-2">
-              {playInRoundMatchups.slice(9, 18).map((matchup, index) => (
+              {currentRound.matchups.slice(Math.ceil(currentRound.matchups.length / 2)).map((matchup, index) => (
                 <motion.div
                   key={`right-${index}`}
                   initial={{ opacity: 0, x: 30 }}
@@ -255,7 +317,7 @@ export default function BracketView() {
           className="bg-green-600 text-white px-4 lg:px-6 py-2 lg:py-3 rounded-xl shadow-lg inline-flex items-center gap-2 border border-green-400"
         >
           <div className="w-2 h-2 lg:w-3 lg:h-3 bg-green-300 rounded-full animate-pulse"></div>
-          <span className="font-bold text-sm lg:text-base">🔴 LIVE • MATCHUPS REVEALED • COMPETE NOW!</span>
+          <span className="font-bold text-sm lg:text-base">🔴 LIVE • {currentRound.description} • {currentRound.matchups.length} GAMES • COMPETE NOW!</span>
           <div className="w-2 h-2 lg:w-3 lg:h-3 bg-green-300 rounded-full animate-pulse"></div>
         </motion.div>
         <p className="text-red-300 text-sm mt-2">
