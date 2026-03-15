@@ -168,15 +168,15 @@ export default function BracketView() {
             </div>
           </div>
 
-          {/* Round 2 - Current Active */}
+          {/* Round 2 - Left Side (Games 1-4) */}
           <div className="flex flex-col min-w-[120px]">
             <div className="text-center text-white font-bold text-xs mb-3 bg-green-600/80 rounded-lg py-2 border border-green-400">
               🔴 ROUND 2 - LIVE
             </div>
             <div className="space-y-2">
-              {round2Matchups.map((matchup, index) => (
+              {round2Matchups.slice(0, 4).map((matchup, index) => (
                 <motion.div
-                  key={`r2-${index}`}
+                  key={`r2-left-${index}`}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5 + index * 0.05 }}
@@ -271,13 +271,26 @@ export default function BracketView() {
             </div>
           </div>
 
-          {/* Round 2 - Right Side (Mirror) */}
+          {/* Round 2 - Right Side (Games 5-8) */}
           <div className="flex flex-col min-w-[120px]">
             <div className="text-center text-white font-bold text-xs mb-3 bg-green-600/80 rounded-lg py-2 border border-green-400">
               🔴 ROUND 2 - LIVE
             </div>
-            <div className="text-center text-gray-400 text-[8px] mt-8">
-              8 Active Games
+            <div className="space-y-2">
+              {round2Matchups.slice(4, 8).map((matchup, index) => (
+                <motion.div
+                  key={`r2-right-${index}`}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.7 + index * 0.05 }}
+                  className="bg-green-600/20 rounded border-2 border-green-500 p-1.5 text-[8px] font-bold shadow-md"
+                >
+                  <div className="text-white truncate text-right">G{matchup.game}: {matchup.team1.split(' ')[0]}</div>
+                  <div className="text-green-300 text-[7px] text-center font-bold">VS</div>
+                  <div className="text-white truncate text-right">{matchup.team2.split(' ')[0]}</div>
+                  <div className="text-yellow-400 text-[7px] text-center mt-0.5">ACTIVE</div>
+                </motion.div>
+              ))}
             </div>
           </div>
 
