@@ -1,8 +1,56 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 
 export default function TVBracketView() {
+  const [currentRound, setCurrentRound] = useState<{name: string, description: string, matchups: any[]}>({
+    name: "Round 2", 
+    description: "WEEK 2 ROUND 2",
+    matchups: []
+  })
+
+  useEffect(() => {
+    // Determine current tournament round based on date
+    const updateCurrentRound = () => {
+      const now = new Date()
+      const playInStart = new Date('2026-03-07T06:00:00.000Z') // March 7, 12:00 AM CST
+      const round2Start = new Date('2026-03-15T06:00:00.000Z')  // March 15, 12:00 AM CST
+      const round3Start = new Date('2026-03-21T06:00:00.000Z')  // March 21, 12:00 AM CST
+      
+      if (now < playInStart) {
+        setCurrentRound({
+          name: "Pre-Tournament", 
+          description: "TOURNAMENT STARTS SOON",
+          matchups: playInRoundMatchups
+        })
+      } else if (now < round2Start) {
+        setCurrentRound({
+          name: "Play-In", 
+          description: "WEEK 1 PLAY-IN ROUND",
+          matchups: playInRoundMatchups
+        })
+      } else if (now < round3Start) {
+        setCurrentRound({
+          name: "Round 2", 
+          description: "WEEK 2 ROUND 2",
+          matchups: round2Matchups
+        })
+      } else {
+        setCurrentRound({
+          name: "Round 3", 
+          description: "WEEK 3 ELITE 8",
+          matchups: []
+        })
+      }
+    }
+    
+    updateCurrentRound()
+    const timer = setInterval(updateCurrentRound, 60000) // Check every minute
+    
+    return () => clearInterval(timer)
+  }, [])
+
   // Week 1 - Play-In Round Matchups (18 games total)
   const playInRoundMatchups = [
     { game: 1, team1: "MAX KONOPKA", team2: "ROBERT BRADY" },
@@ -25,6 +73,18 @@ export default function TVBracketView() {
     { game: 18, team1: "KADEN BAKER", team2: "LINDSEY NOONAN" },
   ]
 
+  // Week 2 - Round 2 Matchups (9 games total)
+  const round2Matchups = [
+    { game: 1, team1: "MAX KONOPKA", team2: "BYRON ACHA" },
+    { game: 2, team1: "JOSE VALDEZ", team2: "NOLAN SCHOENBACHLER" },
+    { game: 3, team1: "THOMAS FOX", team2: "VALERIA ALVAL" },
+    { game: 4, team1: "RYAN COOPER", team2: "LUCAS KONSTATOS" },
+    { game: 5, team1: "FABIAN ESCATEL", team2: "KAMREN HERALD" },
+    { game: 6, team1: "AALYIAH WASHBURN", team2: "HANNAH FRENCH" },
+    { game: 7, team1: "TAJ DHILLON", team2: "DENNIS CHORNIY" },
+    { game: 8, team1: "JACOB LEE", team2: "KIRILL PAVLYCHEV" },
+  ]
+
   return (
     <div className="w-full h-full bg-transparent overflow-auto">
       {/* Mobile Layout */}
@@ -37,14 +97,14 @@ export default function TVBracketView() {
             className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md inline-flex items-center gap-2 border border-green-400"
           >
             <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
-            <span className="font-bold text-sm">🔴 LIVE • PLAY-IN ROUND • 18 GAMES</span>
+            <span className="font-bold text-sm">🔴 LIVE • {currentRound.description} • {currentRound.matchups.length} GAMES</span>
             <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
           </motion.div>
         </div>
 
         {/* Mobile Games Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[500px] overflow-y-auto">
-          {playInRoundMatchups.map((matchup, index) => (
+          {currentRound.matchups.map((matchup, index) => (
             <motion.div
               key={`mobile-${index}`}
               initial={{ opacity: 0, y: 20 }}
@@ -78,13 +138,13 @@ export default function TVBracketView() {
       {/* Desktop TV-Optimized Traditional Bracket Layout */}
       <div className="hidden md:flex items-start justify-between h-full gap-2 text-xs min-w-[900px] max-w-[1100px] mx-auto py-2">
         
-        {/* Left Side - Round 1 */}
+        {/* Left Side - Current Round */}
         <div className="flex flex-col min-w-[140px] h-full">
           <div className="text-center text-white font-bold text-xs mb-1 bg-red-600/80 rounded py-1 border border-red-400">
-            PLAY-IN LEFT
+            {currentRound.name} LEFT
           </div>
           <div className="flex-1 flex flex-col justify-evenly">
-            {playInRoundMatchups.slice(0, 9).map((matchup, index) => (
+            {currentRound.matchups.slice(0, Math.ceil(currentRound.matchups.length / 2)).map((matchup, index) => (
               <motion.div
                 key={`left-${index}`}
                 initial={{ opacity: 0, x: -20 }}
@@ -217,13 +277,13 @@ export default function TVBracketView() {
           </div>
         </div>
 
-        {/* Right Side - Round 1 */}
+        {/* Right Side - Current Round */}
         <div className="flex flex-col min-w-[140px] h-full">
           <div className="text-center text-white font-bold text-xs mb-1 bg-red-600/80 rounded py-1 border border-red-400">
-            PLAY-IN RIGHT
+            {currentRound.name} RIGHT
           </div>
           <div className="flex-1 flex flex-col justify-evenly">
-            {playInRoundMatchups.slice(9, 18).map((matchup, index) => (
+            {currentRound.matchups.slice(Math.ceil(currentRound.matchups.length / 2)).map((matchup, index) => (
               <motion.div
                 key={`right-${index}`}
                 initial={{ opacity: 0, x: 20 }}
@@ -248,7 +308,7 @@ export default function TVBracketView() {
             className="bg-green-600 text-white px-3 py-1 rounded shadow-md inline-flex items-center gap-2 border border-green-400"
           >
             <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
-            <span className="font-bold text-xs">🔴 LIVE • PLAY-IN ROUND • 18 GAMES • COMPETE NOW!</span>
+            <span className="font-bold text-xs">🔴 LIVE • {currentRound.description} • {currentRound.matchups.length} GAMES • COMPETE NOW!</span>
             <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
           </motion.div>
         </div>

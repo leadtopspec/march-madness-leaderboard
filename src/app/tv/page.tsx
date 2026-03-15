@@ -398,8 +398,8 @@ export default function TVMode() {
             <div className="bg-black/80 backdrop-blur-sm rounded-xl p-3 border border-white/20">
               <div className="text-center text-white">
                 <div className="text-lg font-bold text-green-400 mb-1">🔴 LIVE</div>
-                <div className="text-base font-bold">ROUND 1</div>
-                <div className="text-xs opacity-75">17 ACTIVE MATCHUPS</div>
+                <div className="text-base font-bold">ROUND 2</div>
+                <div className="text-xs opacity-75">8 ACTIVE MATCHUPS</div>
               </div>
             </div>
           </div>
@@ -455,8 +455,8 @@ export default function TVMode() {
             <div className="bg-black/80 backdrop-blur-sm rounded-xl p-4 border border-white/20">
               <div className="text-center text-white">
                 <div className="text-2xl font-bold text-green-400 mb-2">🔴 LIVE</div>
-                <div className="text-xl font-bold">ROUND 1</div>
-                <div className="text-sm opacity-75">17 ACTIVE MATCHUPS</div>
+                <div className="text-xl font-bold">ROUND 2</div>
+                <div className="text-sm opacity-75">8 ACTIVE MATCHUPS</div>
               </div>
             </div>
 
@@ -464,7 +464,7 @@ export default function TVMode() {
             {timeUntilStart && (
               <div className="bg-green-600/80 backdrop-blur-sm rounded-xl p-4 border border-green-400/20">
                 <div className="text-center text-white">
-                  <div className="text-lg font-bold mb-2">⏰ ROUND 1 STARTS</div>
+                  <div className="text-lg font-bold mb-2">⏰ ROUND 2 ACTIVE</div>
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     {timeUntilStart.days > 0 && (
                       <div className="text-center">
@@ -556,13 +556,13 @@ export default function TVMode() {
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
               <h3 className="text-lg font-bold text-white mb-3 text-center">📊 PROGRESS</h3>
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between text-white">
-                  <span>Round 1</span>
-                  <span className="text-green-400 font-bold">ACTIVE</span>
-                </div>
                 <div className="flex justify-between text-white/60">
+                  <span>Round 1</span>
+                  <span>Complete</span>
+                </div>
+                <div className="flex justify-between text-white">
                   <span>Round 2</span>
-                  <span>Pending</span>
+                  <span className="text-green-400 font-bold">ACTIVE</span>
                 </div>
                 <div className="flex justify-between text-white/60">
                   <span>Final Four</span>
