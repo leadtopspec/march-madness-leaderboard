@@ -84,6 +84,7 @@ export default function MarchMadnessLeaderboard() {
   const [timeUntilStart, setTimeUntilStart] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
   const [timeUntilEnd, setTimeUntilEnd] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
   const [showRules, setShowRules] = useState(false)
+  const [currentRound, setCurrentRound] = useState<{name: string, description: string}>({name: "Play-In", description: "WEEK 1 PLAY-IN ROUND"})
 
   useEffect(() => {
     // Set client-side flag and initial time
@@ -200,6 +201,30 @@ export default function MarchMadnessLeaderboard() {
     
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
     
+    // Determine current tournament round based on date
+    const updateCurrentRound = () => {
+      const now = new Date()
+      const playInStart = new Date('2026-03-07T06:00:00.000Z') // March 7, 12:00 AM CST
+      const round2Start = new Date('2026-03-15T06:00:00.000Z')  // March 15, 12:00 AM CST
+      const round3Start = new Date('2026-03-21T06:00:00.000Z')  // March 21, 12:00 AM CST
+      const finalFourStart = new Date('2026-03-25T06:00:00.000Z') // March 25, 12:00 AM CST
+      const championshipStart = new Date('2026-03-27T06:00:00.000Z') // March 27, 12:00 AM CST
+      
+      if (now < playInStart) {
+        setCurrentRound({name: "Pre-Tournament", description: "TOURNAMENT STARTS SOON"})
+      } else if (now < round2Start) {
+        setCurrentRound({name: "Play-In", description: "WEEK 1 PLAY-IN ROUND"})
+      } else if (now < round3Start) {
+        setCurrentRound({name: "Round 2", description: "WEEK 2 ROUND 2"})
+      } else if (now < finalFourStart) {
+        setCurrentRound({name: "Round 3", description: "WEEK 3 ELITE 8"})
+      } else if (now < championshipStart) {
+        setCurrentRound({name: "Final Four", description: "WEEK 4 FINAL FOUR"})
+      } else {
+        setCurrentRound({name: "Championship", description: "CHAMPIONSHIP ROUND"})
+      }
+    }
+
     // Countdown to Round 1 start (March 7, 2026 at 12:00 AM CST)
     const updateCountdown = () => {
       const startTime = new Date('2026-03-07T06:00:00.000Z') // 12:00 AM CST = 06:00 UTC
@@ -218,9 +243,9 @@ export default function MarchMadnessLeaderboard() {
       }
     }
 
-    // Countdown to Tournament end (March 14, 2026 at 11:59 PM CST)
+    // Countdown to Tournament end (March 28, 2026 at 11:59 PM CST - Extended for full bracket)
     const updateEndCountdown = () => {
-      const endTime = new Date('2026-03-15T05:59:00.000Z') // 11:59 PM CST = 05:59 UTC next day
+      const endTime = new Date('2026-03-28T05:59:00.000Z') // 11:59 PM CST = 05:59 UTC next day
       const now = new Date()
       const diff = endTime.getTime() - now.getTime()
       
@@ -238,13 +263,16 @@ export default function MarchMadnessLeaderboard() {
     
     updateCountdown() // Initial call
     updateEndCountdown() // Initial call for end countdown
+    updateCurrentRound() // Initial call for round detection
     const countdownTimer = setInterval(updateCountdown, 1000)
     const endCountdownTimer = setInterval(updateEndCountdown, 1000)
+    const roundTimer = setInterval(updateCurrentRound, 60000) // Check round every minute
     
     return () => {
       clearInterval(timer)
       clearInterval(countdownTimer)
       clearInterval(endCountdownTimer)
+      clearInterval(roundTimer)
       unsubscribe()
       SupabaseSync.cleanup()
     }
@@ -649,18 +677,30 @@ export default function MarchMadnessLeaderboard() {
             <div className="space-y-4">
               <div className="bg-gradient-to-r from-green-500/20 to-green-700/20 border border-green-400/30 rounded-xl p-4 text-center">
                 <div className="text-xl md:text-2xl font-black text-white mb-1">🔴 LIVE</div>
-                <div className="text-lg font-bold text-white">WEEK 1 PLAY-IN ROUND</div>
-                <div className="text-sm text-white/70">18 Active Matchups</div>
+                <div className="text-lg font-bold text-white">{currentRound.description}</div>
+                <div className="text-sm text-white/70">
+                  {currentRound.name === "Play-In" ? "18 Active Matchups" : 
+                   currentRound.name === "Round 2" ? "9 Active Matchups" : 
+                   currentRound.name === "Round 3" ? "4 Active Matchups" : 
+                   currentRound.name === "Final Four" ? "2 Active Matchups" : 
+                   "Championship Match"}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
                   <div className="text-sm text-yellow-400 font-bold mb-1">CURRENT ROUND</div>
-                  <div className="text-white font-bold">Play-In</div>
+                  <div className="text-white font-bold">{currentRound.name}</div>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
                   <div className="text-sm text-orange-400 font-bold mb-1">NEXT ROUND</div>
-                  <div className="text-white font-bold">Elite 8</div>
+                  <div className="text-white font-bold">
+                    {currentRound.name === "Play-In" ? "Round 2" : 
+                     currentRound.name === "Round 2" ? "Elite 8" : 
+                     currentRound.name === "Round 3" ? "Final Four" : 
+                     currentRound.name === "Final Four" ? "Championship" : 
+                     "Complete"}
+                  </div>
                 </div>
               </div>
 

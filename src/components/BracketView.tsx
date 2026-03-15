@@ -35,13 +35,13 @@ export default function BracketView() {
           className="bg-gradient-to-r from-red-600 to-red-800 text-white px-4 lg:px-8 py-3 lg:py-4 rounded-2xl shadow-xl inline-block border-2 border-red-400"
         >
           <h2 className="text-xl lg:text-3xl font-black">🏀 MARCH MADNESS BRACKET 🏀</h2>
-          <p className="text-sm lg:text-lg opacity-90">36 COMPETITORS • WEEK 1 PLAY-IN ROUND</p>
+          <p className="text-sm lg:text-lg opacity-90">36 COMPETITORS • LIVE TOURNAMENT</p>
         </motion.div>
       </div>
 
       {/* Play-In Round Matchups */}
       <div className="mb-8">
-        <h3 className="text-center text-red-300 font-bold text-lg mb-6">🥊 WEEK 1 - PLAY-IN ROUND MATCHUPS 🥊</h3>
+        <h3 className="text-center text-red-300 font-bold text-lg mb-6">🥊 LIVE TOURNAMENT MATCHUPS 🥊</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-7xl mx-auto">
           {playInRoundMatchups.map((matchup, index) => (
             <motion.div
