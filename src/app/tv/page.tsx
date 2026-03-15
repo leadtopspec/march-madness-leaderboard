@@ -63,7 +63,7 @@ const bracketParticipants: SalesRep[] = [
 export default function TVMode() {
   const [currentTime, setCurrentTime] = useState<Date | null>(null)
   const [isClient, setIsClient] = useState(false)
-  const [salesReps, setSalesReps] = useState<SalesRep[]>(bracketParticipants.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
+  const [salesReps, setSalesReps] = useState<SalesRep[]>(bracketParticipants.sort((a, b) => b.totalPremium - a.totalPremium || b.totalSales - a.totalSales))
   const [timeUntilStart, setTimeUntilStart] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
   const [timeUntilEnd, setTimeUntilEnd] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null)
 
@@ -77,7 +77,7 @@ export default function TVMode() {
       try {
         console.log('📺 TV: Initializing SupabaseSync...')
         const data = await SupabaseSync.initialize()
-        setSalesReps(data.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
+        setSalesReps(data.salesReps.sort((a, b) => b.totalPremium - a.totalPremium || b.totalSales - a.totalSales))
         console.log('📺 TV: SupabaseSync initialized')
       } catch (error) {
         console.error('❌ TV: Failed to initialize sync:', error)
@@ -89,7 +89,7 @@ export default function TVMode() {
     // Subscribe to emergency fallback updates
     const unsubscribe = SupabaseSync.subscribe((updatedData) => {
       console.log('📺 TV: Received SupabaseSync real-time update')
-      setSalesReps(updatedData.salesReps.sort((a, b) => b.totalSales - a.totalSales || b.totalPremium - a.totalPremium))
+      setSalesReps(updatedData.salesReps.sort((a, b) => b.totalPremium - a.totalPremium || b.totalSales - a.totalSales))
     })
     
     // Listen for storage changes from other tabs/windows
@@ -145,9 +145,9 @@ export default function TVMode() {
       }
     }
 
-    // Countdown to Tournament end (March 14, 2026 at 11:59 PM CST)
+    // Countdown to Tournament end (March 28, 2026 at 11:59 PM CST)
     const updateEndCountdown = () => {
-      const endTime = new Date('2026-03-15T05:59:00.000Z') // 11:59 PM CST = 05:59 UTC next day
+      const endTime = new Date('2026-03-28T05:59:00.000Z') // 11:59 PM CST = 05:59 UTC next day
       const now = new Date()
       const diff = endTime.getTime() - now.getTime()
       
@@ -287,7 +287,7 @@ export default function TVMode() {
               ● LIVE
             </div>
             <div className="text-red-100 text-sm font-bold">
-              March 7-14, 2026
+              March 7-28, 2026
             </div>
           </div>
         </div>
@@ -319,7 +319,7 @@ export default function TVMode() {
                     ● LIVE
                   </div>
                   <div className="text-red-100 text-lg font-bold">
-                    March 7-14, 2026
+                    March 7-28, 2026
                   </div>
                 </div>
               </div>
@@ -389,7 +389,7 @@ export default function TVMode() {
                       <div className="text-xs opacity-75">HRS</div>
                     </div>
                   </div>
-                  <div className="text-xs opacity-75 mt-1">3/14/26 • 11:59 PM</div>
+                  <div className="text-xs opacity-75 mt-1">3/28/26 • 11:59 PM</div>
                 </div>
               </div>
             )}
@@ -515,7 +515,7 @@ export default function TVMode() {
                       <div className="text-xs opacity-75">SEC</div>
                     </div>
                   </div>
-                  <div className="text-xs opacity-75 mt-2">3/14/26 • 11:59 PM</div>
+                  <div className="text-xs opacity-75 mt-2">3/28/26 • 11:59 PM</div>
                 </div>
               </div>
             )}
