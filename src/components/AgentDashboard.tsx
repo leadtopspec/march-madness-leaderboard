@@ -104,16 +104,73 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
     { game: 17, team1: "LAINEY DROWN", team2: "VALERIA ALVAL" },
   ]
 
+  // Week 2 - Round 2 Matchups (8 games total)
+  const round2Matchups = [
+    { game: 1, team1: "MAX KONOPKA", team2: "BYRON ACHA" },
+    { game: 2, team1: "JOSE VALDEZ", team2: "NOLAN SCHOENBACHLER" },
+    { game: 3, team1: "THOMAS FOX", team2: "VALERIA ALVAL" },
+    { game: 4, team1: "RYAN COOPER", team2: "LUCAS KONSTATOS" },
+    { game: 5, team1: "FABIAN ESCATEL", team2: "KAMREN HERALD" },
+    { game: 6, team1: "AALYIAH WASHBURN", team2: "HANNAH FRENCH" },
+    { game: 7, team1: "TAJ DHILLON", team2: "DENNIS CHORNIY" },
+    { game: 8, team1: "JACOB LEE", team2: "KIRILL PAVLYCHEV" },
+  ]
+
+  // Round 2 qualifiers (these agents made it to Round 2)
+  const round2Qualifiers = [
+    "MAX KONOPKA", "BYRON ACHA", "JOSE VALDEZ", "NOLAN SCHOENBACHLER",
+    "THOMAS FOX", "VALERIA ALVAL", "RYAN COOPER", "LUCAS KONSTATOS", 
+    "FABIAN ESCATEL", "KAMREN HERALD", "AALYIAH WASHBURN", "HANNAH FRENCH",
+    "TAJ DHILLON", "DENNIS CHORNIY", "JACOB LEE", "KIRILL PAVLYCHEV"
+  ]
+
+  // Determine current round and tournament status
+  const getCurrentRoundData = () => {
+    const now = new Date()
+    const playInStart = new Date('2026-03-07T06:00:00.000Z')
+    const round2Start = new Date('2026-03-15T06:00:00.000Z')
+    const round3Start = new Date('2026-03-21T06:00:00.000Z')
+    
+    if (now < playInStart) {
+      return { name: "Pre-Tournament", matchups: playInRoundMatchups }
+    } else if (now < round2Start) {
+      return { name: "Play-In", matchups: playInRoundMatchups }
+    } else if (now < round3Start) {
+      return { name: "Round 2", matchups: round2Matchups }
+    } else {
+      return { name: "Round 3", matchups: [] }
+    }
+  }
+
+  const currentRoundData = getCurrentRoundData()
+  const isInRound2 = currentRoundData.name === "Round 2"
+
   const getCurrentMatchup = () => {
-    // Find the matchup this agent is in
-    const matchup = playInRoundMatchups.find(m => 
+    // Check if agent is eliminated (not in Round 2 qualifiers during Round 2)
+    if (isInRound2 && !round2Qualifiers.includes(agent.name)) {
+      return { 
+        eliminated: true, 
+        status: "Eliminated in Round 1",
+        message: "You did not advance to Round 2. Keep competing in future tournaments!"
+      }
+    }
+
+    // Find the matchup this agent is in based on current round
+    const matchups = currentRoundData.matchups
+    const matchup = matchups.find(m => 
       m.team1 === agent.name || m.team2 === agent.name
     )
     
     if (matchup) {
       const opponent = matchup.team1 === agent.name ? matchup.team2 : matchup.team1
       const opponentAgent = allAgents.find(a => a.name === opponent)
-      return { opponent: opponentAgent, matchup, gameNumber: matchup.game }
+      return { 
+        opponent: opponentAgent, 
+        matchup, 
+        gameNumber: matchup.game,
+        eliminated: false,
+        round: currentRoundData.name
+      }
     }
     
     return null
@@ -252,13 +309,26 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
                 <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl mx-auto mb-3">
                   <Users className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-black text-white">🥊 YOUR MATCHUP</h3>
+                <h3 className="text-2xl font-black text-white">
+                  🥊 {isInRound2 ? "ROUND 2 MATCHUP" : "YOUR MATCHUP"}
+                </h3>
               </div>
 
-              {currentMatchup?.opponent ? (
+              {currentMatchup?.eliminated ? (
+                <div className="text-center">
+                  <div className="text-6xl mb-6">😔</div>
+                  <div className="text-2xl font-black text-red-400 mb-4">{currentMatchup.status}</div>
+                  <div className="bg-red-900/50 border-2 border-red-600 rounded-xl p-6 backdrop-blur-sm">
+                    <div className="text-lg font-bold text-red-300 mb-2">Tournament Over</div>
+                    <div className="text-sm text-white">{currentMatchup.message}</div>
+                  </div>
+                </div>
+              ) : currentMatchup?.opponent ? (
                 <div className="text-center">
                   <div className="text-4xl mb-4">⚔️</div>
-                  <div className="text-lg font-black text-white mb-4">GAME #{currentMatchup.gameNumber} - HEAD TO HEAD</div>
+                  <div className="text-lg font-black text-white mb-4">
+                    {isInRound2 ? `ROUND 2 GAME #${currentMatchup.gameNumber} - HEAD TO HEAD` : `GAME #${currentMatchup.gameNumber} - HEAD TO HEAD`}
+                  </div>
                   
                   {/* Mobile Matchup Layout */}
                   <div className="space-y-4 mb-6">
@@ -305,7 +375,12 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
 
                   <div className="bg-black/80 border-2 border-red-600 rounded-xl p-4 backdrop-blur-sm">
                     <div className="text-base font-bold text-red-300 mb-2">🔴 LIVE COMPETITION!</div>
-                    <div className="text-sm text-white">Record sales now to outperform your opponent and advance to Round 2!</div>
+                    <div className="text-sm text-white">
+                      {isInRound2 ? 
+                        "Record sales now to outperform your opponent and advance to Elite 8!" :
+                        "Record sales now to outperform your opponent and advance to Round 2!"
+                      }
+                    </div>
                   </div>
                 </div>
               ) : (
