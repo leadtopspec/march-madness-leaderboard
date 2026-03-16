@@ -58,7 +58,7 @@ export default function TVBracketView() {
     { game: 3, team1: "JOSE VALDEZ", team2: "JADEN POPE", winner: "JOSE VALDEZ" },
     { game: 4, team1: "WESTON CHRISTOPHER", team2: "NOLAN SCHOENBACHLER", winner: "NOLAN SCHOENBACHLER" },
     { game: 5, team1: "THOMAS FOX", team2: "JEREMI KISINSKI", winner: "THOMAS FOX" },
-    { game: 6, team1: "JAKE DOLL", team2: "DANIEL SUAREZ", winner: null },
+    { game: 6, team1: "JAKE DOLL", team2: "DANIEL SUAREZ", winner: "DNQ" },
     { game: 7, team1: "RYAN BOVE", team2: "RYAN COOPER", winner: "RYAN COOPER" },
     { game: 8, team1: "LUCAS KONSTATOS", team2: "ANTHONY MAYROSE", winner: "LUCAS KONSTATOS" },
     { game: 9, team1: "ANDREW FLASKAMP", team2: "FABIAN ESCATEL", winner: "FABIAN ESCATEL" },
@@ -107,8 +107,8 @@ export default function TVBracketView() {
                 <div className="text-white truncate">{matchup.team1.split(' ')[0]}</div>
                 <div className="text-gray-400 text-[6px] text-center">vs</div>
                 <div className="text-white truncate">{matchup.team2.split(' ')[0]}</div>
-                <div className={`text-[6px] text-center mt-0.5 ${matchup.winner ? 'text-green-400' : (matchup.game === 18 ? 'text-red-400' : 'text-gray-400')}`}>
-                  {matchup.winner ? `✓ ${matchup.winner.split(' ')[0]}` : (matchup.game === 18 ? "DNQ" : "TBD")}
+                <div className={`text-[6px] text-center mt-0.5 ${matchup.winner && matchup.winner !== 'DNQ' ? 'text-green-400' : ((matchup.game === 18 || matchup.game === 6) ? 'text-red-400' : 'text-gray-400')}`}>
+                  {matchup.winner && matchup.winner !== 'DNQ' ? `✓ ${matchup.winner.split(' ')[0]}` : ((matchup.game === 18 || matchup.game === 6) ? "DNQ" : "TBD")}
                 </div>
               </motion.div>
             ))}
@@ -257,8 +257,8 @@ export default function TVBracketView() {
                 <div className="text-white text-right truncate">{matchup.team1.split(' ')[0]}</div>
                 <div className="text-gray-400 text-[6px] text-center">vs</div>
                 <div className="text-white text-right truncate">{matchup.team2.split(' ')[0]}</div>
-                <div className={`text-[6px] text-center mt-0.5 ${matchup.winner ? 'text-green-400' : (matchup.game === 18 ? 'text-red-400' : 'text-gray-400')}`}>
-                  {matchup.winner ? `✓ ${matchup.winner.split(' ')[0]}` : (matchup.game === 18 ? "DNQ" : "TBD")}
+                <div className={`text-[6px] text-center mt-0.5 ${matchup.winner && matchup.winner !== 'DNQ' ? 'text-green-400' : ((matchup.game === 18 || matchup.game === 6) ? 'text-red-400' : 'text-gray-400')}`}>
+                  {matchup.winner && matchup.winner !== 'DNQ' ? `✓ ${matchup.winner.split(' ')[0]}` : ((matchup.game === 18 || matchup.game === 6) ? "DNQ" : "TBD")}
                 </div>
               </motion.div>
             ))}

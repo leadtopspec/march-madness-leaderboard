@@ -58,7 +58,7 @@ export default function BracketView() {
     { game: 3, team1: "JOSE VALDEZ", team2: "JADEN POPE", winner: "JOSE VALDEZ" },
     { game: 4, team1: "WESTON CHRISTOPHER", team2: "NOLAN SCHOENBACHLER", winner: "NOLAN SCHOENBACHLER" },
     { game: 5, team1: "THOMAS FOX", team2: "JEREMI KISINSKI", winner: "THOMAS FOX" },
-    { game: 6, team1: "JAKE DOLL", team2: "DANIEL SUAREZ", winner: null },
+    { game: 6, team1: "JAKE DOLL", team2: "DANIEL SUAREZ", winner: "DNQ" },
     { game: 7, team1: "RYAN BOVE", team2: "RYAN COOPER", winner: "RYAN COOPER" },
     { game: 8, team1: "LUCAS KONSTATOS", team2: "ANTHONY MAYROSE", winner: "LUCAS KONSTATOS" },
     { game: 9, team1: "ANDREW FLASKAMP", team2: "FABIAN ESCATEL", winner: "FABIAN ESCATEL" },
@@ -95,7 +95,10 @@ export default function BracketView() {
           className="bg-gradient-to-r from-red-600 to-red-800 text-white px-4 lg:px-8 py-3 lg:py-4 rounded-2xl shadow-xl inline-block border-2 border-red-400"
         >
           <h2 className="text-xl lg:text-3xl font-black">🏀 MARCH MADNESS BRACKET 🏀</h2>
-          <p className="text-sm lg:text-lg opacity-90">36 COMPETITORS • LIVE TOURNAMENT</p>
+          <div className="text-sm lg:text-lg opacity-90 space-y-1">
+            <p>16 COMPETITORS REMAINING • $XXXXX SALES PREMIUM • $XXXXX TOP PERFORMER</p>
+            <p className="text-red-300 text-xs lg:text-sm">⏰ TOURNAMENT ENDS: MARCH 22ND AT 11:59 PM ⏰</p>
+          </div>
         </motion.div>
       </div>
 
@@ -130,8 +133,8 @@ export default function BracketView() {
                 </div>
               </div>
               <div className="text-center mt-3">
-                <div className="bg-black/50 rounded px-3 py-1 text-red-300 text-xs font-bold">
-                  {matchup.winner ? `WINNER: ${matchup.winner}` : "WINNER: TBD"}
+                <div className={`bg-black/50 rounded px-3 py-1 text-xs font-bold ${matchup.winner === 'DNQ' ? 'text-red-400' : 'text-red-300'}`}>
+                  {matchup.winner === 'DNQ' ? "STATUS: DNQ" : (matchup.winner ? `WINNER: ${matchup.winner}` : "WINNER: TBD")}
                 </div>
               </div>
             </motion.div>
@@ -160,8 +163,8 @@ export default function BracketView() {
                   <div className="text-white truncate">G{matchup.game}: {matchup.team1}</div>
                   <div className="text-gray-300 text-[7px] text-center">vs</div>
                   <div className="text-white truncate">{matchup.team2}</div>
-                  <div className={`text-[7px] text-center mt-0.5 ${matchup.winner ? 'text-green-400' : (matchup.game === 18 ? 'text-red-400' : 'text-gray-400')}`}>
-                    {matchup.winner ? `✓ ${matchup.winner.split(' ')[0]}` : (matchup.game === 18 ? "DNQ" : "TBD")}
+                  <div className={`text-[7px] text-center mt-0.5 ${matchup.winner && matchup.winner !== 'DNQ' ? 'text-green-400' : ((matchup.game === 18 || matchup.game === 6) ? 'text-red-400' : 'text-gray-400')}`}>
+                    {matchup.winner && matchup.winner !== 'DNQ' ? `✓ ${matchup.winner.split(' ')[0]}` : ((matchup.game === 18 || matchup.game === 6) ? "DNQ" : "TBD")}
                   </div>
                 </motion.div>
               ))}
@@ -311,8 +314,8 @@ export default function BracketView() {
                   <div className="text-white text-right truncate">G{matchup.game}: {matchup.team1}</div>
                   <div className="text-gray-300 text-[7px] text-center">vs</div>
                   <div className="text-white text-right truncate">{matchup.team2}</div>
-                  <div className={`text-[7px] text-center mt-0.5 ${matchup.winner ? 'text-green-400' : (matchup.game === 18 ? 'text-red-400' : 'text-gray-400')}`}>
-                    {matchup.winner ? `✓ ${matchup.winner.split(' ')[0]}` : (matchup.game === 18 ? "DNQ" : "TBD")}
+                  <div className={`text-[7px] text-center mt-0.5 ${matchup.winner && matchup.winner !== 'DNQ' ? 'text-green-400' : ((matchup.game === 18 || matchup.game === 6) ? 'text-red-400' : 'text-gray-400')}`}>
+                    {matchup.winner && matchup.winner !== 'DNQ' ? `✓ ${matchup.winner.split(' ')[0]}` : ((matchup.game === 18 || matchup.game === 6) ? "DNQ" : "TBD")}
                   </div>
                 </motion.div>
               ))}
