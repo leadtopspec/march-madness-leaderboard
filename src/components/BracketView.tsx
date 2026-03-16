@@ -16,7 +16,7 @@ export default function BracketView() {
       const now = new Date()
       const playInStart = new Date('2026-03-07T06:00:00.000Z') // March 7, 12:00 AM CST
       const round2Start = new Date('2026-03-15T06:00:00.000Z')  // March 15, 12:00 AM CST
-      const round3Start = new Date('2026-03-21T06:00:00.000Z')  // March 21, 12:00 AM CST
+      const round3Start = new Date('2026-03-23T05:59:00.000Z')  // March 22, 11:59 PM CST
       
       if (now < playInStart) {
         setCurrentRound({
@@ -97,7 +97,7 @@ export default function BracketView() {
           <h2 className="text-xl lg:text-3xl font-black">🏀 MARCH MADNESS BRACKET 🏀</h2>
           <div className="text-sm lg:text-lg opacity-90 space-y-1">
             <p>16 COMPETITORS REMAINING • $XXXXX SALES PREMIUM • $XXXXX TOP PERFORMER</p>
-            <p className="text-red-300 text-xs lg:text-sm">⏰ TOURNAMENT ENDS: MARCH 22ND AT 11:59 PM ⏰</p>
+            <p className="text-red-300 text-xs lg:text-sm">⏰ ROUND 2 ENDS: MARCH 22ND AT 11:59 PM ⏰</p>
           </div>
         </motion.div>
       </div>

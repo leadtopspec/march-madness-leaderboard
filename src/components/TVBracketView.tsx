@@ -16,7 +16,7 @@ export default function TVBracketView() {
       const now = new Date()
       const playInStart = new Date('2026-03-07T06:00:00.000Z') // March 7, 12:00 AM CST
       const round2Start = new Date('2026-03-15T06:00:00.000Z')  // March 15, 12:00 AM CST
-      const round3Start = new Date('2026-03-21T06:00:00.000Z')  // March 21, 12:00 AM CST
+      const round3Start = new Date('2026-03-23T05:59:00.000Z')  // March 22, 11:59 PM CST
       
       if (now < playInStart) {
         setCurrentRound({
