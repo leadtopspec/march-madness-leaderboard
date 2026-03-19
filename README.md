@@ -239,4 +239,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Built with ❤️ for competitive teams and tournament organizers worldwide.**
 
-⭐ Star this repo if you found it helpful!
+⭐ Star this repo if you found it helpful!# Environment fix
