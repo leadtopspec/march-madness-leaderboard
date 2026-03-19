@@ -99,6 +99,43 @@ export class SupabaseSync {
     return data || []
   }
 
+  // Get sales within Round 2 date range (March 15-22, 2026)
+  async getRound2Sales(): Promise<Sale[]> {
+    const round2Start = '2026-03-15T00:00:00Z'
+    const round2End = '2026-03-22T23:59:59Z'
+    
+    const { data, error } = await supabase
+      .from('sales')
+      .select('*')
+      .gte('timestamp', round2Start)
+      .lte('timestamp', round2End)
+      .order('timestamp', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching Round 2 sales:', error)
+      return []
+    }
+
+    return data || []
+  }
+
+  // Calculate Round 2 totals for each rep
+  async getRound2RepTotals(): Promise<{ [repName: string]: { sales: number, premium: number } }> {
+    const round2Sales = await this.getRound2Sales()
+    
+    const round2Totals: { [repName: string]: { sales: number, premium: number } } = {}
+    
+    round2Sales.forEach(sale => {
+      if (!round2Totals[sale.rep_name]) {
+        round2Totals[sale.rep_name] = { sales: 0, premium: 0 }
+      }
+      round2Totals[sale.rep_name].sales++
+      round2Totals[sale.rep_name].premium += sale.premium
+    })
+    
+    return round2Totals
+  }
+
   // Add a new sale
   async addSale(sale: Omit<Sale, 'id' | 'timestamp'>): Promise<boolean> {
     const { error: saleError } = await supabase

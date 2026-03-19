@@ -145,16 +145,24 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
   const currentRoundData = getCurrentRoundData()
   const isInRound2 = currentRoundData.name === "Round 2"
   
-  // Round 2 Stats Override (March 15-21, 2026) - Agent dashboards only
-  const round2StatsOverride: Record<string, { sales: number, premium: number }> = {
-    'THOMAS GARCIA': { sales: 3, premium: 4249.92 },
-    'VALERIA SMITH': { sales: 1, premium: 1850.00 },
-    'DAVID JOHNSON': { sales: 2, premium: 3200.00 },
-  }
+  // Round 2 date filtering (March 15-22, 2026)
+  const round2Start = new Date('2026-03-15T00:00:00Z')
+  const round2End = new Date('2026-03-22T23:59:59Z')
   
-  // Apply Round 2 override if in Round 2 and data exists
-  const displayAgent = isInRound2 && round2StatsOverride[agent.name]
-    ? { ...agent, totalSales: round2StatsOverride[agent.name].sales, totalPremium: round2StatsOverride[agent.name].premium }
+  // Filter recent sales for Round 2 period
+  const round2Sales = recentSales.filter(sale => {
+    const saleDate = new Date(sale.timestamp)
+    return saleDate >= round2Start && saleDate <= round2End
+  })
+  
+  // Calculate Round 2 totals for this agent
+  const agentRound2Sales = round2Sales.filter(sale => sale.repName === agent.name)
+  const round2TotalSales = agentRound2Sales.length
+  const round2TotalPremium = agentRound2Sales.reduce((sum, sale) => sum + sale.premium, 0)
+  
+  // Apply Round 2 filtering if in Round 2 mode
+  const displayAgent = isInRound2 
+    ? { ...agent, totalSales: round2TotalSales, totalPremium: round2TotalPremium }
     : agent
 
   const getCurrentMatchup = () => {
@@ -177,10 +185,19 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
       const opponent = matchup.team1 === agent.name ? matchup.team2 : matchup.team1
       const opponentAgent = allAgents.find(a => a.name === opponent)
       
-      // Apply Round 2 override to opponent as well
-      const displayOpponent = isInRound2 && round2StatsOverride[opponent] && opponentAgent
-        ? { ...opponentAgent, totalSales: round2StatsOverride[opponent].sales, totalPremium: round2StatsOverride[opponent].premium }
-        : opponentAgent
+      // Apply Round 2 filtering to opponent as well
+      let displayOpponent = opponentAgent
+      if (isInRound2 && opponentAgent) {
+        const opponentRound2Sales = round2Sales.filter(sale => sale.repName === opponentAgent.name)
+        const opponentRound2TotalSales = opponentRound2Sales.length
+        const opponentRound2TotalPremium = opponentRound2Sales.reduce((sum, sale) => sum + sale.premium, 0)
+        
+        displayOpponent = { 
+          ...opponentAgent, 
+          totalSales: opponentRound2TotalSales, 
+          totalPremium: opponentRound2TotalPremium 
+        }
+      }
       
       return { 
         opponent: displayOpponent, 
