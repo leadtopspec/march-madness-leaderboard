@@ -144,6 +144,18 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
 
   const currentRoundData = getCurrentRoundData()
   const isInRound2 = currentRoundData.name === "Round 2"
+  
+  // Round 2 Stats Override (March 15-21, 2026) - Agent dashboards only
+  const round2StatsOverride: Record<string, { sales: number, premium: number }> = {
+    'THOMAS GARCIA': { sales: 3, premium: 4249.92 },
+    'VALERIA SMITH': { sales: 1, premium: 1850.00 },
+    'DAVID JOHNSON': { sales: 2, premium: 3200.00 },
+  }
+  
+  // Apply Round 2 override if in Round 2 and data exists
+  const displayAgent = isInRound2 && round2StatsOverride[agent.name]
+    ? { ...agent, totalSales: round2StatsOverride[agent.name].sales, totalPremium: round2StatsOverride[agent.name].premium }
+    : agent
 
   const getCurrentMatchup = () => {
     // Check if agent is eliminated (not in Round 2 qualifiers during Round 2)
@@ -164,8 +176,14 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
     if (matchup) {
       const opponent = matchup.team1 === agent.name ? matchup.team2 : matchup.team1
       const opponentAgent = allAgents.find(a => a.name === opponent)
+      
+      // Apply Round 2 override to opponent as well
+      const displayOpponent = isInRound2 && round2StatsOverride[opponent] && opponentAgent
+        ? { ...opponentAgent, totalSales: round2StatsOverride[opponent].sales, totalPremium: round2StatsOverride[opponent].premium }
+        : opponentAgent
+      
       return { 
-        opponent: opponentAgent, 
+        opponent: displayOpponent, 
         matchup, 
         gameNumber: matchup.game,
         eliminated: false,
@@ -281,17 +299,17 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
               {/* Stats Grid - Mobile Friendly */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="text-center bg-red-900/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-red-700">
-                  <div className="text-3xl font-black text-red-300 mb-2">{agent.totalSales}</div>
-                  <div className="text-base font-bold text-white">Total Sales</div>
-                  <div className="text-sm text-gray-400">Policies Sold</div>
+                  <div className="text-3xl font-black text-red-300 mb-2">{displayAgent.totalSales}</div>
+                  <div className="text-base font-bold text-white">{isInRound2 ? 'Round 2 Sales' : 'Total Sales'}</div>
+                  <div className="text-sm text-gray-400">{isInRound2 ? 'This Round' : 'Policies Sold'}</div>
                 </div>
                 <div className="text-center bg-black/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-gray-700">
-                  <div className="text-3xl font-black text-green-400 mb-2">{formatCurrency(agent.totalPremium).replace('$', '').replace(',000', 'K')}</div>
-                  <div className="text-base font-bold text-white">Total Premium</div>
-                  <div className="text-sm text-gray-400">Volume Generated</div>
+                  <div className="text-3xl font-black text-green-400 mb-2">{formatCurrency(displayAgent.totalPremium).replace('$', '').replace(',000', 'K')}</div>
+                  <div className="text-base font-bold text-white">{isInRound2 ? 'Round 2 Premium' : 'Total Premium'}</div>
+                  <div className="text-sm text-gray-400">{isInRound2 ? 'This Round' : 'Volume Generated'}</div>
                 </div>
                 <div className="text-center bg-gray-900/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-gray-600">
-                  <div className="text-3xl font-black text-red-400 mb-2">{formatCurrency(agent.totalPremium).replace('$', '').replace(',000', 'K')}</div>
+                  <div className="text-3xl font-black text-red-400 mb-2">{formatCurrency(displayAgent.totalPremium).replace('$', '').replace(',000', 'K')}</div>
                   <div className="text-base font-bold text-white">Annual Premium</div>
                   <div className="text-sm text-gray-400">AP Volume</div>
                 </div>
@@ -340,12 +358,12 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
                           <div className="text-sm text-red-300">YOU</div>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-black text-white">{agent.totalSales}</div>
+                          <div className="text-2xl font-black text-white">{displayAgent.totalSales}</div>
                           <div className="text-sm text-gray-400">Sales</div>
                         </div>
                       </div>
                       <div className="mt-2 text-center">
-                        <div className="text-lg font-bold text-green-400">{formatCurrency(agent.totalPremium).replace('$', '').replace(',000', 'K')}</div>
+                        <div className="text-lg font-bold text-green-400">{formatCurrency(displayAgent.totalPremium).replace('$', '').replace(',000', 'K')}</div>
                       </div>
                     </div>
 
@@ -593,11 +611,11 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-400">Last Sale:</span>
-                  <span className="font-bold text-white">{agent.totalSales > 0 ? agent.lastSale.toLocaleDateString() : 'None'}</span>
+                  <span className="font-bold text-white">{displayAgent.totalSales > 0 ? agent.lastSale.toLocaleDateString() : 'None'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Avg Premium:</span>
-                  <span className="font-bold text-white">{agent.totalSales > 0 ? formatCurrency(agent.totalPremium / agent.totalSales) : '$0'}</span>
+                  <span className="font-bold text-white">{displayAgent.totalSales > 0 ? formatCurrency(displayAgent.totalPremium / displayAgent.totalSales) : '$0'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Team:</span>
