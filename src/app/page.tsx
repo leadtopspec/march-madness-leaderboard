@@ -243,21 +243,39 @@ export default function MarchMadnessLeaderboard() {
       }
     }
 
-    // Countdown to Tournament end (March 28, 2026 at 11:59 PM CST - Extended for full bracket)
+    // Countdown to current round end - Round 2 ends March 21, 2026 at 11:59 PM CST
     const updateEndCountdown = () => {
-      const endTime = new Date('2026-03-28T05:59:00.000Z') // 11:59 PM CST = 05:59 UTC next day
       const now = new Date()
-      const diff = endTime.getTime() - now.getTime()
+      const round2End = new Date('2026-03-22T05:59:00.000Z') // March 21 11:59 PM CST = March 22 05:59 UTC
       
-      if (diff > 0) {
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-        
-        setTimeUntilEnd({ days, hours, minutes, seconds })
+      // If we're currently in Round 2 (March 15-21), show countdown to Round 2 end
+      if (now >= new Date('2026-03-15T06:00:00.000Z') && now < round2End) {
+        const diff = round2End.getTime() - now.getTime()
+        if (diff > 0) {
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+          const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+          
+          setTimeUntilEnd({ days, hours, minutes, seconds })
+        } else {
+          setTimeUntilEnd(null)
+        }
       } else {
-        setTimeUntilEnd(null) // Tournament has ended
+        // For other rounds, show tournament end (March 28, 2026)
+        const tournamentEnd = new Date('2026-03-28T05:59:00.000Z')
+        const diff = tournamentEnd.getTime() - now.getTime()
+        
+        if (diff > 0) {
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+          const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+          
+          setTimeUntilEnd({ days, hours, minutes, seconds })
+        } else {
+          setTimeUntilEnd(null)
+        }
       }
     }
     

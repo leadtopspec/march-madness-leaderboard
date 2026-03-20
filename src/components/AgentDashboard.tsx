@@ -214,7 +214,11 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
   const currentMatchup = getCurrentMatchup()
   const agentBadge = getRankBadge(agent.rank)
   const AgentIcon = agentBadge.icon
-  const mySales = recentSales.filter(sale => sale.repName === agent.name).slice(0, 5)
+  
+  // Filter sales based on current round - Round 2 shows only March 15-21 data
+  const mySales = isInRound2 
+    ? agentRound2Sales.slice(0, 5)  // Show only Round 2 sales (March 15-21)
+    : recentSales.filter(sale => sale.repName === agent.name).slice(0, 5)  // Show all sales for other rounds
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900">
