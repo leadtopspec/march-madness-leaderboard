@@ -1,0 +1,7 @@
+{
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://onlrkjvewecrrfkrgwhz.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ubHJranZld2VjcnJma3Jnd2h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA5NzIzOTMsImV4cCI6MjAyNjU0ODM5M30.M79QCpEb7gMc1UawwGJMSKDZ3A-wOGO7nM8_eBZhvO8"
+  },
+  "domains": ["allingiveaway.com", "www.allingiveaway.com"]
+}
