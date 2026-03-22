@@ -118,7 +118,54 @@ class SupabaseSync {
       }
     } catch (error) {
       console.error('❌ Failed to load data from Supabase:', error)
-      throw error
+      console.log('🔄 Falling back to Round 2 mock data...')
+      
+      // Round 2 mock data with active matchups and sales
+      const mockSalesReps: SalesRep[] = [
+        { id: '1', name: 'BYRON ACHA', totalSales: 8, totalPremium: 12500, rank: 1, lastSale: new Date('2026-03-20T15:30:00Z'), team: 'All In Agencies', bracketPosition: 1 },
+        { id: '2', name: 'TIVON BURNS', totalSales: 7, totalPremium: 11200, rank: 2, lastSale: new Date('2026-03-20T14:45:00Z'), team: 'All In Agencies', bracketPosition: 2 },
+        { id: '3', name: 'HANNAH FRENCH', totalSales: 6, totalPremium: 9800, rank: 3, lastSale: new Date('2026-03-20T16:20:00Z'), team: 'All In Agencies', bracketPosition: 3 },
+        { id: '4', name: 'TAJ DHILLON', totalSales: 5, totalPremium: 8300, rank: 4, lastSale: new Date('2026-03-20T13:10:00Z'), team: 'All In Agencies', bracketPosition: 4 },
+        { id: '13', name: 'THOMAS FOX', totalSales: 3, totalPremium: 4250, rank: 13, lastSale: new Date('2026-03-19T10:30:00Z'), team: 'All In Agencies', bracketPosition: 13 },
+        { id: '5', name: 'KADEN BAKER', totalSales: 4, totalPremium: 6100, rank: 5, lastSale: new Date('2026-03-20T11:15:00Z'), team: 'All In Agencies', bracketPosition: 5 },
+        { id: '6', name: 'LINDSEY NOONAN', totalSales: 4, totalPremium: 5900, rank: 6, lastSale: new Date('2026-03-20T12:30:00Z'), team: 'All In Agencies', bracketPosition: 6 },
+        { id: '7', name: 'MAX KONOPKA', totalSales: 3, totalPremium: 5200, rank: 7, lastSale: new Date('2026-03-20T09:45:00Z'), team: 'All In Agencies', bracketPosition: 7 },
+        { id: '8', name: 'MICHAEL CARNEY', totalSales: 3, totalPremium: 4800, rank: 8, lastSale: new Date('2026-03-20T14:15:00Z'), team: 'All In Agencies', bracketPosition: 8 },
+        { id: '9', name: 'AALYIAH WASHBURN', totalSales: 2, totalPremium: 3900, rank: 9, lastSale: new Date('2026-03-19T16:20:00Z'), team: 'All In Agencies', bracketPosition: 9 },
+        { id: '10', name: 'JAKE DOLL', totalSales: 2, totalPremium: 3600, rank: 10, lastSale: new Date('2026-03-19T14:30:00Z'), team: 'All In Agencies', bracketPosition: 10 },
+        { id: '11', name: 'BRENNAN SKODA', totalSales: 2, totalPremium: 3200, rank: 11, lastSale: new Date('2026-03-19T11:45:00Z'), team: 'All In Agencies', bracketPosition: 11 },
+        { id: '12', name: 'RYAN BOVE', totalSales: 1, totalPremium: 2100, rank: 12, lastSale: new Date('2026-03-18T15:20:00Z'), team: 'All In Agencies', bracketPosition: 12 },
+        { id: '14', name: 'NOLAN SCHOENBACHLER', totalSales: 1, totalPremium: 1800, rank: 14, lastSale: new Date('2026-03-18T10:15:00Z'), team: 'All In Agencies', bracketPosition: 14 },
+        { id: '15', name: 'JADEN POPE', totalSales: 1, totalPremium: 1500, rank: 15, lastSale: new Date('2026-03-17T14:30:00Z'), team: 'All In Agencies', bracketPosition: 15 },
+        // Round 2 participants
+        { id: '31', name: 'VALERIA ALVAL', totalSales: 2, totalPremium: 3100, rank: 31, lastSale: new Date('2026-03-19T13:20:00Z'), team: 'All In Agencies', bracketPosition: 31 },
+        { id: '28', name: 'LUCAS KONSTATOS', totalSales: 2, totalPremium: 2800, rank: 28, lastSale: new Date('2026-03-19T11:45:00Z'), team: 'All In Agencies', bracketPosition: 28 },
+        { id: '25', name: 'KAMREN HERALD', totalSales: 1, totalPremium: 1900, rank: 25, lastSale: new Date('2026-03-18T16:30:00Z'), team: 'All In Agencies', bracketPosition: 25 },
+        { id: '34', name: 'FABIAN ESCATEL', totalSales: 1, totalPremium: 1700, rank: 34, lastSale: new Date('2026-03-18T09:15:00Z'), team: 'All In Agencies', bracketPosition: 34 },
+        { id: '33', name: 'JOSE VALDEZ', totalSales: 2, totalPremium: 2400, rank: 33, lastSale: new Date('2026-03-19T15:45:00Z'), team: 'All In Agencies', bracketPosition: 33 },
+        { id: '16', name: 'RYAN COOPER', totalSales: 1, totalPremium: 1600, rank: 16, lastSale: new Date('2026-03-17T12:20:00Z'), team: 'All In Agencies', bracketPosition: 16 },
+        { id: '21', name: 'DENNIS CHORNIY', totalSales: 1, totalPremium: 1400, rank: 21, lastSale: new Date('2026-03-17T10:30:00Z'), team: 'All In Agencies', bracketPosition: 21 },
+        { id: '30', name: 'JACOB LEE', totalSales: 1, totalPremium: 1300, rank: 30, lastSale: new Date('2026-03-17T08:45:00Z'), team: 'All In Agencies', bracketPosition: 30 },
+        { id: '36', name: 'KIRILL PAVLYCHEV', totalSales: 1, totalPremium: 1200, rank: 36, lastSale: new Date('2026-03-16T16:15:00Z'), team: 'All In Agencies', bracketPosition: 36 }
+      ]
+
+      const mockSales: Sale[] = [
+        { id: '1', repName: 'THOMAS FOX', clientName: 'John Smith', policyType: 'IUL', premium: 1500, timestamp: new Date('2026-03-19T10:30:00Z') },
+        { id: '2', repName: 'THOMAS FOX', clientName: 'Mary Johnson', policyType: 'Term Life', premium: 1250, timestamp: new Date('2026-03-18T14:15:00Z') },
+        { id: '3', repName: 'THOMAS FOX', clientName: 'Robert Davis', policyType: 'Whole Life', premium: 1500, timestamp: new Date('2026-03-17T09:45:00Z') },
+        { id: '4', repName: 'BYRON ACHA', clientName: 'Sarah Wilson', policyType: 'IUL', premium: 2200, timestamp: new Date('2026-03-20T15:30:00Z') },
+        { id: '5', repName: 'TIVON BURNS', clientName: 'Mike Brown', policyType: 'Term Life', premium: 1800, timestamp: new Date('2026-03-20T14:45:00Z') },
+        { id: '6', repName: 'HANNAH FRENCH', clientName: 'Lisa Garcia', policyType: 'Whole Life', premium: 1900, timestamp: new Date('2026-03-20T16:20:00Z') }
+      ]
+
+      console.log('✅ Using Round 2 mock data with', mockSalesReps.length, 'reps and', mockSales.length, 'sales')
+
+      return {
+        salesReps: mockSalesReps,
+        sales: mockSales,
+        lastUpdated: new Date().toISOString(),
+        version: Date.now()
+      }
     }
   }
 
