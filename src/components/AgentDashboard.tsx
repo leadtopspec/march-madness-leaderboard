@@ -129,7 +129,7 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
     const now = new Date()
     const playInStart = new Date('2026-03-07T06:00:00.000Z')
     const round2Start = new Date('2026-03-15T06:00:00.000Z')
-    const round3Start = new Date('2026-03-21T06:00:00.000Z')
+    const round3Start = new Date('2026-03-23T05:59:00.000Z') // Round 2 ends March 22 at 11:59 PM CST
     
     if (now < playInStart) {
       return { name: "Pre-Tournament", matchups: playInRoundMatchups }
@@ -147,22 +147,29 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
   
   // Round 2 date filtering (March 15-22, 2026)
   const round2Start = new Date('2026-03-15T00:00:00Z')
-  const round2End = new Date('2026-03-22T23:59:59Z')
+  const round2End = new Date('2026-03-22T05:59:59Z') // March 21 11:59 PM CST
   
-  // Filter recent sales for Round 2 period
-  const round2Sales = recentSales.filter(sale => {
-    const saleDate = new Date(sale.timestamp)
-    return saleDate >= round2Start && saleDate <= round2End
-  })
+  // Filter sales to only show Round 2 data (March 15-22)
+  const filterRound2Sales = (sales: Sale[]) => {
+    return sales.filter(sale => {
+      const saleDate = new Date(sale.timestamp)
+      return saleDate >= round2Start && saleDate <= round2End
+    })
+  }
   
-  // Calculate Round 2 totals for this agent
-  const agentRound2Sales = round2Sales.filter(sale => sale.repName === agent.name)
-  const round2TotalSales = agentRound2Sales.length
-  const round2TotalPremium = agentRound2Sales.reduce((sum, sale) => sum + sale.premium, 0)
+  // Filter recent sales for this agent in Round 2 only
+  const agentRound2Sales = filterRound2Sales(recentSales.filter(sale => sale.repName === agent.name))
+  
+  // Calculate Round 2 stats for this agent
+  const round2Stats = {
+    totalSales: agentRound2Sales.length,
+    totalPremium: agentRound2Sales.reduce((sum, sale) => sum + sale.premium, 0),
+    lastSale: agentRound2Sales.length > 0 ? new Date(Math.max(...agentRound2Sales.map(s => new Date(s.timestamp).getTime()))) : null
+  }
   
   // Apply Round 2 filtering if in Round 2 mode
   const displayAgent = isInRound2 
-    ? { ...agent, totalSales: round2TotalSales, totalPremium: round2TotalPremium }
+    ? { ...agent, totalSales: round2Stats.totalSales, totalPremium: round2Stats.totalPremium }
     : agent
 
   const getCurrentMatchup = () => {
@@ -188,7 +195,7 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
       // Apply Round 2 filtering to opponent as well
       let displayOpponent = opponentAgent
       if (isInRound2 && opponentAgent) {
-        const opponentRound2Sales = round2Sales.filter(sale => sale.repName === opponentAgent.name)
+        const opponentRound2Sales = filterRound2Sales(recentSales.filter(sale => sale.repName === opponentAgent.name))
         const opponentRound2TotalSales = opponentRound2Sales.length
         const opponentRound2TotalPremium = opponentRound2Sales.reduce((sum, sale) => sum + sale.premium, 0)
         
@@ -631,8 +638,12 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
               
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-400">Last Sale:</span>
-                  <span className="font-bold text-white">{displayAgent.totalSales > 0 ? agent.lastSale.toLocaleDateString() : 'None'}</span>
+                  <span className="text-gray-400">{isInRound2 ? 'Round 2 Last Sale:' : 'Last Sale:'}</span>
+                  <span className="font-bold text-white">{
+                    isInRound2 
+                      ? (round2Stats.lastSale ? round2Stats.lastSale.toLocaleDateString() : 'None')
+                      : (displayAgent.totalSales > 0 ? agent.lastSale.toLocaleDateString() : 'None')
+                  }</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Avg Premium:</span>
