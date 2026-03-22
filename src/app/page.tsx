@@ -206,7 +206,7 @@ export default function MarchMadnessLeaderboard() {
       const now = new Date()
       const playInStart = new Date('2026-03-07T06:00:00.000Z') // March 7, 12:00 AM CST
       const round2Start = new Date('2026-03-15T06:00:00.000Z')  // March 15, 12:00 AM CST
-      const round3Start = new Date('2026-03-21T06:00:00.000Z')  // March 21, 12:00 AM CST
+      const round3Start = new Date('2026-03-23T06:00:00.000Z')  // March 23, 12:00 AM CST
       const finalFourStart = new Date('2026-03-25T06:00:00.000Z') // March 25, 12:00 AM CST
       const championshipStart = new Date('2026-03-27T06:00:00.000Z') // March 27, 12:00 AM CST
       
@@ -243,12 +243,12 @@ export default function MarchMadnessLeaderboard() {
       }
     }
 
-    // Countdown to current round end - Round 2 ends March 21, 2026 at 11:59 PM CST
+    // Countdown to current round end - Round 2 ends March 22, 2026 at 11:59 PM CST
     const updateEndCountdown = () => {
       const now = new Date()
-      const round2End = new Date('2026-03-22T05:59:00.000Z') // March 21 11:59 PM CST = March 22 05:59 UTC
+      const round2End = new Date('2026-03-23T05:59:00.000Z') // March 22 11:59 PM CST = March 23 05:59 UTC
       
-      // If we're currently in Round 2 (March 15-21), show countdown to Round 2 end
+      // If we're currently in Round 2 (March 15-22), show countdown to Round 2 end
       if (now >= new Date('2026-03-15T06:00:00.000Z') && now < round2End) {
         const diff = round2End.getTime() - now.getTime()
         if (diff > 0) {
