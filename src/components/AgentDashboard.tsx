@@ -203,6 +203,13 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
     : agent
 
   const getCurrentMatchup = () => {
+    // Debug logging
+    console.log('Agent name:', agent.name)
+    console.log('Current round:', currentRoundData.name)
+    console.log('Is Round 3:', isInRound3)
+    console.log('Round 3 qualifiers:', round3Qualifiers)
+    console.log('Round 3 matchups:', currentRoundData.matchups)
+    
     // Check if agent is eliminated (not in Round 2 qualifiers during Round 2)
     if (isInRound2 && !round2Qualifiers.includes(agent.name)) {
       return { 
@@ -225,9 +232,27 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
 
     // Find the matchup this agent is in based on current round
     const matchups = currentRoundData.matchups
-    const matchup = matchups.find(m => 
+    
+    // Try exact match first
+    let matchup = matchups.find(m => 
       m.team1 === agent.name || m.team2 === agent.name
     )
+    
+    // If no exact match, try partial match (in case of name variations)
+    if (!matchup) {
+      const agentFirstName = agent.name.split(' ')[0].toUpperCase()
+      const agentLastName = agent.name.split(' ').slice(-1)[0].toUpperCase()
+      
+      matchup = matchups.find(m => {
+        const team1First = m.team1.split(' ')[0].toUpperCase()
+        const team1Last = m.team1.split(' ').slice(-1)[0].toUpperCase()
+        const team2First = m.team2.split(' ')[0].toUpperCase()
+        const team2Last = m.team2.split(' ').slice(-1)[0].toUpperCase()
+        
+        return (team1First === agentFirstName && team1Last === agentLastName) ||
+               (team2First === agentFirstName && team2Last === agentLastName)
+      })
+    }
     
     if (matchup) {
       const opponent = matchup.team1 === agent.name ? matchup.team2 : matchup.team1
