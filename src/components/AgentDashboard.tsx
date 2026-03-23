@@ -124,12 +124,21 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
     "TAJ DHILLON", "DENNIS CHORNIY", "JACOB LEE", "KIRILL PAVLYCHEV"
   ]
 
+  // Week 3 - Round 3 Elite 8 Matchups (4 games total)
+  const round3Matchups = [
+    { game: 1, team1: "MAX KONOPKA", team2: "JOSE VALDEZ" },
+    { game: 2, team1: "THOMAS FOX", team2: "LUCAS KONSTATOS" },
+    { game: 3, team1: "FABIAN ESCATEL", team2: "AALYIAH WASHBURN" },
+    { game: 4, team1: "DENNIS CHORNIY", team2: "KIRILL PAVLYCHEV" },
+  ]
+
   // Determine current round and tournament status
   const getCurrentRoundData = () => {
     const now = new Date()
     const playInStart = new Date('2026-03-07T06:00:00.000Z')
     const round2Start = new Date('2026-03-15T06:00:00.000Z')
-    const round3Start = new Date('2026-03-23T05:59:00.000Z') // Round 2 ends March 22 at 11:59 PM CST
+    const round3Start = new Date('2026-03-23T06:00:00.000Z') // Round 3 starts March 23 at 12:00 AM CST
+    const round4Start = new Date('2026-03-30T05:59:00.000Z') // Round 3 ends March 29 at 11:59 PM CST
     
     if (now < playInStart) {
       return { name: "Pre-Tournament", matchups: playInRoundMatchups }
@@ -137,39 +146,54 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
       return { name: "Play-In", matchups: playInRoundMatchups }
     } else if (now < round3Start) {
       return { name: "Round 2", matchups: round2Matchups }
+    } else if (now < round4Start) {
+      return { name: "Round 3", matchups: round3Matchups }
     } else {
-      return { name: "Round 3", matchups: [] }
+      return { name: "Final Four", matchups: [] }
     }
   }
 
   const currentRoundData = getCurrentRoundData()
   const isInRound2 = currentRoundData.name === "Round 2"
+  const isInRound3 = currentRoundData.name === "Round 3"
   
   // Round 2 date filtering (March 15-22, 2026)
   const round2Start = new Date('2026-03-15T00:00:00Z')
   const round2End = new Date('2026-03-22T05:59:59Z') // March 21 11:59 PM CST
   
-  // Filter sales to only show Round 2 data (March 15-22)
-  const filterRound2Sales = (sales: Sale[]) => {
-    return sales.filter(sale => {
-      const saleDate = new Date(sale.timestamp)
-      return saleDate >= round2Start && saleDate <= round2End
-    })
+  // Round 3 date filtering (March 23-29, 2026)
+  const round3Start = new Date('2026-03-23T00:00:00Z')
+  const round3End = new Date('2026-03-29T05:59:59Z') // March 29 11:59 PM CST
+  
+  // Filter sales for current round
+  const filterCurrentRoundSales = (sales: Sale[]) => {
+    if (isInRound2) {
+      return sales.filter(sale => {
+        const saleDate = new Date(sale.timestamp)
+        return saleDate >= round2Start && saleDate <= round2End
+      })
+    } else if (isInRound3) {
+      return sales.filter(sale => {
+        const saleDate = new Date(sale.timestamp)
+        return saleDate >= round3Start && saleDate <= round3End
+      })
+    }
+    return sales // Return all sales for other rounds
   }
   
-  // Filter recent sales for this agent in Round 2 only
-  const agentRound2Sales = filterRound2Sales(recentSales.filter(sale => sale.repName === agent.name))
+  // Filter recent sales for this agent in current round
+  const agentCurrentRoundSales = filterCurrentRoundSales(recentSales.filter(sale => sale.repName === agent.name))
   
-  // Calculate Round 2 stats for this agent
-  const round2Stats = {
-    totalSales: agentRound2Sales.length,
-    totalPremium: agentRound2Sales.reduce((sum, sale) => sum + sale.premium, 0),
-    lastSale: agentRound2Sales.length > 0 ? new Date(Math.max(...agentRound2Sales.map(s => new Date(s.timestamp).getTime()))) : null
+  // Calculate current round stats for this agent
+  const currentRoundStats = {
+    totalSales: agentCurrentRoundSales.length,
+    totalPremium: agentCurrentRoundSales.reduce((sum, sale) => sum + sale.premium, 0),
+    lastSale: agentCurrentRoundSales.length > 0 ? new Date(Math.max(...agentCurrentRoundSales.map(s => new Date(s.timestamp).getTime()))) : null
   }
   
-  // Apply Round 2 filtering if in Round 2 mode
-  const displayAgent = isInRound2 
-    ? { ...agent, totalSales: round2Stats.totalSales, totalPremium: round2Stats.totalPremium }
+  // Apply current round filtering if in Round 2 or 3
+  const displayAgent = (isInRound2 || isInRound3)
+    ? { ...agent, totalSales: currentRoundStats.totalSales, totalPremium: currentRoundStats.totalPremium }
     : agent
 
   const getCurrentMatchup = () => {
@@ -179,6 +203,21 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
         eliminated: true, 
         status: "Eliminated in Round 1",
         message: "You did not advance to Round 2. Keep competing in future tournaments!"
+      }
+    }
+
+    // For Round 3, check if agent made it to Elite 8
+    if (isInRound3) {
+      const round3Qualifiers = [
+        "MAX KONOPKA", "JOSE VALDEZ", "THOMAS FOX", "LUCAS KONSTATOS", 
+        "FABIAN ESCATEL", "AALYIAH WASHBURN", "DENNIS CHORNIY", "KIRILL PAVLYCHEV"
+      ]
+      if (!round3Qualifiers.includes(agent.name)) {
+        return { 
+          eliminated: true, 
+          status: "Eliminated in Round 2",
+          message: "You did not advance to Elite 8. Keep competing in future tournaments!"
+        }
       }
     }
 
@@ -192,17 +231,17 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
       const opponent = matchup.team1 === agent.name ? matchup.team2 : matchup.team1
       const opponentAgent = allAgents.find(a => a.name === opponent)
       
-      // Apply Round 2 filtering to opponent as well
+      // Apply current round filtering to opponent as well
       let displayOpponent = opponentAgent
-      if (isInRound2 && opponentAgent) {
-        const opponentRound2Sales = filterRound2Sales(recentSales.filter(sale => sale.repName === opponentAgent.name))
-        const opponentRound2TotalSales = opponentRound2Sales.length
-        const opponentRound2TotalPremium = opponentRound2Sales.reduce((sum, sale) => sum + sale.premium, 0)
+      if ((isInRound2 || isInRound3) && opponentAgent) {
+        const opponentCurrentRoundSales = filterCurrentRoundSales(recentSales.filter(sale => sale.repName === opponentAgent.name))
+        const opponentCurrentRoundTotalSales = opponentCurrentRoundSales.length
+        const opponentCurrentRoundTotalPremium = opponentCurrentRoundSales.reduce((sum, sale) => sum + sale.premium, 0)
         
         displayOpponent = { 
           ...opponentAgent, 
-          totalSales: opponentRound2TotalSales, 
-          totalPremium: opponentRound2TotalPremium 
+          totalSales: opponentCurrentRoundTotalSales, 
+          totalPremium: opponentCurrentRoundTotalPremium 
         }
       }
       
@@ -222,9 +261,9 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
   const agentBadge = getRankBadge(agent.rank)
   const AgentIcon = agentBadge.icon
   
-  // Filter sales based on current round - Round 2 shows only March 15-21 data
-  const mySales = isInRound2 
-    ? agentRound2Sales.slice(0, 5)  // Show only Round 2 sales (March 15-21)
+  // Filter sales based on current round
+  const mySales = (isInRound2 || isInRound3)
+    ? agentCurrentRoundSales.slice(0, 5)  // Show only current round sales
     : recentSales.filter(sale => sale.repName === agent.name).slice(0, 5)  // Show all sales for other rounds
 
   return (
@@ -328,13 +367,13 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="text-center bg-red-900/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-red-700">
                   <div className="text-3xl font-black text-red-300 mb-2">{displayAgent.totalSales}</div>
-                  <div className="text-base font-bold text-white">{isInRound2 ? 'Round 2 Sales' : 'Total Sales'}</div>
-                  <div className="text-sm text-gray-400">{isInRound2 ? 'This Round' : 'Policies Sold'}</div>
+                  <div className="text-base font-bold text-white">{(isInRound2 || isInRound3) ? 'Current Round Sales' : 'Total Sales'}</div>
+                  <div className="text-sm text-gray-400">{(isInRound2 || isInRound3) ? 'This Round' : 'Policies Sold'}</div>
                 </div>
                 <div className="text-center bg-black/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-gray-700">
                   <div className="text-3xl font-black text-green-400 mb-2">{formatCurrency(displayAgent.totalPremium).replace('$', '').replace(',000', 'K')}</div>
-                  <div className="text-base font-bold text-white">{isInRound2 ? 'Round 2 Premium' : 'Total Premium'}</div>
-                  <div className="text-sm text-gray-400">{isInRound2 ? 'This Round' : 'Volume Generated'}</div>
+                  <div className="text-base font-bold text-white">{(isInRound2 || isInRound3) ? 'Current Round Premium' : 'Total Premium'}</div>
+                  <div className="text-sm text-gray-400">{(isInRound2 || isInRound3) ? 'This Round' : 'Volume Generated'}</div>
                 </div>
                 <div className="text-center bg-gray-900/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-gray-600">
                   <div className="text-3xl font-black text-red-400 mb-2">{formatCurrency(displayAgent.totalPremium).replace('$', '').replace(',000', 'K')}</div>
@@ -356,7 +395,7 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
                   <Users className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-2xl font-black text-white">
-                  🥊 {isInRound2 ? "ROUND 2 MATCHUP" : "YOUR MATCHUP"}
+                  🥊 {isInRound2 ? "ROUND 2 MATCHUP" : isInRound3 ? "ELITE 8 MATCHUP" : "YOUR MATCHUP"}
                 </h3>
               </div>
 
@@ -373,7 +412,9 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
                 <div className="text-center">
                   <div className="text-4xl mb-4">⚔️</div>
                   <div className="text-lg font-black text-white mb-4">
-                    {isInRound2 ? `ROUND 2 GAME #${currentMatchup.gameNumber} - HEAD TO HEAD` : `GAME #${currentMatchup.gameNumber} - HEAD TO HEAD`}
+                    {isInRound2 ? `ROUND 2 GAME #${currentMatchup.gameNumber} - HEAD TO HEAD` : 
+                     isInRound3 ? `ELITE 8 GAME #${currentMatchup.gameNumber} - HEAD TO HEAD` : 
+                     `GAME #${currentMatchup.gameNumber} - HEAD TO HEAD`}
                   </div>
                   
                   {/* Mobile Matchup Layout */}
@@ -424,6 +465,8 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
                     <div className="text-sm text-white">
                       {isInRound2 ? 
                         "Record sales now to outperform your opponent and advance to Elite 8!" :
+                       isInRound3 ?
+                        "Record sales now to outperform your opponent and advance to Final Four!" :
                         "Record sales now to outperform your opponent and advance to Round 2!"
                       }
                     </div>
@@ -638,10 +681,10 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
               
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-400">{isInRound2 ? 'Round 2 Last Sale:' : 'Last Sale:'}</span>
+                  <span className="text-gray-400">{(isInRound2 || isInRound3) ? 'Current Round Last Sale:' : 'Last Sale:'}</span>
                   <span className="font-bold text-white">{
-                    isInRound2 
-                      ? (round2Stats.lastSale ? round2Stats.lastSale.toLocaleDateString() : 'None')
+                    (isInRound2 || isInRound3)
+                      ? (currentRoundStats.lastSale ? currentRoundStats.lastSale.toLocaleDateString() : 'None')
                       : (displayAgent.totalSales > 0 ? agent.lastSale.toLocaleDateString() : 'None')
                   }</span>
                 </div>

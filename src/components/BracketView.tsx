@@ -16,7 +16,8 @@ export default function BracketView() {
       const now = new Date()
       const playInStart = new Date('2026-03-07T06:00:00.000Z') // March 7, 12:00 AM CST
       const round2Start = new Date('2026-03-15T06:00:00.000Z')  // March 15, 12:00 AM CST
-      const round3Start = new Date('2026-03-23T05:59:00.000Z')  // March 22, 11:59 PM CST
+      const round3Start = new Date('2026-03-23T06:00:00.000Z')  // March 23, 12:00 AM CST
+      const round4Start = new Date('2026-03-30T05:59:00.000Z')  // March 29, 11:59 PM CST
       
       if (now < playInStart) {
         setCurrentRound({
@@ -36,10 +37,16 @@ export default function BracketView() {
           description: "WEEK 2 ROUND 2",
           matchups: round2Matchups
         })
-      } else {
+      } else if (now < round4Start) {
         setCurrentRound({
           name: "Round 3", 
           description: "WEEK 3 ELITE 8",
+          matchups: round3Matchups
+        })
+      } else {
+        setCurrentRound({
+          name: "Final Four", 
+          description: "FINAL FOUR",
           matchups: []
         })
       }
@@ -75,14 +82,22 @@ export default function BracketView() {
 
   // Week 2 - Round 2 Matchups (8 games total)
   const round2Matchups = [
-    { game: 1, team1: "MAX KONOPKA", team2: "BYRON ACHA", winner: null },
-    { game: 2, team1: "JOSE VALDEZ", team2: "NOLAN SCHOENBACHLER", winner: null },
-    { game: 3, team1: "THOMAS FOX", team2: "VALERIA ALVAL", winner: null },
-    { game: 4, team1: "RYAN COOPER", team2: "LUCAS KONSTATOS", winner: null },
-    { game: 5, team1: "FABIAN ESCATEL", team2: "KAMREN HERALD", winner: null },
-    { game: 6, team1: "AALYIAH WASHBURN", team2: "HANNAH FRENCH", winner: null },
-    { game: 7, team1: "TAJ DHILLON", team2: "DENNIS CHORNIY", winner: null },
-    { game: 8, team1: "JACOB LEE", team2: "KIRILL PAVLYCHEV", winner: null },
+    { game: 1, team1: "MAX KONOPKA", team2: "BYRON ACHA", winner: "MAX KONOPKA" },
+    { game: 2, team1: "JOSE VALDEZ", team2: "NOLAN SCHOENBACHLER", winner: "JOSE VALDEZ" },
+    { game: 3, team1: "THOMAS FOX", team2: "VALERIA ALVAL", winner: "THOMAS FOX" },
+    { game: 4, team1: "RYAN COOPER", team2: "LUCAS KONSTATOS", winner: "LUCAS KONSTATOS" },
+    { game: 5, team1: "FABIAN ESCATEL", team2: "KAMREN HERALD", winner: "FABIAN ESCATEL" },
+    { game: 6, team1: "AALYIAH WASHBURN", team2: "HANNAH FRENCH", winner: "AALYIAH WASHBURN" },
+    { game: 7, team1: "TAJ DHILLON", team2: "DENNIS CHORNIY", winner: "DENNIS CHORNIY" },
+    { game: 8, team1: "JACOB LEE", team2: "KIRILL PAVLYCHEV", winner: "KIRILL PAVLYCHEV" },
+  ]
+
+  // Week 3 - Round 3 Elite 8 Matchups (4 games total)
+  const round3Matchups = [
+    { game: 1, team1: "MAX KONOPKA", team2: "JOSE VALDEZ", winner: null },
+    { game: 2, team1: "THOMAS FOX", team2: "LUCAS KONSTATOS", winner: null },
+    { game: 3, team1: "FABIAN ESCATEL", team2: "AALYIAH WASHBURN", winner: null },
+    { game: 4, team1: "DENNIS CHORNIY", team2: "KIRILL PAVLYCHEV", winner: null },
   ]
 
   return (
@@ -97,7 +112,7 @@ export default function BracketView() {
           <h2 className="text-xl lg:text-3xl font-black">🏀 MARCH MADNESS BRACKET 🏀</h2>
           <div className="text-sm lg:text-lg opacity-90 space-y-1">
             <p>16 COMPETITORS REMAINING • $XXXXX SALES PREMIUM • $XXXXX TOP PERFORMER</p>
-            <p className="text-red-300 text-xs lg:text-sm">⏰ ROUND 2 ENDS: MARCH 22ND AT 11:59 PM ⏰</p>
+            <p className="text-red-300 text-xs lg:text-sm">⏰ ROUND 3 ENDS: MARCH 29TH AT 11:59 PM ⏰</p>
           </div>
         </motion.div>
       </div>
@@ -173,8 +188,8 @@ export default function BracketView() {
 
           {/* Round 2 - Left Side (Games 1-4) */}
           <div className="flex flex-col min-w-[120px]">
-            <div className="text-center text-white font-bold text-xs mb-3 bg-green-600/80 rounded-lg py-2 border border-green-400">
-              🔴 ROUND 2 - LIVE
+            <div className="text-center text-white font-bold text-xs mb-3 bg-red-600/80 rounded-lg py-2 border border-red-400">
+              ROUND 2 - COMPLETED
             </div>
             <div className="space-y-2">
               {round2Matchups.slice(0, 4).map((matchup, index) => (
@@ -183,12 +198,12 @@ export default function BracketView() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5 + index * 0.05 }}
-                  className="bg-green-600/20 rounded border-2 border-green-500 p-1.5 text-[8px] font-bold shadow-md"
+                  className="bg-gray-700/50 rounded border border-gray-500 p-1.5 text-[8px] font-bold shadow-sm"
                 >
                   <div className="text-white truncate">G{matchup.game}: {matchup.team1.split(' ')[0]}</div>
-                  <div className="text-green-300 text-[7px] text-center font-bold">VS</div>
+                  <div className="text-gray-300 text-[7px] text-center">vs</div>
                   <div className="text-white truncate">{matchup.team2.split(' ')[0]}</div>
-                  <div className="text-yellow-400 text-[7px] text-center mt-0.5">ACTIVE</div>
+                  <div className="text-green-400 text-[7px] text-center mt-0.5">✓ {matchup.winner.split(' ')[0]}</div>
                 </motion.div>
               ))}
             </div>
@@ -197,19 +212,22 @@ export default function BracketView() {
           {/* Round 3 (Elite 8) */}
           <div className="flex flex-col min-w-[100px]">
             <div className="text-center text-white font-bold text-xs mb-3 bg-red-800/80 rounded-lg py-2 border border-red-600">
-              ROUND 3 - ELITE 8
+              🔴 ROUND 3 - LIVE
             </div>
             <div className="flex flex-col justify-center space-y-4">
-              {[...Array(4)].map((_, index) => (
+              {round3Matchups.map((matchup, index) => (
                 <motion.div
                   key={`r3-${index}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1 + index * 0.1 }}
-                  className="bg-gray-800/80 rounded border border-red-400 p-2 text-[8px] font-bold text-center shadow-sm"
+                  className="bg-green-600/20 rounded border-2 border-green-500 p-2 text-[8px] font-bold text-center shadow-md"
                 >
-                  <div className="text-red-300">Game {index + 1}</div>
-                  <div className="text-gray-400 text-[7px] mt-0.5">TBD vs TBD</div>
+                  <div className="text-green-300">Game {matchup.game}</div>
+                  <div className="text-white text-[7px] mt-0.5">{matchup.team1.split(' ')[0]}</div>
+                  <div className="text-green-300 text-[6px]">VS</div>
+                  <div className="text-white text-[7px]">{matchup.team2.split(' ')[0]}</div>
+                  <div className="text-yellow-400 text-[6px] mt-0.5">ACTIVE</div>
                 </motion.div>
               ))}
             </div>
@@ -256,19 +274,22 @@ export default function BracketView() {
           {/* Round 3 (Elite 8) - Right Side */}
           <div className="flex flex-col min-w-[100px]">
             <div className="text-center text-white font-bold text-xs mb-3 bg-red-800/80 rounded-lg py-2 border border-red-600">
-              ROUND 3 - ELITE 8
+              🔴 ROUND 3 - LIVE
             </div>
             <div className="flex flex-col justify-center space-y-4">
-              {[...Array(4)].map((_, index) => (
+              {round3Matchups.map((matchup, index) => (
                 <motion.div
                   key={`r3-right-${index}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1 + index * 0.1 }}
-                  className="bg-gray-800/80 rounded border border-red-400 p-2 text-[8px] font-bold text-center shadow-sm"
+                  className="bg-green-600/20 rounded border-2 border-green-500 p-2 text-[8px] font-bold text-center shadow-md"
                 >
-                  <div className="text-red-300">Game {index + 5}</div>
-                  <div className="text-gray-400 text-[7px] mt-0.5">TBD vs TBD</div>
+                  <div className="text-green-300">Game {matchup.game}</div>
+                  <div className="text-white text-[7px] mt-0.5 text-right">{matchup.team1.split(' ')[0]}</div>
+                  <div className="text-green-300 text-[6px]">VS</div>
+                  <div className="text-white text-[7px] text-right">{matchup.team2.split(' ')[0]}</div>
+                  <div className="text-yellow-400 text-[6px] mt-0.5">ACTIVE</div>
                 </motion.div>
               ))}
             </div>
@@ -276,8 +297,8 @@ export default function BracketView() {
 
           {/* Round 2 - Right Side (Games 5-8) */}
           <div className="flex flex-col min-w-[120px]">
-            <div className="text-center text-white font-bold text-xs mb-3 bg-green-600/80 rounded-lg py-2 border border-green-400">
-              🔴 ROUND 2 - LIVE
+            <div className="text-center text-white font-bold text-xs mb-3 bg-red-600/80 rounded-lg py-2 border border-red-400">
+              ROUND 2 - COMPLETED
             </div>
             <div className="space-y-2">
               {round2Matchups.slice(4, 8).map((matchup, index) => (
@@ -286,12 +307,12 @@ export default function BracketView() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.7 + index * 0.05 }}
-                  className="bg-green-600/20 rounded border-2 border-green-500 p-1.5 text-[8px] font-bold shadow-md"
+                  className="bg-gray-700/50 rounded border border-gray-500 p-1.5 text-[8px] font-bold shadow-sm"
                 >
                   <div className="text-white truncate text-right">G{matchup.game}: {matchup.team1.split(' ')[0]}</div>
-                  <div className="text-green-300 text-[7px] text-center font-bold">VS</div>
+                  <div className="text-gray-300 text-[7px] text-center">vs</div>
                   <div className="text-white truncate text-right">{matchup.team2.split(' ')[0]}</div>
-                  <div className="text-yellow-400 text-[7px] text-center mt-0.5">ACTIVE</div>
+                  <div className="text-green-400 text-[7px] text-center mt-0.5">✓ {matchup.winner.split(' ')[0]}</div>
                 </motion.div>
               ))}
             </div>
@@ -333,7 +354,7 @@ export default function BracketView() {
           className="bg-green-600 text-white px-4 lg:px-6 py-2 lg:py-3 rounded-xl shadow-lg inline-flex items-center gap-2 border border-green-400"
         >
           <div className="w-2 h-2 lg:w-3 lg:h-3 bg-green-300 rounded-full animate-pulse"></div>
-          <span className="font-bold text-sm lg:text-base">🔴 LIVE • {currentRound.description} • {currentRound.matchups.length} GAMES • COMPETE NOW!</span>
+          <span className="font-bold text-sm lg:text-base">🔴 LIVE • {currentRound.description} • ELITE 8 • COMPETE NOW!</span>
           <div className="w-2 h-2 lg:w-3 lg:h-3 bg-green-300 rounded-full animate-pulse"></div>
         </motion.div>
         <p className="text-red-300 text-sm mt-2">
