@@ -104,24 +104,30 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
     { game: 17, team1: "LAINEY DROWN", team2: "VALERIA ALVAL" },
   ]
 
-  // Week 2 - Round 2 Matchups (8 games total)
+  // Week 2 - Round 2 Matchups (8 games total) - COMPLETED
   const round2Matchups = [
-    { game: 1, team1: "MAX KONOPKA", team2: "BYRON ACHA" },
-    { game: 2, team1: "JOSE VALDEZ", team2: "NOLAN SCHOENBACHLER" },
-    { game: 3, team1: "THOMAS FOX", team2: "VALERIA ALVAL" },
-    { game: 4, team1: "RYAN COOPER", team2: "LUCAS KONSTATOS" },
-    { game: 5, team1: "FABIAN ESCATEL", team2: "KAMREN HERALD" },
-    { game: 6, team1: "AALYIAH WASHBURN", team2: "HANNAH FRENCH" },
-    { game: 7, team1: "TAJ DHILLON", team2: "DENNIS CHORNIY" },
-    { game: 8, team1: "JACOB LEE", team2: "KIRILL PAVLYCHEV" },
+    { game: 1, team1: "MAX KONOPKA", team2: "BYRON ACHA", winner: "MAX KONOPKA" },
+    { game: 2, team1: "JOSE VALDEZ", team2: "NOLAN SCHOENBACHLER", winner: "JOSE VALDEZ" },
+    { game: 3, team1: "THOMAS FOX", team2: "VALERIA ALVAL", winner: "THOMAS FOX" },
+    { game: 4, team1: "RYAN COOPER", team2: "LUCAS KONSTATOS", winner: "LUCAS KONSTATOS" },
+    { game: 5, team1: "FABIAN ESCATEL", team2: "KAMREN HERALD", winner: "FABIAN ESCATEL" },
+    { game: 6, team1: "AALYIAH WASHBURN", team2: "HANNAH FRENCH", winner: "AALYIAH WASHBURN" },
+    { game: 7, team1: "TAJ DHILLON", team2: "DENNIS CHORNIY", winner: "DENNIS CHORNIY" },
+    { game: 8, team1: "JACOB LEE", team2: "KIRILL PAVLYCHEV", winner: "KIRILL PAVLYCHEV" },
   ]
 
-  // Round 2 qualifiers (these agents made it to Round 2)
+  // Round 2 qualifiers (these agents made it to Round 2) - for historical reference
   const round2Qualifiers = [
     "MAX KONOPKA", "BYRON ACHA", "JOSE VALDEZ", "NOLAN SCHOENBACHLER",
     "THOMAS FOX", "VALERIA ALVAL", "RYAN COOPER", "LUCAS KONSTATOS", 
     "FABIAN ESCATEL", "KAMREN HERALD", "AALYIAH WASHBURN", "HANNAH FRENCH",
     "TAJ DHILLON", "DENNIS CHORNIY", "JACOB LEE", "KIRILL PAVLYCHEV"
+  ]
+
+  // Round 3 Elite 8 qualifiers (Round 2 winners)
+  const round3Qualifiers = [
+    "MAX KONOPKA", "JOSE VALDEZ", "THOMAS FOX", "LUCAS KONSTATOS",
+    "FABIAN ESCATEL", "AALYIAH WASHBURN", "DENNIS CHORNIY", "KIRILL PAVLYCHEV"
   ]
 
   // Week 3 - Round 3 Elite 8 Matchups (4 games total)
@@ -208,10 +214,6 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
 
     // For Round 3, check if agent made it to Elite 8
     if (isInRound3) {
-      const round3Qualifiers = [
-        "MAX KONOPKA", "JOSE VALDEZ", "THOMAS FOX", "LUCAS KONSTATOS", 
-        "FABIAN ESCATEL", "AALYIAH WASHBURN", "DENNIS CHORNIY", "KIRILL PAVLYCHEV"
-      ]
       if (!round3Qualifiers.includes(agent.name)) {
         return { 
           eliminated: true, 
