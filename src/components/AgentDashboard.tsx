@@ -138,7 +138,7 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
     const playInStart = new Date('2026-03-07T06:00:00.000Z')
     const round2Start = new Date('2026-03-15T06:00:00.000Z')
     const round3Start = new Date('2026-03-23T06:00:00.000Z') // Round 3 starts March 23 at 12:00 AM CST
-    const round4Start = new Date('2026-03-30T05:59:00.000Z') // Round 3 ends March 29 at 11:59 PM CST
+    const round4Start = new Date('2026-04-01T05:59:00.000Z') // Round 3 ends March 31 at 11:59 PM CST
     
     if (now < playInStart) {
       return { name: "Pre-Tournament", matchups: playInRoundMatchups }
@@ -161,9 +161,9 @@ export default function AgentDashboard({ agent, allAgents, onRecordSale, onDelet
   const round2Start = new Date('2026-03-15T00:00:00Z')
   const round2End = new Date('2026-03-22T05:59:59Z') // March 21 11:59 PM CST
   
-  // Round 3 date filtering (March 23-29, 2026)
+  // Round 3 date filtering (March 23-31, 2026)
   const round3Start = new Date('2026-03-23T00:00:00Z')
-  const round3End = new Date('2026-03-29T05:59:59Z') // March 29 11:59 PM CST
+  const round3End = new Date('2026-03-31T05:59:59Z') // March 31 11:59 PM CST
   
   // Filter sales for current round
   const filterCurrentRoundSales = (sales: Sale[]) => {
